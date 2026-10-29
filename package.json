@@ -1,0 +1,12 @@
+{
+  "name": "web-nabung",
+  "version": "1.0.0",
+  "description": "Aplikasi Web Target Menabung Sederhana",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.19.2"
+  }
+}
