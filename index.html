@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aplikasi Nabung</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-[#f5f2eb] text-slate-800 font-sans min-h-screen flex flex-col">
+
+    <!-- Header -->
+    <header class="bg-[#e6dfd1] p-4 shadow-sm flex justify-between items-center">
+        <h1 class="text-xl font-bold tracking-wide"><i class="fa-solid fa-piggy-bank mr-2"></i> Nabung App</h1>
+        <button class="text-xl"><i class="fa-solid fa-bars"></i></button>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container mx-auto p-4 flex-grow max-w-md flex flex-col justify-center items-center text-center space-y-4">
+        <div class="bg-[#ded5c4] w-20 h-20 rounded-full flex items-center justify-center text-3xl shadow-inner text-slate-700">
+            <i class="fa-solid fa-dollar-sign"></i>
+        </div>
+        <h2 class="text-lg font-semibold text-slate-700">Belum ada target aktif</h2>
+        <p class="text-xs text-slate-500">Buat Goal atau Challenge baru untuk mulai menabung impianmu.</p>
+    </main>
+
+    <!-- Floating Action Button (+) -->
+    <div class="fixed bottom-20 right-6">
+        <button onclick="alert('Fitur tambah target segera hadir!')" class="bg-slate-900 text-white w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-xl hover:bg-slate-800 transition">
+            <i class="fa-solid fa-plus"></i>
+        </button>
+    </div>
+
+    <!-- Bottom Navigation Bar -->
+    <nav class="bg-[#e6dfd1] border-t border-[#d8cfbe] p-3 flex justify-around items-center text-sm font-medium">
+        <button class="flex flex-col items-center text-slate-900">
+            <i class="fa-solid fa-wallet text-lg mb-1"></i>
+            <span>Berjalan</span>
+        </button>
+        <button class="flex flex-col items-center text-slate-400 hover:text-slate-700">
+            <i class="fa-solid fa-circle-check text-lg mb-1"></i>
+            <span>Selesai</span>
+        </button>
+    </nav>
+
+</body>
+</html>
