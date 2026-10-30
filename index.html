@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Aplikasi Nabung</title>
+    <title>Aplikasi Nabung & Permainan</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -48,6 +48,65 @@
         </main>
 
         <div id="target-list" class="p-4 space-y-3 hidden"></div>
+    </div>
+
+    <!-- VIEW ULAR TANGGA GAME ROOM -->
+    <div id="view-snake-game" class="fixed inset-0 z-50 flex flex-col hidden transition-all duration-300" style="background-color: #1e3f20; background-image: radial-gradient(#2d5a31 15%, transparent 16%), radial-gradient(#1e3f20 15%, transparent 16%); background-size: 30px 30px;">
+        <!-- Top Bar Game -->
+        <div class="p-3 flex justify-between items-center bg-black/30 backdrop-blur-xs text-white">
+            <button onclick="keluarGame()" class="px-3 py-1.5 rounded-xl bg-rose-600 font-bold text-xs flex items-center gap-1.5 active:scale-95 transition shadow-md">
+                <i class="fa-solid fa-arrow-left"><span>Keluar</span></i>
+            </button>
+            <div id="game-status-text" class="text-xs font-bold bg-black/40 px-3 py-1.5 rounded-xl">Pilih Mode Permainan</div>
+            <button onclick="bukaAturanGame()" class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-sm font-bold shadow-md active:scale-95 transition">
+                <i class="fa-solid fa-info"></i>
+            </button>
+        </div>
+
+        <!-- Area Konten Game -->
+        <div class="flex-grow flex flex-col items-center justify-center p-3 relative overflow-hidden">
+            
+            <!-- Menu Pilih Lawan (Home Ular Tangga) -->
+            <div id="snake-menu-screen" class="w-full max-w-xs p-6 rounded-3xl bg-sky-400/90 backdrop-blur-md border-4 border-orange-500 shadow-2xl text-center space-y-4">
+                <h2 class="text-xl font-black text-white drop-shadow-md tracking-wider">SNAKES & LADDERS</h2>
+                <button onclick="mulaiGame('pvp')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-sm shadow-lg active:scale-95 transition flex items-center justify-center gap-2 border-2 border-white/40">
+                    <i class="fa-solid fa-user-group"></i> Player vs Player
+                </button>
+                <button onclick="mulaiGame('bot')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-sm shadow-lg active:scale-95 transition flex items-center justify-center gap-2 border-2 border-white/40">
+                    <i class="fa-solid fa-robot"></i> Player vs Bot
+                </button>
+            </div>
+
+            <!-- Papan Permainan (Grid 10x10) -->
+            <div id="snake-board-screen" class="w-full max-w-sm aspect-square bg-sky-900/80 rounded-2xl p-2 border-4 border-amber-600 shadow-2xl hidden grid grid-cols-10 gap-1 relative">
+                <!-- Grid Kotak 1-100 akan digenerate via JS -->
+            </div>
+
+            <!-- Panel Dadu & Kontrol Giliran -->
+            <div id="snake-controls" class="w-full max-w-sm mt-3 flex justify-between items-center px-2 hidden">
+                <div id="player-turn-badge" class="px-3 py-2 rounded-xl bg-black/50 text-white text-xs font-bold border border-white/20">
+                    Giliran: <span id="current-player-name">Player 1</span>
+                </div>
+                <button onclick="lemparDadu()" id="btn-dadu" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-2xl text-white shadow-xl active:scale-90 transition border-2 border-white/50 relative">
+                    <i id="dice-icon" class="fa-solid fa-dice-five animate-bounce"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL KEMENANGAN ULAR TANGGA -->
+    <div id="snake-win-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
+        <div class="w-full max-w-xs bg-amber-100 rounded-3xl p-6 border-4 border-amber-600 shadow-2xl text-center space-y-4 animate-scale-up">
+            <div class="w-16 h-16 rounded-2xl bg-amber-500 text-white text-3xl flex items-center justify-center mx-auto shadow-inner">
+                <i class="fa-solid fa-trophy animate-bounce"></i>
+            </div>
+            <h3 id="win-title" class="text-xl font-black text-amber-900">Pemenang!</h3>
+            <p id="win-desc" class="text-xs text-amber-800 font-medium">Player 1 berhasil mencapai puncak duluan!</p>
+            <div class="pt-2 flex flex-col gap-2">
+                <button onclick="mulaiGame(currentGameMode)" class="w-full py-3 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md active:scale-95 transition">Main Lagi</button>
+                <button onclick="keluarGame()" class="w-full py-3 rounded-xl bg-rose-600 text-white font-bold text-xs shadow-md active:scale-95 transition">Kembali ke Home</button>
+            </div>
+        </div>
     </div>
 
     <!-- VIEW 2: DETAIL TARGET -->
@@ -153,7 +212,7 @@
         </form>
     </div>
 
-    <!-- MODAL TAMBAH / TARIK TABUNGAN -->
+    <!-- MODAL TRANSAKSI -->
     <div id="modal-transaksi" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
         <div id="transaksi-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-4 transform scale-95 transition-transform duration-200 border" style="background-color: var(--bg-color); border-color: var(--border-color);">
             <h3 class="text-base font-bold">Tambah Tabungan</h3>
@@ -182,31 +241,19 @@
         </div>
     </div>
 
-    <!-- POPUP PILIHAN TIPE TARGET (+) -->
+    <!-- POPUP TARGET -->
     <div id="target-popup" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
         <div id="popup-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border" style="background-color: var(--bg-color); border-color: var(--border-color);">
             <h3 class="text-lg font-bold mb-2">Pilih Tipe Target</h3>
             <button onclick="openFormNabung()" class="w-full p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: var(--header-bg);">
-                    <i class="fa-solid fa-flag"></i>
-                </div>
-                <div>
-                    <div class="text-sm font-bold">Nabung</div>
-                    <div class="text-[11px] opacity-70">Buat target tabungan biasa</div>
-                </div>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: var(--header-bg);"><i class="fa-solid fa-flag"></i></div>
+                <div><div class="text-sm font-bold">Nabung</div><div class="text-[11px] opacity-70">Buat target tabungan biasa</div></div>
             </button>
             <button onclick="showCustomAlert('Fitur Nabung Berkala akan dikembangkan!'); togglePopup();" class="w-full p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: var(--header-bg);">
-                    <i class="fa-solid fa-trophy"></i>
-                </div>
-                <div>
-                    <div class="text-sm font-bold">Nabung Berkala</div>
-                    <div class="text-[11px] opacity-70">Target dengan setoran rutin</div>
-                </div>
+                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0" style="background-color: var(--header-bg);"><i class="fa-solid fa-trophy"></i></div>
+                <div><div class="text-sm font-bold">Nabung Berkala</div><div class="text-[11px] opacity-70">Target dengan setoran rutin</div></div>
             </button>
-            <div class="pt-2 flex justify-end">
-                <button onclick="togglePopup()" class="px-5 py-2 rounded-xl border text-xs font-semibold active:scale-95 transition" style="border-color: var(--border-color);">Batal</button>
-            </div>
+            <div class="pt-2 flex justify-end"><button onclick="togglePopup()" class="px-5 py-2 rounded-xl border text-xs font-semibold active:scale-95 transition" style="border-color: var(--border-color);">Batal</button></div>
         </div>
     </div>
 
@@ -216,23 +263,16 @@
             <h3 class="text-base font-bold mb-1">Opsi Target</h3>
             <button onclick="konfirmasiHapusTarget()" class="w-full bg-rose-50 hover:bg-rose-100 p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-rose-200 text-rose-600">
                 <i class="fa-solid fa-trash w-5 text-center"></i>
-                <div>
-                    <div class="text-sm font-bold">Hapus</div>
-                    <div class="text-[11px] text-rose-400">Hapus goal beserta semua transaksi</div>
-                </div>
+                <div><div class="text-sm font-bold">Hapus</div><div class="text-[11px] text-rose-400">Hapus goal beserta semua transaksi</div></div>
             </button>
-            <div class="pt-2 flex justify-end">
-                <button onclick="toggleDetailMenu()" class="px-5 py-2 rounded-xl border text-xs font-semibold active:scale-95 transition" style="border-color: var(--border-color);">Batal</button>
-            </div>
+            <div class="pt-2 flex justify-end"><button onclick="toggleDetailMenu()" class="px-5 py-2 rounded-xl border text-xs font-semibold active:scale-95 transition" style="border-color: var(--border-color);">Batal</button></div>
         </div>
     </div>
 
-    <!-- CUSTOM POPUP KONFIRMASI HAPUS (PENGGANTI CONFIRM BAWAAN) -->
+    <!-- CUSTOM POPUP KONFIRMASI HAPUS -->
     <div id="delete-confirm-modal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
         <div id="delete-modal-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border text-center" style="background-color: var(--bg-color); border-color: var(--border-color);">
-            <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-xl text-rose-600 bg-rose-100">
-                <i class="fa-solid fa-triangle-exclamation"></i>
-            </div>
+            <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-xl text-rose-600 bg-rose-100"><i class="fa-solid fa-triangle-exclamation"></i></div>
             <h3 class="text-base font-bold">Hapus Target</h3>
             <p class="text-xs opacity-80">Yakin ingin menghapus target ini beserta riwayat transaksinya?</p>
             <div class="pt-2 flex space-x-2">
@@ -246,29 +286,22 @@
     <div id="theme-popup" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
         <div id="theme-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-2 transform scale-95 transition-transform duration-200 border max-h-[80vh] overflow-y-auto no-scrollbar" style="background-color: var(--bg-color); border-color: var(--border-color);">
             <h3 class="text-base font-bold mb-2">Tema Aplikasi</h3>
-            <button onclick="setTheme('choco')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <i class="fa-solid fa-mug-hot w-5 text-center"></i>
-                <div><div class="text-sm font-bold">Choco</div><div class="text-[10px] opacity-70">Default hangat</div></div>
+            <button onclick="setTheme('choco')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 hover:opacity-80 active:bg-black/10 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
+                <i class="fa-solid fa-mug-hot w-5 text-center"></i><div><div class="text-sm font-bold">Choco</div><div class="text-[10px] opacity-70">Default hangat</div></div>
             </button>
-            <button onclick="setTheme('white')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <i class="fa-solid fa-sun w-5 text-center"></i>
-                <div><div class="text-sm font-bold">White Theme</div><div class="text-[10px] opacity-70">Clean cerah</div></div>
+            <button onclick="setTheme('white')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 hover:opacity-80 active:bg-black/10 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
+                <i class="fa-solid fa-sun w-5 text-center"></i><div><div class="text-sm font-bold">White Theme</div><div class="text-[10px] opacity-70">Clean cerah</div></div>
             </button>
-            <button onclick="setTheme('blue')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <i class="fa-solid fa-droplet w-5 text-center"></i>
-                <div><div class="text-sm font-bold">Blue Theme</div><div class="text-[10px] opacity-70">Nuansa biru segar</div></div>
+            <button onclick="setTheme('blue')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 hover:opacity-80 active:bg-black/10 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
+                <i class="fa-solid fa-droplet w-5 text-center"></i><div><div class="text-sm font-bold">Blue Theme</div><div class="text-[10px] opacity-70">Nuansa biru segar</div></div>
             </button>
-            <button onclick="setTheme('glow')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <i class="fa-solid fa-book-open w-5 text-center"></i>
-                <div><div class="text-sm font-bold">Glow Journal</div><div class="text-[10px] opacity-70">Notebook pink pastel</div></div>
+            <button onclick="setTheme('glow')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 hover:opacity-80 active:bg-black/10 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
+                <i class="fa-solid fa-book-open w-5 text-center"></i><div><div class="text-sm font-bold">Glow Journal</div><div class="text-[10px] opacity-70">Notebook pink pastel</div></div>
             </button>
-            <button onclick="setTheme('dark')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <i class="fa-solid fa-moon w-5 text-center"></i>
-                <div><div class="text-sm font-bold">Dark-Theme</div><div class="text-[10px] opacity-70">Workspace navy gelap</div></div>
+            <button onclick="setTheme('dark')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 hover:opacity-80 active:bg-black/10 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
+                <i class="fa-solid fa-moon w-5 text-center"></i><div><div class="text-sm font-bold">Dark-Theme</div><div class="text-[10px] opacity-70">Workspace navy gelap</div></div>
             </button>
-            <div class="pt-2 flex justify-end">
-                <button onclick="toggleThemeModal()" class="px-5 py-2 rounded-xl border text-xs font-semibold active:scale-95 transition" style="border-color: var(--border-color);">Batal</button>
-            </div>
+            <div class="pt-2 flex justify-end"><button onclick="toggleThemeModal()" class="px-5 py-2 rounded-xl border text-xs font-semibold active:scale-95 transition" style="border-color: var(--border-color);">Batal</button></div>
         </div>
     </div>
 
@@ -276,121 +309,261 @@
     <div id="lang-popup" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
         <div id="lang-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-2 transform scale-95 transition-transform duration-200 border max-h-[80vh] overflow-y-auto no-scrollbar" style="background-color: var(--bg-color); border-color: var(--border-color);">
             <h3 class="text-base font-bold mb-2">Bahasa</h3>
-            <button onclick="setLang('id')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <i class="fa-solid fa-globe w-5 text-center"></i>
-                <div><div class="text-sm font-bold">Indonesia</div><div class="text-[10px] opacity-70">Bahasa Indonesia</div></div>
+            <button onclick="setLang('id')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 hover:opacity-80 active:bg-black/10 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
+                <i class="fa-solid fa-globe w-5 text-center"></i><div><div class="text-sm font-bold">Indonesia</div><div class="text-[10px] opacity-70">Bahasa Indonesia</div></div>
             </button>
-            <button onclick="setLang('en')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <i class="fa-solid fa-language w-5 text-center"></i>
-                <div><div class="text-sm font-bold">English</div><div class="text-[10px] opacity-70">English language</div></div>
+            <button onclick="setLang('en')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 hover:opacity-80 active:bg-black/10 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
+                <i class="fa-solid fa-language w-5 text-center"></i><div><div class="text-sm font-bold">English</div><div class="text-[10px] opacity-70">English language</div></div>
             </button>
-            <div class="pt-2 flex justify-end">
-                <button onclick="toggleLangModal()" class="px-5 py-2 rounded-xl border text-xs font-semibold active:scale-95 transition" style="border-color: var(--border-color);">Batal</button>
-            </div>
+            <div class="pt-2 flex justify-end"><button onclick="toggleLangModal()" class="px-5 py-2 rounded-xl border text-xs font-semibold active:scale-95 transition" style="border-color: var(--border-color);">Batal</button></div>
         </div>
     </div>
 
-    <!-- CUSTOM ALERT MODAL -->
+    <!-- CUSTOM ALERT -->
     <div id="custom-alert" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
         <div id="alert-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border text-center" style="background-color: var(--bg-color); border-color: var(--border-color);">
-            <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-xl" style="background-color: var(--header-bg);">
-                <i class="fa-solid fa-bell"></i>
-            </div>
+            <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-xl" style="background-color: var(--header-bg);"><i class="fa-solid fa-bell"></i></div>
             <h3 class="text-base font-bold">Pemberitahuan</h3>
             <p id="alert-message-text" class="text-xs opacity-80">Pesan...</p>
-            <div class="pt-2 flex justify-center">
-                <button onclick="closeCustomAlert()" class="w-full py-2.5 rounded-xl text-xs font-bold active:scale-95 transition shadow-sm" style="background-color: var(--btn-bg); color: var(--btn-text);">Oke</button>
-            </div>
+            <div class="pt-2 flex justify-center"><button onclick="closeCustomAlert()" class="w-full py-2.5 rounded-xl text-xs font-bold active:scale-95 transition shadow-sm" style="background-color: var(--btn-bg); color: var(--btn-text);">Oke</button></div>
         </div>
     </div>
 
-    <!-- SIDEBAR MENU DENGAN KATEGORI DROPDOWN -->
+    <!-- SIDEBAR MENU -->
     <div id="menu-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300">
         <div id="sidebar" class="absolute top-0 left-0 bottom-0 w-3/4 max-w-xs shadow-2xl transform -translate-x-full transition-transform duration-300 ease-out flex flex-col" style="background-color: var(--bg-color);">
             <div class="p-4 border-b flex justify-between items-center transition-colors duration-300" style="background-color: var(--header-bg); border-color: var(--border-color);">
                 <h3 class="text-base font-bold">Menu</h3>
-                <button onclick="toggleMenu()" class="w-8 h-8 rounded-lg flex items-center justify-center active:scale-90 hover:opacity-80">
-                    <i class="fa-solid fa-xmark text-lg"></i>
-                </button>
+                <button onclick="toggleMenu()" class="w-8 h-8 rounded-lg flex items-center justify-center active:scale-90 hover:opacity-80"><i class="fa-solid fa-xmark text-lg"></i></button>
             </div>
 
-            <!-- List Menu dengan Dropdown Kategori -->
             <div class="p-3 space-y-2 overflow-y-auto flex-grow">
-                
-                <!-- Kategori 1: Information -->
                 <div class="rounded-xl border overflow-hidden transition-colors duration-300" style="border-color: var(--border-color);">
-                    <button onclick="toggleCategory('cat-info', 'arrow-info')" class="w-full p-3 flex justify-between items-center text-xs font-bold uppercase tracking-wider opacity-80" style="background-color: var(--header-bg);">
+                    <button onclick="toggleCategory('cat-info', 'arrow-info')" class="w-full p-3 flex justify-between items-center text-xs font-bold uppercase tracking-wider opacity-80 active:bg-black/10 transition" style="background-color: var(--header-bg);">
                         <span>Information</span>
                         <i id="arrow-info" class="fa-solid fa-chevron-down transition-transform duration-200"></i>
                     </button>
                     <div id="cat-info" class="p-1 space-y-1 transition-all duration-300">
-                        <button onclick="toggleMenu(); toggleThemeModal();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 hover:opacity-80">
-                            <i class="fa-solid fa-palette w-4 text-center"></i>
-                            <span>Tema Aplikasi</span>
-                        </button>
-                        <button onclick="toggleMenu(); showCustomAlert('Fitur Mata Uang akan segera hadir!');" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 hover:opacity-80">
-                            <i class="fa-solid fa-money-bill-transfer w-4 text-center"></i>
-                            <span>Mata Uang</span>
-                        </button>
-                        <button onclick="toggleMenu(); toggleLangModal();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 hover:opacity-80">
-                            <i class="fa-solid fa-globe w-4 text-center"></i>
-                            <span>Bahasa</span>
-                        </button>
+                        <button onclick="toggleMenu(); toggleThemeModal();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 active:bg-black/15 hover:opacity-80"><i class="fa-solid fa-palette w-4 text-center"></i><span>Tema Aplikasi</span></button>
+                        <button onclick="toggleMenu(); showCustomAlert('Fitur Mata Uang akan segera hadir!');" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 active:bg-black/15 hover:opacity-80"><i class="fa-solid fa-money-bill-transfer w-4 text-center"></i><span>Mata Uang</span></button>
+                        <button onclick="toggleMenu(); toggleLangModal();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 active:bg-black/15 hover:opacity-80"><i class="fa-solid fa-globe w-4 text-center"></i><span>Bahasa</span></button>
                     </div>
                 </div>
 
-                <!-- Kategori 2: Permainan -->
                 <div class="rounded-xl border overflow-hidden transition-colors duration-300" style="border-color: var(--border-color);">
-                    <button onclick="toggleCategory('cat-game', 'arrow-game')" class="w-full p-3 flex justify-between items-center text-xs font-bold uppercase tracking-wider opacity-80" style="background-color: var(--header-bg);">
+                    <button onclick="toggleCategory('cat-game', 'arrow-game')" class="w-full p-3 flex justify-between items-center text-xs font-bold uppercase tracking-wider opacity-80 active:bg-black/10 transition" style="background-color: var(--header-bg);">
                         <span>Permainan</span>
                         <i id="arrow-game" class="fa-solid fa-chevron-down transition-transform duration-200"></i>
                     </button>
                     <div id="cat-game" class="p-1 space-y-1 transition-all duration-300">
-                        <button onclick="toggleMenu(); showCustomAlert('Fitur Ular Tangga akan segera hadir!');" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 hover:opacity-80">
-                            <i class="fa-solid fa-dice w-4 text-center"></i>
-                            <span>Ular Tangga</span>
-                        </button>
+                        <button onclick="toggleMenu(); bukaUlarTangga();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 active:bg-black/15 hover:opacity-80"><i class="fa-solid fa-dice w-4 text-center"></i><span>Ular Tangga</span></button>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
-    <!-- FLOATING ACTION BUTTON (+) -->
+    <!-- FAB (+) -->
     <div id="fab-btn" class="fixed bottom-20 right-5 z-20 transition-all duration-300">
         <button onclick="togglePopup()" class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-xl transition-transform transform active:scale-90 focus:outline-none" style="background-color: var(--btn-bg); color: var(--btn-text);">
             <i class="fa-solid fa-plus" id="plus-icon"></i>
         </button>
     </div>
 
-    <!-- BOTTOM NAVIGATION BAR -->
+    <!-- BOTTOM NAVBAR -->
     <nav class="border-t py-3 px-6 flex justify-around items-center text-xs font-medium fixed bottom-0 left-0 right-0 z-30 shadow-lg transition-colors duration-300" style="background-color: var(--header-bg); border-color: var(--border-color);">
-        <button id="nav-berjalan" onclick="switchTab('berjalan')" class="flex flex-col items-center font-bold focus:outline-none active:scale-90 transition">
-            <i class="fa-solid fa-wallet text-base mb-1"></i>
-            <span>Berjalan</span>
-        </button>
-        <button id="nav-selesai" onclick="switchTab('selesai')" class="flex flex-col items-center opacity-60 hover:opacity-100 focus:outline-none active:scale-90 transition">
-            <i class="fa-solid fa-circle-check text-base mb-1"></i>
-            <span>Selesai</span>
-        </button>
+        <button id="nav-berjalan" onclick="switchTab('berjalan')" class="flex flex-col items-center font-bold focus:outline-none active:scale-90 transition"><i class="fa-solid fa-wallet text-base mb-1"></i><span>Berjalan</span></button>
+        <button id="nav-selesai" onclick="switchTab('selesai')" class="flex flex-col items-center opacity-60 hover:opacity-100 focus:outline-none active:scale-90 transition"><i class="fa-solid fa-circle-check text-base mb-1"></i><span>Selesai</span></button>
     </nav>
 
-    <!-- SCRIPT APLIKASI -->
+    <!-- SCRIPT UTAMA & GAME LOGIC -->
     <script>
         let base64Gambar = "";
         let currentTargetId = null;
         let jenisTrx = "Simpan";
         let activeTab = "berjalan";
 
+        // Variabel Game Ular Tangga
+        let currentGameMode = 'pvp';
+        let p1Pos = 0;
+        let p2Pos = 0;
+        let currentTurn = 1; // 1 untuk P1, 2 untuk P2/Bot
+        let isRolling = false;
+
+        const snakesAndLadders = {
+            2: 38, 7: 14, 8: 31, 15: 26, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 78: 98, 87: 94,
+            16: 6, 47: 26, 49: 11, 56: 53, 62: 19, 64: 60, 87: 24, 93: 73, 95: 75, 99: 78
+        };
+
         document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('input-tanggal').valueAsDate = new Date();
             document.getElementById('trx-tanggal').valueAsDate = new Date();
             loadTheme();
             renderTargets();
+            generateBoard();
         });
 
-        // Toggle Dropdown Kategori Sidebar
+        function hapticFeedback() {
+            if (navigator.vibrate) navigator.vibrate(50);
+        }
+
+        // --- Logika Game Ular Tangga ---
+        function bukaUlarTangga() {
+            hapticFeedback();
+            document.getElementById('view-snake-game').classList.remove('hidden');
+            document.getElementById('snake-menu-screen').classList.remove('hidden');
+            document.getElementById('snake-board-screen').classList.add('hidden');
+            document.getElementById('snake-controls').classList.add('hidden');
+            document.getElementById('game-status-text').textContent = "Pilih Mode Permainan";
+        }
+
+        function keluarGame() {
+            hapticFeedback();
+            document.getElementById('view-snake-game').classList.add('hidden');
+            document.getElementById('snake-win-modal').classList.add('hidden');
+        }
+
+        function bukaAturanGame() {
+            hapticFeedback();
+            showCustomAlert("Aturan: Capai kotak 100 untuk menang! Tangga akan menaikkanmu, dan ular akan menjatuhkanmu.");
+        }
+
+        function mulaiGame(mode) {
+            hapticFeedback();
+            currentGameMode = mode;
+            p1Pos = 0;
+            p2Pos = 0;
+            currentTurn = 1;
+            
+            document.getElementById('snake-menu-screen').classList.add('hidden');
+            document.getElementById('snake-board-screen').classList.remove('hidden');
+            document.getElementById('snake-controls').classList.remove('hidden');
+            document.getElementById('game-status-text').textContent = mode === 'bot' ? "Player vs Bot" : "Player 1 vs Player 2";
+            
+            updateBoardUI();
+        }
+
+        function generateBoard() {
+            const board = document.getElementById('snake-board-screen');
+            board.innerHTML = '';
+            for (let r = 9; r >= 0; r--) {
+                for (let c = 0; c < 10; c++) {
+                    let num;
+                    if (r % 2 === 1) {
+                        num = r * 10 + (10 - c);
+                    } else {
+                        num = r * 10 + c + 1;
+                    }
+                    const cell = document.createElement('div');
+                    cell.className = "rounded-lg flex flex-col justify-between p-1 text-[10px] font-bold text-white/80 relative border border-white/10";
+                    cell.style.backgroundColor = (r + c) % 2 === 0 ? 'rgba(255,255,255,0.1)' : 'rgba(0,0,0,0.15)';
+                    cell.id = `cell-${num}`;
+                    cell.innerHTML = `<span>${num}</span><div id="tokens-${num}" class="flex gap-0.5 justify-center items-center absolute inset-0"></div>`;
+                    board.appendChild(cell);
+                }
+            }
+        }
+
+        function updateBoardUI() {
+            for (let i = 1; i <= 100; i++) {
+                const tokenContainer = document.getElementById(`tokens-${i}`);
+                if (tokenContainer) tokenContainer.innerHTML = '';
+            }
+
+            if (p1Pos > 0) {
+                const c1 = document.getElementById(`tokens-${p1Pos}`);
+                if (c1) c1.innerHTML += `<div class="w-4 h-4 rounded-full bg-rose-500 border-2 border-white shadow-md flex items-center justify-center text-[8px] text-white font-black">1</div>`;
+            }
+            if (p2Pos > 0) {
+                const c2 = document.getElementById(`tokens-${p2Pos}`);
+                if (c2) c2.innerHTML += `<div class="w-4 h-4 rounded-full bg-amber-400 border-2 border-white shadow-md flex items-center justify-center text-[8px] text-black font-black">${currentGameMode === 'bot' ? 'B' : '2'}</div>`;
+            }
+
+            const pName = currentTurn === 1 ? "Player 1" : (currentGameMode === 'bot' ? "Bot" : "Player 2");
+            document.getElementById('current-player-name').textContent = pName;
+        }
+
+        function lemparDadu() {
+            if (isRolling) return;
+            isRolling = true;
+            hapticFeedback();
+
+            const diceIcon = document.getElementById('dice-icon');
+            diceIcon.className = "fa-solid fa-dice animate-spin text-amber-300";
+
+            let rollCount = 0;
+            const rollInterval = setInterval(() => {
+                const randomVal = Math.floor(Math.random() * 6) + 1;
+                diceIcon.className = `fa-solid fa-dice-${['one','two','three','four','five','six'][randomVal-1]} text-amber-300`;
+                rollCount++;
+                if (rollCount > 10) {
+                    clearInterval(rollInterval);
+                    const finalRoll = Math.floor(Math.random() * 6) + 1;
+                    diceIcon.className = `fa-solid fa-dice-${['one','two','three','four','five','six'][finalRoll-1]} text-white`;
+                    gerakkanPemain(finalRoll);
+                }
+            }, 80);
+        }
+
+        function gerakkanPemain(angkah) {
+            if (currentTurn === 1) {
+                p1Pos = Math.min(100, p1Pos + angkah);
+                if (snakesAndLadders[p1Pos]) p1Pos = snakesAndLadders[p1Pos];
+                updateBoardUI();
+                if (p1Pos === 100) {
+                    selesaiGame("Player 1 Menang!");
+                    return;
+                }
+                currentTurn = 2;
+                updateBoardUI();
+                isRolling = false;
+                if (currentGameMode === 'bot') {
+                    setTimeout(giliranBot, 1000);
+                }
+            } else {
+                p2Pos = Math.min(100, p2Pos + angkah);
+                if (snakesAndLadders[p2Pos]) p2Pos = snakesAndLadders[p2Pos];
+                updateBoardUI();
+                if (p2Pos === 100) {
+                    selesaiGame(currentGameMode === 'bot' ? "Bot Menang!" : "Player 2 Menang!");
+                    return;
+                }
+                currentTurn = 1;
+                updateBoardUI();
+                isRolling = false;
+            }
+        }
+
+        function giliranBot() {
+            if (currentTurn !== 2) return;
+            isRolling = true;
+            hapticFeedback();
+            const diceIcon = document.getElementById('dice-icon');
+            
+            setTimeout(() => {
+                const botRoll = Math.floor(Math.random() * 6) + 1;
+                diceIcon.className = `fa-solid fa-dice-${['one','two','three','four','five','six'][botRoll-1]} text-white`;
+                p2Pos = Math.min(100, p2Pos + botRoll);
+                if (snakesAndLadders[p2Pos]) p2Pos = snakesAndLadders[p2Pos];
+                updateBoardUI();
+                if (p2Pos === 100) {
+                    selesaiGame("Bot Menang!");
+                    return;
+                }
+                currentTurn = 1;
+                updateBoardUI();
+                isRolling = false;
+            }, 800);
+        }
+
+        function selesaiGame(pesan) {
+            hapticFeedback();
+            document.getElementById('win-title').textContent = pesan;
+            document.getElementById('win-desc').textContent = "Luar biasa! Permainan telah selesai dengan sempurna.";
+            document.getElementById('snake-win-modal').classList.remove('hidden');
+        }
+
+        // --- Fungsi Dasar Web Nabung Sebelumnya ---
         function toggleCategory(contentId, arrowId) {
             const content = document.getElementById(contentId);
             const arrow = document.getElementById(arrowId);
@@ -403,8 +576,8 @@
             }
         }
 
-        // Custom Alert & Confirm Modals
         function showCustomAlert(msg) {
+            hapticFeedback();
             document.getElementById('alert-message-text').textContent = msg;
             const modal = document.getElementById('custom-alert');
             const content = document.getElementById('alert-content');
@@ -419,6 +592,7 @@
         }
 
         function konfirmasiHapusTarget() {
+            hapticFeedback();
             toggleDetailMenu();
             const modal = document.getElementById('delete-confirm-modal');
             const content = document.getElementById('delete-modal-content');
@@ -432,20 +606,14 @@
             setTimeout(() => modal.classList.add('hidden'), 200);
         }
 
-        // Theme Manager
         function setTheme(theme) {
+            hapticFeedback();
             let colors = {};
-            if (theme === 'choco') {
-                colors = { bg: '#f5f2eb', header: '#e6dfd1', card: 'rgba(230, 223, 209, 0.8)', border: '#d8cfbe', btnBg: '#2c2621', btnText: '#f5f2eb', text: '#1e293b' };
-            } else if (theme === 'white') {
-                colors = { bg: '#ffffff', header: '#f1f5f9', card: '#f8fafc', border: '#e2e8f0', btnBg: '#0f172a', btnText: '#ffffff', text: '#0f172a' };
-            } else if (theme === 'blue') {
-                colors = { bg: '#eff6ff', header: '#dbeafe', card: '#bfdbfe', border: '#93c5fd', btnBg: '#1e40af', btnText: '#ffffff', text: '#1e3a8a' };
-            } else if (theme === 'glow') {
-                colors = { bg: '#fdf2f8', header: '#fce7f3', card: '#fbcfe8', border: '#f472b6', btnBg: '#db2777', btnText: '#ffffff', text: '#831843' };
-            } else if (theme === 'dark') {
-                colors = { bg: '#0f172a', header: '#1e293b', card: 'rgba(30, 41, 59, 0.7)', border: '#334155', btnBg: '#38bdf8', btnText: '#0f172a', text: '#f8fafc' };
-            }
+            if (theme === 'choco') colors = { bg: '#f5f2eb', header: '#e6dfd1', card: 'rgba(230, 223, 209, 0.8)', border: '#d8cfbe', btnBg: '#2c2621', btnText: '#f5f2eb', text: '#1e293b' };
+            else if (theme === 'white') colors = { bg: '#ffffff', header: '#f1f5f9', card: '#f8fafc', border: '#e2e8f0', btnBg: '#0f172a', btnText: '#ffffff', text: '#0f172a' };
+            else if (theme === 'blue') colors = { bg: '#eff6ff', header: '#dbeafe', card: '#bfdbfe', border: '#93c5fd', btnBg: '#1e40af', btnText: '#ffffff', text: '#1e3a8a' };
+            else if (theme === 'glow') colors = { bg: '#fdf2f8', header: '#fce7f3', card: '#fbcfe8', border: '#f472b6', btnBg: '#db2777', btnText: '#ffffff', text: '#831843' };
+            else if (theme === 'dark') colors = { bg: '#0f172a', header: '#1e293b', card: 'rgba(30, 41, 59, 0.7)', border: '#334155', btnBg: '#38bdf8', btnText: '#0f172a', text: '#f8fafc' };
 
             document.documentElement.style.setProperty('--bg-color', colors.bg);
             document.documentElement.style.setProperty('--header-bg', colors.header);
@@ -462,10 +630,29 @@
 
         function loadTheme() {
             const savedTheme = localStorage.getItem('app_theme') || 'choco';
-            setTheme(savedTheme);
+            setThemeSilently(savedTheme);
+        }
+
+        function setThemeSilently(theme) {
+            let colors = {};
+            if (theme === 'choco') colors = { bg: '#f5f2eb', header: '#e6dfd1', card: 'rgba(230, 223, 209, 0.8)', border: '#d8cfbe', btnBg: '#2c2621', btnText: '#f5f2eb', text: '#1e293b' };
+            else if (theme === 'white') colors = { bg: '#ffffff', header: '#f1f5f9', card: '#f8fafc', border: '#e2e8f0', btnBg: '#0f172a', btnText: '#ffffff', text: '#0f172a' };
+            else if (theme === 'blue') colors = { bg: '#eff6ff', header: '#dbeafe', card: '#bfdbfe', border: '#93c5fd', btnBg: '#1e40af', btnText: '#ffffff', text: '#1e3a8a' };
+            else if (theme === 'glow') colors = { bg: '#fdf2f8', header: '#fce7f3', card: '#fbcfe8', border: '#f472b6', btnBg: '#db2777', btnText: '#ffffff', text: '#831843' };
+            else if (theme === 'dark') colors = { bg: '#0f172a', header: '#1e293b', card: 'rgba(30, 41, 59, 0.7)', border: '#334155', btnBg: '#38bdf8', btnText: '#0f172a', text: '#f8fafc' };
+
+            document.documentElement.style.setProperty('--bg-color', colors.bg);
+            document.documentElement.style.setProperty('--header-bg', colors.header);
+            document.documentElement.style.setProperty('--card-bg', colors.card);
+            document.documentElement.style.setProperty('--border-color', colors.border);
+            document.documentElement.style.setProperty('--btn-bg', colors.btnBg);
+            document.documentElement.style.setProperty('--btn-text', colors.btnText);
+            document.documentElement.style.setProperty('--text-color', colors.text);
+            document.body.style.color = colors.text;
         }
 
         function toggleThemeModal() {
+            hapticFeedback();
             const modal = document.getElementById('theme-popup');
             const content = document.getElementById('theme-content');
             if (modal.classList.contains('hidden')) {
@@ -478,6 +665,7 @@
         }
 
         function toggleLangModal() {
+            hapticFeedback();
             const modal = document.getElementById('lang-popup');
             const content = document.getElementById('lang-content');
             if (modal.classList.contains('hidden')) {
@@ -490,11 +678,13 @@
         }
 
         function setLang(lang) {
+            hapticFeedback();
             toggleLangModal();
             showCustomAlert(lang === 'id' ? 'Bahasa berhasil diubah ke Indonesia' : 'Language switched to English');
         }
 
         function switchTab(tab) {
+            hapticFeedback();
             activeTab = tab;
             const btnBerjalan = document.getElementById('nav-berjalan');
             const btnSelesai = document.getElementById('nav-selesai');
@@ -512,10 +702,10 @@
             renderTargets();
         }
 
-        // Sidebar Utama
         const menuOverlay = document.getElementById('menu-overlay');
         const sidebar = document.getElementById('sidebar');
         function toggleMenu() {
+            hapticFeedback();
             if (menuOverlay.classList.contains('hidden')) {
                 menuOverlay.classList.remove('hidden');
                 setTimeout(() => { menuOverlay.classList.remove('opacity-0'); sidebar.classList.remove('-translate-x-full'); }, 10);
@@ -527,11 +717,11 @@
         }
         menuOverlay.addEventListener('click', (e) => { if (e.target === menuOverlay) toggleMenu(); });
 
-        // Popup Target (+)
         const popup = document.getElementById('target-popup');
         const popupContent = document.getElementById('popup-content');
         const plusIcon = document.getElementById('plus-icon');
         function togglePopup() {
+            hapticFeedback();
             if (popup.classList.contains('hidden')) {
                 popup.classList.remove('hidden');
                 setTimeout(() => { popup.classList.remove('opacity-0'); popupContent.classList.remove('scale-95'); popupContent.classList.add('scale-100'); }, 10);
@@ -544,7 +734,6 @@
         }
 
         function openFormNabung() {
-            togglePopup();
             currentTargetId = null;
             document.getElementById('form-title').textContent = "Buat Nabung";
             document.getElementById('form-nabung').reset();
