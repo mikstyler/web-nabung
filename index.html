@@ -14,7 +14,6 @@
             overflow: hidden;
             background-color: #f5f2eb;
         }
-        /* Hide scrollbar for smooth app feel */
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
@@ -31,17 +30,14 @@
         </button>
     </header>
 
-    <!-- CONTAINER TAMPILAN UTAMA (HOME) -->
+    <!-- VIEW 1: HOME (DAFTAR TARGET) -->
     <div id="view-home" class="flex-grow flex flex-col overflow-y-auto no-scrollbar relative">
-        
-        <!-- Badge Target Aktif -->
         <div id="target-count-badge" class="hidden px-5 pt-4">
             <div class="bg-[#e6dfd1]/60 px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 inline-block border border-[#ded5c4]">
                 <span id="active-count">0</span> target aktif
             </div>
         </div>
 
-        <!-- Halaman Kosong (Empty State) -->
         <main id="empty-state" class="flex-grow flex flex-col justify-center items-center text-center p-6 space-y-3">
             <div class="bg-[#ded5c4] w-20 h-20 rounded-full flex items-center justify-center text-3xl shadow-inner text-slate-700">
                 <i class="fa-solid fa-dollar-sign"></i>
@@ -50,60 +46,98 @@
             <p class="text-xs text-slate-500 max-w-xs">Buat Goal atau Challenge baru untuk mulai menabung impianmu.</p>
         </main>
 
-        <!-- List Card Target Tabungan -->
-        <div id="target-list" class="p-4 space-y-3 hidden">
-            <!-- Card items will be rendered here dynamically -->
-        </div>
-
+        <div id="target-list" class="p-4 space-y-3 hidden"></div>
     </div>
 
-    <!-- CONTAINER ROOM FORM "BUAT NABUNG" -->
+    <!-- VIEW 2: DETAIL TARGET -->
+    <div id="view-detail" class="fixed inset-0 bg-[#f5f2eb] z-40 flex flex-col translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto no-scrollbar">
+        <header class="bg-[#e6dfd1] p-4 shadow-sm flex justify-between items-center flex-shrink-0">
+            <div class="flex items-center space-x-3">
+                <button onclick="closeDetail()" class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-700 active:scale-90 transition hover:bg-[#ded5c4]">
+                    <i class="fa-solid fa-arrow-left text-lg"></i>
+                </button>
+                <h2 class="text-base font-bold text-slate-800">Detail Target</h2>
+            </div>
+            <div class="flex items-center space-x-2">
+                <button onclick="openEditForm()" class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-700 active:scale-90 transition hover:bg-[#ded5c4]">
+                    <i class="fa-solid fa-pen text-sm"></i>
+                </button>
+                <button onclick="toggleDetailMenu()" class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-700 active:scale-90 transition hover:bg-[#ded5c4]">
+                    <i class="fa-solid fa-ellipsis-vertical text-lg"></i>
+                </button>
+            </div>
+        </header>
+
+        <div class="p-4 space-y-4 flex-grow overflow-y-auto no-scrollbar pb-24">
+            <!-- Card Ringkasan Detail -->
+            <div class="bg-[#e6dfd1]/70 p-4 rounded-3xl border border-[#d8cfbe] shadow-sm space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 id="detail-judul" class="text-base font-bold text-slate-800">Nama Target</h3>
+                    <span id="detail-persen" class="text-xs font-bold text-slate-700 bg-[#ded5c4] px-2.5 py-1 rounded-xl">0%</span>
+                </div>
+                <!-- Progress Bar -->
+                <div class="w-full bg-[#ded5c4] h-2.5 rounded-full overflow-hidden">
+                    <div id="detail-progress-bar" class="bg-[#2c2621] h-full transition-all duration-500" style="width: 0%"></div>
+                </div>
+                <div class="text-center font-bold text-lg text-slate-800 pt-1" id="detail-target-nominal">Rp0</div>
+                
+                <div class="flex justify-between text-xs text-slate-600 pt-2 border-t border-[#d8cfbe]/60">
+                    <div>Terkumpul: <span id="detail-terkumpul" class="font-bold text-slate-800">Rp0</span></div>
+                    <div>Kekurangan: <span id="detail-kurang" class="font-bold text-slate-800">Rp0</span></div>
+                </div>
+                <div class="text-[11px] text-slate-500 pt-1">Mulai <span id="detail-tanggal">--</span></div>
+                <div id="detail-catatan-box" class="text-xs text-slate-600 bg-[#f5f2eb]/60 p-2.5 rounded-xl border border-[#d8cfbe] hidden">
+                    Catatan: <span id="detail-catatan"></span>
+                </div>
+            </div>
+
+            <!-- Tombol Tambah Tabungan -->
+            <button onclick="openTransaksiModal()" class="w-full bg-[#8c8275] text-[#f5f2eb] py-3.5 rounded-2xl font-bold text-xs shadow-md active:scale-95 transition hover:bg-[#786e63]">
+                + Tambah Tabungan
+            </button>
+
+            <!-- Riwayat Transaksi -->
+            <div>
+                <h4 class="text-xs font-bold text-slate-600 mb-2">Riwayat Terakhir</h4>
+                <div id="riwayat-list" class="space-y-2">
+                    <div class="text-xs text-slate-400 italic">Belum ada transaksi.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- VIEW 3: FORM BUAT / EDIT NABUNG -->
     <div id="view-form" class="fixed inset-0 bg-[#f5f2eb] z-40 flex flex-col translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto no-scrollbar">
-        
-        <!-- Header Room Form -->
-        <div class="bg-[#e6dfd1] p-4 shadow-sm flex items-center space-x-3 flex-shrink-0">
+        <header class="bg-[#e6dfd1] p-4 shadow-sm flex items-center space-x-3 flex-shrink-0">
             <button onclick="closeForm()" class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-700 active:scale-90 transition hover:bg-[#ded5c4]">
                 <i class="fa-solid fa-arrow-left text-lg"></i>
             </button>
-            <h2 class="text-base font-bold text-slate-800">Buat Nabung</h2>
-        </div>
+            <h2 id="form-title" class="text-base font-bold text-slate-800">Buat Nabung</h2>
+        </header>
 
-        <!-- Isi Form -->
-        <form id="form-nabung" onsubmit="simpanNabung(event)" class="p-5 space-y-4 flex-grow overflow-y-auto no-scrollbar pb-24">
-            
-            <!-- Judul -->
+        <form id="form-nabung" onsubmit="simpanTarget(event)" class="p-5 space-y-4 flex-grow overflow-y-auto no-scrollbar pb-24">
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Judul</label>
-                <input type="text" id="input-judul" required placeholder="Contoh: Beli HP Baru" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-slate-700 transition">
+                <input type="text" id="input-judul" required placeholder="Contoh: Beli HP Baru" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none transition">
             </div>
-
-            <!-- Target Nominal -->
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Target nominal (Rp)</label>
-                <input type="number" id="input-target" required placeholder="0" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-slate-700 transition">
+                <input type="number" id="input-target" required placeholder="0" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none transition">
             </div>
-
-            <!-- Tanggal Mulai -->
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal mulai</label>
-                <input type="date" id="input-tanggal" required class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-slate-700 transition">
+                <input type="date" id="input-tanggal" required class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none transition">
             </div>
-
-            <!-- Deadline (opsional) -->
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Deadline (opsional)</label>
-                <input type="date" id="input-deadline" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-slate-700 transition">
+                <input type="date" id="input-deadline" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none transition">
             </div>
-
-            <!-- Catatan -->
             <div>
                 <label class="block text-xs font-semibold text-slate-600 mb-1">Catatan</label>
-                <textarea id="input-catatan" rows="3" placeholder="Tulis motivasi atau rincian..." class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-slate-700 transition resize-none"></textarea>
+                <textarea id="input-catatan" rows="3" placeholder="Tulis motivasi atau rincian..." class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none transition resize-none"></textarea>
             </div>
-
-            <!-- Upload Gambar -->
             <div>
-                <label class="block text-xs font-semibold text-slate-600 mb-1">Gambar catatan (opsional, maks 1MB)</label>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Gambar catatan (opsional)</label>
                 <label class="w-full bg-[#e6dfd1]/40 border border-dashed border-[#c5bcae] rounded-2xl p-4 flex flex-col items-center justify-center space-y-2 cursor-pointer hover:bg-[#e6dfd1]/70 transition active:scale-98">
                     <i class="fa-solid fa-file-image text-2xl text-slate-500"></i>
                     <span id="label-gambar" class="text-xs text-slate-500 font-medium text-center">Tap untuk pilih gambar dari file explorer</span>
@@ -111,8 +145,6 @@
                 </label>
                 <img id="preview-img" class="mt-2 rounded-xl h-28 w-full object-cover hidden shadow-sm border border-[#d8cfbe]">
             </div>
-
-            <!-- Tombol Batal & Simpan -->
             <div class="pt-4 flex space-x-3">
                 <button type="button" onclick="closeForm()" class="w-1/2 py-3 rounded-2xl border border-[#c5bcae] text-slate-700 font-bold text-xs active:scale-95 transition hover:bg-[#e6dfd1]">
                     Batal
@@ -121,30 +153,87 @@
                     Simpan
                 </button>
             </div>
-
         </form>
     </div>
 
-    <!-- FLOATING ACTION BUTTON (+) -->
-    <div id="fab-btn" class="fixed bottom-20 right-5 z-20">
-        <button onclick="togglePopup()" class="bg-[#2c2621] text-[#f5f2eb] w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-xl transition-transform transform active:scale-90 hover:bg-black focus:outline-none">
-            <i class="fa-solid fa-plus" id="plus-icon"></i>
-        </button>
+    <!-- MODAL TAMBAH / TARIK TABUNGAN -->
+    <div id="modal-transaksi" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
+        <div id="transaksi-content" class="bg-[#f5f2eb] w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-4 transform scale-95 transition-transform duration-200 border border-[#e2d9cc]">
+            <h3 class="text-base font-bold text-slate-800">Tambah Tabungan</h3>
+            
+            <!-- Tab Simpan / Tarik -->
+            <div class="bg-[#e6dfd1] p-1 rounded-2xl flex">
+                <button type="button" id="tab-simpan" onclick="setJenisTransaksi('Simpan')" class="w-1/2 py-2 rounded-xl text-xs font-bold bg-[#f5f2eb] text-slate-800 shadow-xs transition active:scale-95">Simpan</button>
+                <button type="button" id="tab-tarik" onclick="setJenisTransaksi('Tarik')" class="w-1/2 py-2 rounded-xl text-xs font-bold text-slate-600 transition active:scale-95">Tarik</button>
+            </div>
+
+            <form onsubmit="prosesTransaksi(event)" class="space-y-3">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Nominal (Rp)</label>
+                    <input type="number" id="trx-nominal" required placeholder="0" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-2.5 text-sm focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal</label>
+                    <input type="date" id="trx-tanggal" required class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-2.5 text-sm focus:outline-none">
+                </div>
+                <div>
+                    <label class="block text-xs font-semibold text-slate-600 mb-1">Catatan (opsional)</label>
+                    <input type="text" id="trx-catatan" placeholder="Contoh: Sisihan gaji" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-2.5 text-sm focus:outline-none">
+                </div>
+                <div class="pt-2 flex justify-end space-x-2">
+                    <button type="button" onclick="closeTransaksiModal()" class="px-4 py-2 rounded-xl border border-[#d8cfbe] text-xs font-semibold text-slate-700 active:scale-95 transition">Batal</button>
+                    <button type="submit" class="px-5 py-2 rounded-xl bg-[#2c2621] text-[#f5f2eb] text-xs font-bold active:scale-95 transition">Simpan</button>
+                </div>
+            </form>
+        </div>
     </div>
 
-    <!-- BOTTOM NAVIGATION BAR -->
-    <nav class="bg-[#e6dfd1] border-t border-[#d8cfbe] py-3 px-6 flex justify-around items-center text-xs font-medium fixed bottom-0 left-0 right-0 z-30 shadow-lg">
-        <button class="flex flex-col items-center text-slate-900 focus:outline-none active:scale-90 transition">
-            <i class="fa-solid fa-wallet text-base mb-1"></i>
-            <span>Berjalan</span>
-        </button>
-        <button class="flex flex-col items-center text-slate-400 hover:text-slate-700 focus:outline-none active:scale-90 transition">
-            <i class="fa-solid fa-circle-check text-base mb-1"></i>
-            <span>Selesai</span>
-        </button>
-    </nav>
+    <!-- POPUP PILIHAN TIPE TARGET (+) -->
+    <div id="target-popup" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
+        <div id="popup-content" class="bg-[#f5f2eb] w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border border-[#e2d9cc]">
+            <h3 class="text-lg font-bold text-slate-800 mb-2">Pilih Tipe Target</h3>
+            <button onclick="openFormNabung()" class="w-full bg-[#f0ebd8] hover:bg-[#e6dfd1] p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-[#e6dfd1]">
+                <div class="bg-[#ded5c4] w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 flex-shrink-0">
+                    <i class="fa-solid fa-flag"></i>
+                </div>
+                <div>
+                    <div class="text-sm font-bold text-slate-800">Nabung</div>
+                    <div class="text-[11px] text-slate-500">Buat target tabungan biasa</div>
+                </div>
+            </button>
+            <button onclick="alert('Fitur Nabung Berkala akan dikembangkan!'); togglePopup();" class="w-full bg-[#f0ebd8] hover:bg-[#e6dfd1] p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-[#e6dfd1]">
+                <div class="bg-[#ded5c4] w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 flex-shrink-0">
+                    <i class="fa-solid fa-trophy"></i>
+                </div>
+                <div>
+                    <div class="text-sm font-bold text-slate-800">Nabung Berkala</div>
+                    <div class="text-[11px] text-slate-500">Target dengan setoran rutin</div>
+                </div>
+            </button>
+            <div class="pt-2 flex justify-end">
+                <button onclick="togglePopup()" class="px-5 py-2 rounded-xl border border-[#d8cfbe] text-xs font-semibold text-slate-700 active:scale-95 transition">Batal</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- SIDEBAR MENU (HAMBURGER DRAWER) -->
+    <!-- POPUP OPSI DETAIL (TITIK TIGA) -->
+    <div id="detail-menu-popup" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
+        <div id="detail-menu-content" class="bg-[#f5f2eb] w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border border-[#e2d9cc]">
+            <h3 class="text-base font-bold text-slate-800 mb-1">Opsi Target</h3>
+            <button onclick="hapusTargetAktif()" class="w-full bg-rose-50 hover:bg-rose-100 p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-rose-200 text-rose-600">
+                <i class="fa-solid fa-trash w-5 text-center"></i>
+                <div>
+                    <div class="text-sm font-bold">Hapus</div>
+                    <div class="text-[11px] text-rose-400">Hapus goal beserta semua transaksi</div>
+                </div>
+            </button>
+            <div class="pt-2 flex justify-end">
+                <button onclick="toggleDetailMenu()" class="px-5 py-2 rounded-xl border border-[#d8cfbe] text-xs font-semibold text-slate-700 active:scale-95 transition">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SIDEBAR MENU UTAMA -->
     <div id="menu-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300">
         <div id="sidebar" class="absolute top-0 left-0 bottom-0 w-3/4 max-w-xs bg-[#f5f2eb] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-out flex flex-col">
             <div class="p-4 border-b border-[#e2d9cc] flex justify-between items-center bg-[#e6dfd1]">
@@ -170,63 +259,44 @@
         </div>
     </div>
 
-    <!-- POPUP PILIHAN TIPE TARGET (MODAL) -->
-    <div id="target-popup" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
-        <div id="popup-content" class="bg-[#f5f2eb] w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border border-[#e2d9cc]">
-            <h3 class="text-lg font-bold text-slate-800 mb-2">Pilih Tipe Target</h3>
-
-            <!-- Opsi 1: Nabung Biasa -->
-            <button onclick="openFormNabung()" class="w-full bg-[#f0ebd8] hover:bg-[#e6dfd1] p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-[#e6dfd1]">
-                <div class="bg-[#ded5c4] w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 flex-shrink-0">
-                    <i class="fa-solid fa-flag"></i>
-                </div>
-                <div>
-                    <div class="text-sm font-bold text-slate-800">Nabung</div>
-                    <div class="text-[11px] text-slate-500">Buat target tabungan biasa</div>
-                </div>
-            </button>
-
-            <!-- Opsi 2: Nabung Berkala -->
-            <button onclick="alert('Fitur Nabung Berkala akan dikembangkan!'); togglePopup();" class="w-full bg-[#f0ebd8] hover:bg-[#e6dfd1] p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-[#e6dfd1]">
-                <div class="bg-[#ded5c4] w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 flex-shrink-0">
-                    <i class="fa-solid fa-trophy"></i>
-                </div>
-                <div>
-                    <div class="text-sm font-bold text-slate-800">Nabung Berkala</div>
-                    <div class="text-[11px] text-slate-500">Target dengan setoran rutin</div>
-                </div>
-            </button>
-
-            <!-- Tombol Batal -->
-            <div class="pt-2 flex justify-end">
-                <button onclick="togglePopup()" class="px-5 py-2 rounded-xl border border-[#d8cfbe] text-xs font-semibold text-slate-700 hover:bg-[#e6dfd1] active:scale-95 transition">
-                    Batal
-                </button>
-            </div>
-        </div>
+    <!-- FLOATING ACTION BUTTON (+) -->
+    <div id="fab-btn" class="fixed bottom-20 right-5 z-20">
+        <button onclick="togglePopup()" class="bg-[#2c2621] text-[#f5f2eb] w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-xl transition-transform transform active:scale-90 hover:bg-black focus:outline-none">
+            <i class="fa-solid fa-plus" id="plus-icon"></i>
+        </button>
     </div>
 
-    <!-- JAVASCRIPT SYSTEM & LOCALSTORAGE -->
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="bg-[#e6dfd1] border-t border-[#d8cfbe] py-3 px-6 flex justify-around items-center text-xs font-medium fixed bottom-0 left-0 right-0 z-30 shadow-lg">
+        <button class="flex flex-col items-center text-slate-900 focus:outline-none active:scale-90 transition">
+            <i class="fa-solid fa-wallet text-base mb-1"></i>
+            <span>Berjalan</span>
+        </button>
+        <button class="flex flex-col items-center text-slate-400 hover:text-slate-700 focus:outline-none active:scale-90 transition">
+            <i class="fa-solid fa-circle-check text-base mb-1"></i>
+            <span>Selesai</span>
+        </button>
+    </nav>
+
+    <!-- SCRIPT APLIKASI -->
     <script>
         let base64Gambar = "";
+        let currentTargetId = null;
+        let jenisTrx = "Simpan";
 
-        // Load data saat pertama dibuka
         document.addEventListener("DOMContentLoaded", () => {
-            // Set default tanggal hari ini
             document.getElementById('input-tanggal').valueAsDate = new Date();
+            document.getElementById('trx-tanggal').valueAsDate = new Date();
             renderTargets();
         });
 
-        // Sidebar Navigation Toggle
+        // Sidebar Utama
         const menuOverlay = document.getElementById('menu-overlay');
         const sidebar = document.getElementById('sidebar');
         function toggleMenu() {
             if (menuOverlay.classList.contains('hidden')) {
                 menuOverlay.classList.remove('hidden');
-                setTimeout(() => {
-                    menuOverlay.classList.remove('opacity-0');
-                    sidebar.classList.remove('-translate-x-full');
-                }, 10);
+                setTimeout(() => { menuOverlay.classList.remove('opacity-0'); sidebar.classList.remove('-translate-x-full'); }, 10);
             } else {
                 menuOverlay.classList.add('opacity-0');
                 sidebar.classList.add('-translate-x-full');
@@ -235,48 +305,63 @@
         }
         menuOverlay.addEventListener('click', (e) => { if (e.target === menuOverlay) toggleMenu(); });
 
-        // Popup Target Toggle
+        // Popup Target (+)
         const popup = document.getElementById('target-popup');
         const popupContent = document.getElementById('popup-content');
         const plusIcon = document.getElementById('plus-icon');
         function togglePopup() {
             if (popup.classList.contains('hidden')) {
                 popup.classList.remove('hidden');
-                setTimeout(() => {
-                    popup.classList.remove('opacity-0');
-                    popupContent.classList.remove('scale-95');
-                    popupContent.classList.add('scale-100');
-                }, 10);
-                plusIcon.classList.remove('fa-plus');
-                plusIcon.classList.add('fa-xmark');
+                setTimeout(() => { popup.classList.remove('opacity-0'); popupContent.classList.remove('scale-95'); popupContent.classList.add('scale-100'); }, 10);
+                plusIcon.classList.remove('fa-plus'); plusIcon.classList.add('fa-xmark');
             } else {
-                popup.classList.add('opacity-0');
-                popupContent.classList.remove('scale-100');
-                popupContent.classList.add('scale-95');
+                popup.classList.add('opacity-0'); popupContent.classList.remove('scale-100'); popupContent.classList.add('scale-95');
                 setTimeout(() => popup.classList.add('hidden'), 200);
-                plusIcon.classList.remove('fa-xmark');
-                plusIcon.classList.add('fa-plus');
+                plusIcon.classList.remove('fa-xmark'); plusIcon.classList.add('fa-plus');
             }
         }
 
-        // Buka Room Form "Buat Nabung"
+        // Form Buat / Edit Nabung
         function openFormNabung() {
-            togglePopup(); // tutup popup
-            const formRoom = document.getElementById('view-form');
-            formRoom.classList.remove('translate-x-full');
-        }
-
-        // Tutup Room Form
-        function closeForm() {
-            const formRoom = document.getElementById('view-form');
-            formRoom.classList.add('translate-x-full');
+            togglePopup();
+            currentTargetId = null;
+            document.getElementById('form-title').textContent = "Buat Nabung";
             document.getElementById('form-nabung').reset();
+            document.getElementById('input-tanggal').valueAsDate = new Date();
             document.getElementById('preview-img').classList.add('hidden');
             document.getElementById('label-gambar').textContent = "Tap untuk pilih gambar dari file explorer";
             base64Gambar = "";
+            document.getElementById('view-form').classList.remove('translate-x-full');
         }
 
-        // Handle Image Preview & Base64 Converter
+        function openEditForm() {
+            const listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
+            const item = listNabung.find(t => t.id === currentTargetId);
+            if (!item) return;
+
+            currentTargetId = item.id;
+            document.getElementById('form-title').textContent = "Edit Nabung";
+            document.getElementById('input-judul').value = item.judul;
+            document.getElementById('input-target').value = item.targetNominal;
+            document.getElementById('input-tanggal').value = item.tanggal;
+            document.getElementById('input-deadline').value = item.deadline || '';
+            document.getElementById('input-catatan').value = item.catatan || '';
+            base64Gambar = item.gambar;
+
+            if (base64Gambar) {
+                const preview = document.getElementById('preview-img');
+                preview.src = base64Gambar;
+                preview.classList.remove('hidden');
+                document.getElementById('label-gambar').textContent = "Gambar tersimpan";
+            }
+
+            document.getElementById('view-form').classList.remove('translate-x-full');
+        }
+
+        function closeForm() {
+            document.getElementById('view-form').classList.add('translate-x-full');
+        }
+
         function previewGambar(input) {
             if (input.files && input.files[0]) {
                 const reader = new FileReader();
@@ -291,41 +376,187 @@
             }
         }
 
-        // Simpan Data Nabung ke LocalStorage
-        function simpanNabung(e) {
+        function simpanTarget(e) {
             e.preventDefault();
-
             const judul = document.getElementById('input-judul').value;
             const targetNominal = parseFloat(document.getElementById('input-target').value);
             const tanggal = document.getElementById('input-tanggal').value;
             const deadline = document.getElementById('input-deadline').value;
             const catatan = document.getElementById('input-catatan').value;
 
-            const newTarget = {
-                id: Date.now(),
-                judul,
-                targetNominal,
-                terkumpul: 0,
-                tanggal,
-                deadline,
-                catatan,
-                gambar: base64Gambar || 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=400&q=80' // default jar image
-            };
+            let listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
 
-            const listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
-            listNabung.push(newTarget);
+            if (currentTargetId) {
+                // Edit mode
+                listNabung = listNabung.map(item => {
+                    if (item.id === currentTargetId) {
+                        return { ...item, judul, targetNominal, tanggal, deadline, catatan, gambar: base64Gambar || item.gambar };
+                    }
+                    return item;
+                });
+            } else {
+                // Buat baru
+                const newTarget = {
+                    id: Date.now(),
+                    judul,
+                    targetNominal,
+                    terkumpul: 0,
+                    tanggal,
+                    deadline,
+                    catatan,
+                    gambar: base64Gambar || 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=400&q=80',
+                    riwayat: []
+                };
+                listNabung.push(newTarget);
+            }
+
             localStorage.setItem('targets_nabung', JSON.stringify(listNabung));
-
             closeForm();
+            renderTargets();
+            if (currentTargetId) openDetail(currentTargetId);
+        }
+
+        // Detail Target View
+        function openDetail(id) {
+            currentTargetId = id;
+            renderDetailContent();
+            document.getElementById('view-detail').classList.remove('translate-x-full');
+        }
+
+        function closeDetail() {
+            document.getElementById('view-detail').classList.add('translate-x-full');
             renderTargets();
         }
 
-        // Format angka ke Rupiah
+        function renderDetailContent() {
+            const listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
+            const item = listNabung.find(t => t.id === currentTargetId);
+            if (!item) return;
+
+            const persen = Math.min(100, Math.round((item.terkumpul / item.targetNominal) * 100));
+            const kekurangan = Math.max(0, item.targetNominal - item.terkumpul);
+
+            document.getElementById('detail-judul').textContent = item.judul;
+            document.getElementById('detail-persen').textContent = persen + '%';
+            document.getElementById('detail-progress-bar').style.width = persen + '%';
+            document.getElementById('detail-target-nominal').textContent = formatRupiah(item.targetNominal);
+            document.getElementById('detail-terkumpul').textContent = formatRupiah(item.terkumpul);
+            document.getElementById('detail-kurang').textContent = formatRupiah(kekurangan);
+            document.getElementById('detail-tanggal').textContent = item.tanggal;
+
+            const catatanBox = document.getElementById('detail-catatan-box');
+            if (item.catatan) {
+                document.getElementById('detail-catatan').textContent = item.catatan;
+                catatanBox.classList.remove('hidden');
+            } else {
+                catatanBox.classList.add('hidden');
+            }
+
+            const riwayatList = document.getElementById('riwayat-list');
+            if (!item.riwayat || item.riwayat.length === 0) {
+                riwayatList.innerHTML = `<div class="text-xs text-slate-400 italic">Belum ada transaksi.</div>`;
+            } else {
+                riwayatList.innerHTML = item.riwayat.slice().reverse().map(trx => `
+                    <div class="bg-[#e6dfd1]/60 p-3 rounded-2xl border border-[#d8cfbe] flex justify-between items-center">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-8 h-8 rounded-xl flex items-center justify-center ${trx.jenis === 'Simpan' ? 'bg-emerald-100 text-emerald-600' : 'bg-rose-100 text-rose-600'}">
+                                <i class="fa-solid fa-arrow-${trx.jenis === 'Simpan' ? 'down' : 'up'} text-xs"></i>
+                            </div>
+                            <div>
+                                <div class="text-xs font-bold text-slate-800">${formatRupiah(trx.nominal)}</div>
+                                <div class="text-[10px] text-slate-500">${trx.tanggal} ${trx.catatan ? '• ' + trx.catatan : ''}</div>
+                            </div>
+                        </div>
+                        <span class="text-[10px] font-bold text-slate-600 bg-[#ded5c4] px-2 py-0.5 rounded-lg">${trx.jenis}</span>
+                    </div>
+                `).join('');
+            }
+        }
+
+        // Modal Transaksi (Simpan / Tarik)
+        function openTransaksiModal() {
+            const modal = document.getElementById('modal-transaksi');
+            const content = document.getElementById('transaksi-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        }
+
+        function closeTransaksiModal() {
+            const modal = document.getElementById('modal-transaksi');
+            const content = document.getElementById('transaksi-content');
+            modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+            document.getElementById('trx-nominal').value = '';
+            document.getElementById('trx-catatan').value = '';
+        }
+
+        function setJenisTransaksi(jenis) {
+            jenisTrx = jenis;
+            const btnSimpan = document.getElementById('tab-simpan');
+            const btnTarik = document.getElementById('tab-tarik');
+            if (jenis === 'Simpan') {
+                btnSimpan.className = "w-1/2 py-2 rounded-xl text-xs font-bold bg-[#f5f2eb] text-slate-800 shadow-xs transition active:scale-95";
+                btnTarik.className = "w-1/2 py-2 rounded-xl text-xs font-bold text-slate-600 transition active:scale-95";
+            } else {
+                btnTarik.className = "w-1/2 py-2 rounded-xl text-xs font-bold bg-[#f5f2eb] text-slate-800 shadow-xs transition active:scale-95";
+                btnSimpan.className = "w-1/2 py-2 rounded-xl text-xs font-bold text-slate-600 transition active:scale-95";
+            }
+        }
+
+        function prosesTransaksi(e) {
+            e.preventDefault();
+            const nominal = parseFloat(document.getElementById('trx-nominal').value);
+            const tanggal = document.getElementById('trx-tanggal').value;
+            const catatan = document.getElementById('trx-catatan').value;
+
+            let listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
+            listNabung = listNabung.map(item => {
+                if (item.id === currentTargetId) {
+                    if (!item.riwayat) item.riwayat = [];
+                    item.riwayat.push({ jenis: jenisTrx, nominal, tanggal, catatan });
+                    if (jenisTrx === 'Simpan') {
+                        item.terkumpul += nominal;
+                    } else {
+                        item.terkumpul = Math.max(0, item.terkumpul - nominal);
+                    }
+                }
+                return item;
+            });
+
+            localStorage.setItem('targets_nabung', JSON.stringify(listNabung));
+            closeTransaksiModal();
+            renderDetailContent();
+        }
+
+        // Menu Titik Tiga Detail
+        const detailMenuPopup = document.getElementById('detail-menu-popup');
+        const detailMenuContent = document.getElementById('detail-menu-content');
+        function toggleDetailMenu() {
+            if (detailMenuPopup.classList.contains('hidden')) {
+                detailMenuPopup.classList.remove('hidden');
+                setTimeout(() => { detailMenuPopup.classList.remove('opacity-0'); detailMenuContent.classList.remove('scale-95'); detailMenuContent.classList.add('scale-100'); }, 10);
+            } else {
+                detailMenuPopup.classList.add('opacity-0'); detailMenuContent.classList.remove('scale-100'); detailMenuContent.classList.add('scale-95');
+                setTimeout(() => detailMenuPopup.classList.add('hidden'), 200);
+            }
+        }
+
+        function hapusTargetAktif() {
+            if (confirm("Yakin ingin menghapus target ini beserta riwayatnya?")) {
+                let listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
+                listNabung = listNabung.filter(t => t.id !== currentTargetId);
+                localStorage.setItem('targets_nabung', JSON.stringify(listNabung));
+                toggleDetailMenu();
+                closeDetail();
+                renderTargets();
+            }
+        }
+
+        // Render Home Cards
         function formatRupiah(angka) {
             return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
         }
 
-        // Render Cards di Tampilan Utama
         function renderTargets() {
             const listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
             const emptyState = document.getElementById('empty-state');
@@ -346,7 +577,7 @@
                 targetList.innerHTML = listNabung.map(item => {
                     const persen = Math.min(100, Math.round((item.terkumpul / item.targetNominal) * 100));
                     return `
-                        <div class="bg-[#e6dfd1]/80 rounded-2xl p-3 border border-[#d8cfbe] shadow-sm flex items-center space-x-3 active:scale-98 transition">
+                        <div onclick="openDetail(${item.id})" class="bg-[#e6dfd1]/80 rounded-2xl p-3 border border-[#d8cfbe] shadow-sm flex items-center space-x-3 active:scale-98 transition cursor-pointer">
                             <img src="${item.gambar}" class="w-20 h-20 rounded-xl object-cover flex-shrink-0 shadow-xs border border-[#c5bcae]">
                             <div class="flex-grow min-w-0">
                                 <div class="flex justify-between items-center mb-1">
@@ -355,7 +586,6 @@
                                 </div>
                                 <div class="text-[11px] text-slate-500">Terkumpul: <span class="font-semibold text-slate-700">${formatRupiah(item.terkumpul)}</span></div>
                                 <div class="text-[11px] text-slate-500 mb-2">Target: <span class="font-semibold text-slate-700">${formatRupiah(item.targetNominal)}</span></div>
-                                <!-- Progress Bar -->
                                 <div class="w-full bg-[#ded5c4] h-2 rounded-full overflow-hidden">
                                     <div class="bg-[#2c2621] h-full transition-all duration-500" style="width: ${persen}%"></div>
                                 </div>
