@@ -14,91 +14,169 @@
             overflow: hidden;
             background-color: #f5f2eb;
         }
+        /* Hide scrollbar for smooth app feel */
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="text-slate-800 font-sans flex flex-col justify-between h-full relative">
 
-    <!-- Header -->
+    <!-- HEADER UTAMA -->
     <header class="bg-[#e6dfd1] p-4 shadow-sm flex justify-between items-center z-10 flex-shrink-0">
-        <h1 class="text-lg font-bold tracking-wide"><i class="fa-solid fa-piggy-bank mr-2"></i> Nabung App</h1>
-        <button onclick="toggleMenu()" class="text-lg text-slate-700 focus:outline-none w-10 h-10 rounded-xl flex items-center justify-center transition active:scale-90 hover:bg-[#ded5c4]">
-            <i class="fa-solid fa-bars" id="menu-icon"></i>
+        <h1 class="text-lg font-bold tracking-wide flex items-center gap-2">
+            <i class="fa-solid fa-piggy-bank"></i> Nabung App
+        </h1>
+        <button onclick="toggleMenu()" class="w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 transition active:scale-90 hover:bg-[#ded5c4] focus:outline-none">
+            <i class="fa-solid fa-bars text-lg"></i>
         </button>
     </header>
 
-    <!-- Main Content -->
-    <main class="flex-grow flex flex-col justify-center items-center text-center p-6 space-y-3 overflow-y-auto">
-        <div class="bg-[#ded5c4] w-20 h-20 rounded-full flex items-center justify-center text-3xl shadow-inner text-slate-700">
-            <i class="fa-solid fa-dollar-sign"></i>
+    <!-- CONTAINER TAMPILAN UTAMA (HOME) -->
+    <div id="view-home" class="flex-grow flex flex-col overflow-y-auto no-scrollbar relative">
+        
+        <!-- Badge Target Aktif -->
+        <div id="target-count-badge" class="hidden px-5 pt-4">
+            <div class="bg-[#e6dfd1]/60 px-4 py-2 rounded-xl text-xs font-semibold text-slate-600 inline-block border border-[#ded5c4]">
+                <span id="active-count">0</span> target aktif
+            </div>
         </div>
-        <h2 class="text-base font-semibold text-slate-700">Belum ada target aktif</h2>
-        <p class="text-xs text-slate-500 max-w-xs">Buat Goal atau Challenge baru untuk mulai menabung impianmu.</p>
-    </main>
 
-    <!-- Floating Action Button (+) -->
-    <div class="fixed bottom-20 right-5 z-20">
+        <!-- Halaman Kosong (Empty State) -->
+        <main id="empty-state" class="flex-grow flex flex-col justify-center items-center text-center p-6 space-y-3">
+            <div class="bg-[#ded5c4] w-20 h-20 rounded-full flex items-center justify-center text-3xl shadow-inner text-slate-700">
+                <i class="fa-solid fa-dollar-sign"></i>
+            </div>
+            <h2 class="text-base font-semibold text-slate-700">Belum ada target aktif</h2>
+            <p class="text-xs text-slate-500 max-w-xs">Buat Goal atau Challenge baru untuk mulai menabung impianmu.</p>
+        </main>
+
+        <!-- List Card Target Tabungan -->
+        <div id="target-list" class="p-4 space-y-3 hidden">
+            <!-- Card items will be rendered here dynamically -->
+        </div>
+
+    </div>
+
+    <!-- CONTAINER ROOM FORM "BUAT NABUNG" -->
+    <div id="view-form" class="fixed inset-0 bg-[#f5f2eb] z-40 flex flex-col translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto no-scrollbar">
+        
+        <!-- Header Room Form -->
+        <div class="bg-[#e6dfd1] p-4 shadow-sm flex items-center space-x-3 flex-shrink-0">
+            <button onclick="closeForm()" class="w-9 h-9 rounded-xl flex items-center justify-center text-slate-700 active:scale-90 transition hover:bg-[#ded5c4]">
+                <i class="fa-solid fa-arrow-left text-lg"></i>
+            </button>
+            <h2 class="text-base font-bold text-slate-800">Buat Nabung</h2>
+        </div>
+
+        <!-- Isi Form -->
+        <form id="form-nabung" onsubmit="simpanNabung(event)" class="p-5 space-y-4 flex-grow overflow-y-auto no-scrollbar pb-24">
+            
+            <!-- Judul -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Judul</label>
+                <input type="text" id="input-judul" required placeholder="Contoh: Beli HP Baru" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-slate-700 transition">
+            </div>
+
+            <!-- Target Nominal -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Target nominal (Rp)</label>
+                <input type="number" id="input-target" required placeholder="0" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-slate-700 transition">
+            </div>
+
+            <!-- Tanggal Mulai -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Tanggal mulai</label>
+                <input type="date" id="input-tanggal" required class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-slate-700 transition">
+            </div>
+
+            <!-- Deadline (opsional) -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Deadline (opsional)</label>
+                <input type="date" id="input-deadline" class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-slate-700 transition">
+            </div>
+
+            <!-- Catatan -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Catatan</label>
+                <textarea id="input-catatan" rows="3" placeholder="Tulis motivasi atau rincian..." class="w-full bg-[#e6dfd1]/50 border border-[#d8cfbe] rounded-xl px-4 py-3 text-sm focus:outline-none focus:border-slate-700 transition resize-none"></textarea>
+            </div>
+
+            <!-- Upload Gambar -->
+            <div>
+                <label class="block text-xs font-semibold text-slate-600 mb-1">Gambar catatan (opsional, maks 1MB)</label>
+                <label class="w-full bg-[#e6dfd1]/40 border border-dashed border-[#c5bcae] rounded-2xl p-4 flex flex-col items-center justify-center space-y-2 cursor-pointer hover:bg-[#e6dfd1]/70 transition active:scale-98">
+                    <i class="fa-solid fa-file-image text-2xl text-slate-500"></i>
+                    <span id="label-gambar" class="text-xs text-slate-500 font-medium text-center">Tap untuk pilih gambar dari file explorer</span>
+                    <input type="file" id="input-gambar" accept="image/*" class="hidden" onchange="previewGambar(this)">
+                </label>
+                <img id="preview-img" class="mt-2 rounded-xl h-28 w-full object-cover hidden shadow-sm border border-[#d8cfbe]">
+            </div>
+
+            <!-- Tombol Batal & Simpan -->
+            <div class="pt-4 flex space-x-3">
+                <button type="button" onclick="closeForm()" class="w-1/2 py-3 rounded-2xl border border-[#c5bcae] text-slate-700 font-bold text-xs active:scale-95 transition hover:bg-[#e6dfd1]">
+                    Batal
+                </button>
+                <button type="submit" class="w-1/2 py-3 rounded-2xl bg-[#2c2621] text-[#f5f2eb] font-bold text-xs shadow-lg active:scale-95 transition hover:bg-black">
+                    Simpan
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <!-- FLOATING ACTION BUTTON (+) -->
+    <div id="fab-btn" class="fixed bottom-20 right-5 z-20">
         <button onclick="togglePopup()" class="bg-[#2c2621] text-[#f5f2eb] w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-xl transition-transform transform active:scale-90 hover:bg-black focus:outline-none">
             <i class="fa-solid fa-plus" id="plus-icon"></i>
         </button>
     </div>
 
-    <!-- Bottom Navigation Bar -->
+    <!-- BOTTOM NAVIGATION BAR -->
     <nav class="bg-[#e6dfd1] border-t border-[#d8cfbe] py-3 px-6 flex justify-around items-center text-xs font-medium fixed bottom-0 left-0 right-0 z-30 shadow-lg">
-        <button class="flex flex-col items-center text-slate-900 focus:outline-none">
+        <button class="flex flex-col items-center text-slate-900 focus:outline-none active:scale-90 transition">
             <i class="fa-solid fa-wallet text-base mb-1"></i>
             <span>Berjalan</span>
         </button>
-        <button class="flex flex-col items-center text-slate-400 hover:text-slate-700 focus:outline-none">
+        <button class="flex flex-col items-center text-slate-400 hover:text-slate-700 focus:outline-none active:scale-90 transition">
             <i class="fa-solid fa-circle-check text-base mb-1"></i>
             <span>Selesai</span>
         </button>
     </nav>
 
-    <!-- Sidebar Menu (Hamburger Drawer) -->
+    <!-- SIDEBAR MENU (HAMBURGER DRAWER) -->
     <div id="menu-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300">
         <div id="sidebar" class="absolute top-0 left-0 bottom-0 w-3/4 max-w-xs bg-[#f5f2eb] shadow-2xl transform -translate-x-full transition-transform duration-300 ease-out flex flex-col">
-            
-            <!-- Header Sidebar -->
             <div class="p-4 border-b border-[#e2d9cc] flex justify-between items-center bg-[#e6dfd1]">
                 <h3 class="text-base font-bold text-slate-800">Menu</h3>
                 <button onclick="toggleMenu()" class="text-slate-600 w-8 h-8 rounded-lg flex items-center justify-center active:scale-90 hover:bg-[#ded5c4]">
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-
-            <!-- List Menu -->
             <div class="p-3 space-y-1 overflow-y-auto flex-grow">
-                
-                <!-- Bahasa -->
                 <button onclick="alert('Menu Bahasa')" class="w-full p-3 rounded-xl flex items-center space-x-3 text-left text-slate-700 hover:bg-[#e6dfd1] active:scale-95 transition">
                     <i class="fa-solid fa-globe w-5 text-center text-slate-600"></i>
                     <span class="text-sm font-medium">Bahasa</span>
                 </button>
-
-                <!-- Mata Uang -->
                 <button onclick="alert('Menu Mata Uang')" class="w-full p-3 rounded-xl flex items-center space-x-3 text-left text-slate-700 hover:bg-[#e6dfd1] active:scale-95 transition">
                     <i class="fa-solid fa-money-bill-transfer w-5 text-center text-slate-600"></i>
                     <span class="text-sm font-medium">Mata Uang</span>
                 </button>
-
-                <!-- Tema Aplikasi -->
                 <button onclick="alert('Menu Tema Aplikasi')" class="w-full p-3 rounded-xl flex items-center space-x-3 text-left text-slate-700 hover:bg-[#e6dfd1] active:scale-95 transition">
                     <i class="fa-solid fa-palette w-5 text-center text-slate-600"></i>
                     <span class="text-sm font-medium">Tema Aplikasi</span>
                 </button>
-
             </div>
         </div>
     </div>
 
-    <!-- Popup Pilihan Tipe Target (Modal) -->
+    <!-- POPUP PILIHAN TIPE TARGET (MODAL) -->
     <div id="target-popup" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
         <div id="popup-content" class="bg-[#f5f2eb] w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border border-[#e2d9cc]">
-            
             <h3 class="text-lg font-bold text-slate-800 mb-2">Pilih Tipe Target</h3>
 
             <!-- Opsi 1: Nabung Biasa -->
-            <button onclick="pilihTarget('Nabung')" class="w-full bg-[#f0ebd8] hover:bg-[#e6dfd1] p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-[#e6dfd1]">
+            <button onclick="openFormNabung()" class="w-full bg-[#f0ebd8] hover:bg-[#e6dfd1] p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-[#e6dfd1]">
                 <div class="bg-[#ded5c4] w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 flex-shrink-0">
                     <i class="fa-solid fa-flag"></i>
                 </div>
@@ -109,7 +187,7 @@
             </button>
 
             <!-- Opsi 2: Nabung Berkala -->
-            <button onclick="pilihTarget('Nabung Berkala')" class="w-full bg-[#f0ebd8] hover:bg-[#e6dfd1] p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-[#e6dfd1]">
+            <button onclick="alert('Fitur Nabung Berkala akan dikembangkan!'); togglePopup();" class="w-full bg-[#f0ebd8] hover:bg-[#e6dfd1] p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-[#e6dfd1]">
                 <div class="bg-[#ded5c4] w-10 h-10 rounded-xl flex items-center justify-center text-slate-700 flex-shrink-0">
                     <i class="fa-solid fa-trophy"></i>
                 </div>
@@ -125,15 +203,23 @@
                     Batal
                 </button>
             </div>
-
         </div>
     </div>
 
-    <!-- Script Interaktif -->
+    <!-- JAVASCRIPT SYSTEM & LOCALSTORAGE -->
     <script>
+        let base64Gambar = "";
+
+        // Load data saat pertama dibuka
+        document.addEventListener("DOMContentLoaded", () => {
+            // Set default tanggal hari ini
+            document.getElementById('input-tanggal').valueAsDate = new Date();
+            renderTargets();
+        });
+
+        // Sidebar Navigation Toggle
         const menuOverlay = document.getElementById('menu-overlay');
         const sidebar = document.getElementById('sidebar');
-        
         function toggleMenu() {
             if (menuOverlay.classList.contains('hidden')) {
                 menuOverlay.classList.remove('hidden');
@@ -144,22 +230,15 @@
             } else {
                 menuOverlay.classList.add('opacity-0');
                 sidebar.classList.add('-translate-x-full');
-                setTimeout(() => {
-                    menuOverlay.classList.add('hidden');
-                }, 300);
+                setTimeout(() => menuOverlay.classList.add('hidden'), 300);
             }
         }
+        menuOverlay.addEventListener('click', (e) => { if (e.target === menuOverlay) toggleMenu(); });
 
-        menuOverlay.addEventListener('click', function(e) {
-            if (e.target === menuOverlay) {
-                toggleMenu();
-            }
-        });
-
+        // Popup Target Toggle
         const popup = document.getElementById('target-popup');
         const popupContent = document.getElementById('popup-content');
         const plusIcon = document.getElementById('plus-icon');
-
         function togglePopup() {
             if (popup.classList.contains('hidden')) {
                 popup.classList.remove('hidden');
@@ -174,24 +253,118 @@
                 popup.classList.add('opacity-0');
                 popupContent.classList.remove('scale-100');
                 popupContent.classList.add('scale-95');
-                setTimeout(() => {
-                    popup.classList.add('hidden');
-                }, 200);
+                setTimeout(() => popup.classList.add('hidden'), 200);
                 plusIcon.classList.remove('fa-xmark');
                 plusIcon.classList.add('fa-plus');
             }
         }
 
-        function pilihTarget(tipe) {
-            alert('Kamu memilih: ' + tipe);
-            togglePopup();
+        // Buka Room Form "Buat Nabung"
+        function openFormNabung() {
+            togglePopup(); // tutup popup
+            const formRoom = document.getElementById('view-form');
+            formRoom.classList.remove('translate-x-full');
         }
 
-        popup.addEventListener('click', function(e) {
-            if (e.target === popup) {
-                togglePopup();
+        // Tutup Room Form
+        function closeForm() {
+            const formRoom = document.getElementById('view-form');
+            formRoom.classList.add('translate-x-full');
+            document.getElementById('form-nabung').reset();
+            document.getElementById('preview-img').classList.add('hidden');
+            document.getElementById('label-gambar').textContent = "Tap untuk pilih gambar dari file explorer";
+            base64Gambar = "";
+        }
+
+        // Handle Image Preview & Base64 Converter
+        function previewGambar(input) {
+            if (input.files && input.files[0]) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    base64Gambar = e.target.result;
+                    const preview = document.getElementById('preview-img');
+                    preview.src = base64Gambar;
+                    preview.classList.remove('hidden');
+                    document.getElementById('label-gambar').textContent = input.files[0].name;
+                }
+                reader.readAsDataURL(input.files[0]);
             }
-        });
+        }
+
+        // Simpan Data Nabung ke LocalStorage
+        function simpanNabung(e) {
+            e.preventDefault();
+
+            const judul = document.getElementById('input-judul').value;
+            const targetNominal = parseFloat(document.getElementById('input-target').value);
+            const tanggal = document.getElementById('input-tanggal').value;
+            const deadline = document.getElementById('input-deadline').value;
+            const catatan = document.getElementById('input-catatan').value;
+
+            const newTarget = {
+                id: Date.now(),
+                judul,
+                targetNominal,
+                terkumpul: 0,
+                tanggal,
+                deadline,
+                catatan,
+                gambar: base64Gambar || 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=400&q=80' // default jar image
+            };
+
+            const listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
+            listNabung.push(newTarget);
+            localStorage.setItem('targets_nabung', JSON.stringify(listNabung));
+
+            closeForm();
+            renderTargets();
+        }
+
+        // Format angka ke Rupiah
+        function formatRupiah(angka) {
+            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
+        }
+
+        // Render Cards di Tampilan Utama
+        function renderTargets() {
+            const listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
+            const emptyState = document.getElementById('empty-state');
+            const targetList = document.getElementById('target-list');
+            const countBadge = document.getElementById('target-count-badge');
+            const activeCount = document.getElementById('active-count');
+
+            if (listNabung.length === 0) {
+                emptyState.classList.remove('hidden');
+                targetList.classList.add('hidden');
+                countBadge.classList.add('hidden');
+            } else {
+                emptyState.classList.add('hidden');
+                targetList.classList.remove('hidden');
+                countBadge.classList.remove('hidden');
+                activeCount.textContent = listNabung.length;
+
+                targetList.innerHTML = listNabung.map(item => {
+                    const persen = Math.min(100, Math.round((item.terkumpul / item.targetNominal) * 100));
+                    return `
+                        <div class="bg-[#e6dfd1]/80 rounded-2xl p-3 border border-[#d8cfbe] shadow-sm flex items-center space-x-3 active:scale-98 transition">
+                            <img src="${item.gambar}" class="w-20 h-20 rounded-xl object-cover flex-shrink-0 shadow-xs border border-[#c5bcae]">
+                            <div class="flex-grow min-w-0">
+                                <div class="flex justify-between items-center mb-1">
+                                    <h4 class="text-sm font-bold text-slate-800 truncate">${item.judul}</h4>
+                                    <span class="text-xs font-bold text-slate-600 bg-[#ded5c4] px-2 py-0.5 rounded-lg">${persen}%</span>
+                                </div>
+                                <div class="text-[11px] text-slate-500">Terkumpul: <span class="font-semibold text-slate-700">${formatRupiah(item.terkumpul)}</span></div>
+                                <div class="text-[11px] text-slate-500 mb-2">Target: <span class="font-semibold text-slate-700">${formatRupiah(item.targetNominal)}</span></div>
+                                <!-- Progress Bar -->
+                                <div class="w-full bg-[#ded5c4] h-2 rounded-full overflow-hidden">
+                                    <div class="bg-[#2c2621] h-full transition-all duration-500" style="width: ${persen}%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
     </script>
 </body>
 </html>
