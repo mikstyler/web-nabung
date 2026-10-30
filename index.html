@@ -214,7 +214,7 @@
     <div id="detail-menu-popup" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
         <div id="detail-menu-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border" style="background-color: var(--bg-color); border-color: var(--border-color);">
             <h3 class="text-base font-bold mb-1">Opsi Target</h3>
-            <button onclick="hapusTargetAktif()" class="w-full bg-rose-50 hover:bg-rose-100 p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-rose-200 text-rose-600">
+            <button onclick="konfirmasiHapusTarget()" class="w-full bg-rose-50 hover:bg-rose-100 p-3.5 rounded-2xl flex items-center space-x-3 text-left transition active:scale-95 border border-rose-200 text-rose-600">
                 <i class="fa-solid fa-trash w-5 text-center"></i>
                 <div>
                     <div class="text-sm font-bold">Hapus</div>
@@ -223,6 +223,21 @@
             </button>
             <div class="pt-2 flex justify-end">
                 <button onclick="toggleDetailMenu()" class="px-5 py-2 rounded-xl border text-xs font-semibold active:scale-95 transition" style="border-color: var(--border-color);">Batal</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- CUSTOM POPUP KONFIRMASI HAPUS (PENGGANTI CONFIRM BAWAAN) -->
+    <div id="delete-confirm-modal" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
+        <div id="delete-modal-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border text-center" style="background-color: var(--bg-color); border-color: var(--border-color);">
+            <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-xl text-rose-600 bg-rose-100">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+            <h3 class="text-base font-bold">Hapus Target</h3>
+            <p class="text-xs opacity-80">Yakin ingin menghapus target ini beserta riwayat transaksinya?</p>
+            <div class="pt-2 flex space-x-2">
+                <button onclick="closeDeleteConfirm()" class="w-1/2 py-2.5 rounded-xl border text-xs font-semibold active:scale-95 transition" style="border-color: var(--border-color);">Batal</button>
+                <button onclick="hapusTargetAktif()" class="w-1/2 py-2.5 rounded-xl bg-rose-600 text-white text-xs font-bold active:scale-95 transition shadow-sm">Oke</button>
             </div>
         </div>
     </div>
@@ -275,7 +290,7 @@
         </div>
     </div>
 
-    <!-- CUSTOM ALERT MODAL (PENGGANTI ALERT BAWAAN) -->
+    <!-- CUSTOM ALERT MODAL -->
     <div id="custom-alert" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
         <div id="alert-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border text-center" style="background-color: var(--bg-color); border-color: var(--border-color);">
             <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-xl" style="background-color: var(--header-bg);">
@@ -289,7 +304,7 @@
         </div>
     </div>
 
-    <!-- SIDEBAR MENU -->
+    <!-- SIDEBAR MENU DENGAN KATEGORI DROPDOWN -->
     <div id="menu-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300">
         <div id="sidebar" class="absolute top-0 left-0 bottom-0 w-3/4 max-w-xs shadow-2xl transform -translate-x-full transition-transform duration-300 ease-out flex flex-col" style="background-color: var(--bg-color);">
             <div class="p-4 border-b flex justify-between items-center transition-colors duration-300" style="background-color: var(--header-bg); border-color: var(--border-color);">
@@ -298,19 +313,46 @@
                     <i class="fa-solid fa-xmark text-lg"></i>
                 </button>
             </div>
-            <div class="p-3 space-y-1 overflow-y-auto flex-grow">
-                <button onclick="toggleMenu(); toggleLangModal();" class="w-full p-3 rounded-xl flex items-center space-x-3 text-left transition active:scale-95 hover:opacity-80">
-                    <i class="fa-solid fa-globe w-5 text-center"></i>
-                    <span class="text-sm font-medium">Bahasa</span>
-                </button>
-                <button onclick="toggleMenu(); showCustomAlert('Fitur Mata Uang akan segera hadir!');" class="w-full p-3 rounded-xl flex items-center space-x-3 text-left transition active:scale-95 hover:opacity-80">
-                    <i class="fa-solid fa-money-bill-transfer w-5 text-center"></i>
-                    <span class="text-sm font-medium">Mata Uang</span>
-                </button>
-                <button onclick="toggleMenu(); toggleThemeModal();" class="w-full p-3 rounded-xl flex items-center space-x-3 text-left transition active:scale-95 hover:opacity-80">
-                    <i class="fa-solid fa-palette w-5 text-center"></i>
-                    <span class="text-sm font-medium">Tema Aplikasi</span>
-                </button>
+
+            <!-- List Menu dengan Dropdown Kategori -->
+            <div class="p-3 space-y-2 overflow-y-auto flex-grow">
+                
+                <!-- Kategori 1: Information -->
+                <div class="rounded-xl border overflow-hidden transition-colors duration-300" style="border-color: var(--border-color);">
+                    <button onclick="toggleCategory('cat-info', 'arrow-info')" class="w-full p-3 flex justify-between items-center text-xs font-bold uppercase tracking-wider opacity-80" style="background-color: var(--header-bg);">
+                        <span>Information</span>
+                        <i id="arrow-info" class="fa-solid fa-chevron-down transition-transform duration-200"></i>
+                    </button>
+                    <div id="cat-info" class="p-1 space-y-1 transition-all duration-300">
+                        <button onclick="toggleMenu(); toggleThemeModal();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 hover:opacity-80">
+                            <i class="fa-solid fa-palette w-4 text-center"></i>
+                            <span>Tema Aplikasi</span>
+                        </button>
+                        <button onclick="toggleMenu(); showCustomAlert('Fitur Mata Uang akan segera hadir!');" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 hover:opacity-80">
+                            <i class="fa-solid fa-money-bill-transfer w-4 text-center"></i>
+                            <span>Mata Uang</span>
+                        </button>
+                        <button onclick="toggleMenu(); toggleLangModal();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 hover:opacity-80">
+                            <i class="fa-solid fa-globe w-4 text-center"></i>
+                            <span>Bahasa</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Kategori 2: Permainan -->
+                <div class="rounded-xl border overflow-hidden transition-colors duration-300" style="border-color: var(--border-color);">
+                    <button onclick="toggleCategory('cat-game', 'arrow-game')" class="w-full p-3 flex justify-between items-center text-xs font-bold uppercase tracking-wider opacity-80" style="background-color: var(--header-bg);">
+                        <span>Permainan</span>
+                        <i id="arrow-game" class="fa-solid fa-chevron-down transition-transform duration-200"></i>
+                    </button>
+                    <div id="cat-game" class="p-1 space-y-1 transition-all duration-300">
+                        <button onclick="toggleMenu(); showCustomAlert('Fitur Ular Tangga akan segera hadir!');" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium transition active:scale-95 hover:opacity-80">
+                            <i class="fa-solid fa-dice w-4 text-center"></i>
+                            <span>Ular Tangga</span>
+                        </button>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>
@@ -348,7 +390,20 @@
             renderTargets();
         });
 
-        // Custom Alert Pengganti Bawaan Browser
+        // Toggle Dropdown Kategori Sidebar
+        function toggleCategory(contentId, arrowId) {
+            const content = document.getElementById(contentId);
+            const arrow = document.getElementById(arrowId);
+            if (content.style.display === "none") {
+                content.style.display = "block";
+                arrow.style.transform = "rotate(0deg)";
+            } else {
+                content.style.display = "none";
+                arrow.style.transform = "rotate(-90deg)";
+            }
+        }
+
+        // Custom Alert & Confirm Modals
         function showCustomAlert(msg) {
             document.getElementById('alert-message-text').textContent = msg;
             const modal = document.getElementById('custom-alert');
@@ -359,6 +414,20 @@
         function closeCustomAlert() {
             const modal = document.getElementById('custom-alert');
             const content = document.getElementById('alert-content');
+            modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95');
+            setTimeout(() => modal.classList.add('hidden'), 200);
+        }
+
+        function konfirmasiHapusTarget() {
+            toggleDetailMenu();
+            const modal = document.getElementById('delete-confirm-modal');
+            const content = document.getElementById('delete-modal-content');
+            modal.classList.remove('hidden');
+            setTimeout(() => { modal.classList.remove('opacity-0'); content.classList.remove('scale-95'); content.classList.add('scale-100'); }, 10);
+        }
+        function closeDeleteConfirm() {
+            const modal = document.getElementById('delete-confirm-modal');
+            const content = document.getElementById('delete-modal-content');
             modal.classList.add('opacity-0'); content.classList.remove('scale-100'); content.classList.add('scale-95');
             setTimeout(() => modal.classList.add('hidden'), 200);
         }
@@ -592,7 +661,7 @@
             progressBar.style.width = persen + '%';
 
             if (persen >= 100) {
-                progressBar.style.backgroundColor = '#22c55e'; // Hijau
+                progressBar.style.backgroundColor = '#22c55e';
                 persenEl.style.backgroundColor = '#dcfce7';
                 persenEl.style.color = '#15803d';
             } else {
@@ -717,14 +786,12 @@
         }
 
         function hapusTargetAktif() {
-            if (confirm("Yakin ingin menghapus target ini beserta riwayatnya?")) {
-                let listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
-                listNabung = listNabung.filter(t => t.id !== currentTargetId);
-                localStorage.setItem('targets_nabung', JSON.stringify(listNabung));
-                toggleDetailMenu();
-                closeDetail();
-                renderTargets();
-            }
+            closeDeleteConfirm();
+            let listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
+            listNabung = listNabung.filter(t => t.id !== currentTargetId);
+            localStorage.setItem('targets_nabung', JSON.stringify(listNabung));
+            closeDetail();
+            renderTargets();
         }
 
         function formatRupiah(angka) {
