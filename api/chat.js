@@ -38,13 +38,11 @@ module.exports = async (req, res) => {
     try {
         await connectToDatabase();
 
-        // 1. KETIKA RENDER: Ambil 50 Pesan Terakhir
         if (req.method === 'GET') {
             const messages = await Chat.find().sort({ createdAt: -1 }).limit(50);
             return res.status(200).json({ success: true, messages: messages.reverse() });
         }
 
-        // 2. KETIKA KIRIM PESAN BARU
         if (req.method === 'POST') {
             const { username, avatar, message, replyTo } = req.body;
             if (!username || !message) {
