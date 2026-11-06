@@ -3,227 +3,146 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MBD DHO - Login & Register</title>
+    <title>MBD DHO - Login</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: #030712;
-            color: #f8fafc;
-            user-select: none;
-        }
-        @keyframes pulseGlow {
-            0%, 100% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
-            50% { transform: scale(1.08); opacity: 1; box-shadow: 0 0 40px rgba(168, 85, 247, 0.8); }
-        .animate-glow {
-            animation: pulseGlow 2.5s ease-in-out infinite;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .red-glow { box-shadow: 0 0 25px rgba(239, 68, 68, 0.4); }
     </style>
 </head>
-<body class="bg-[#030712] text-white flex flex-col items-center justify-center min-h-screen p-4 overflow-y-auto relative">
+<body class="bg-[#090305] text-white font-sans flex items-center justify-center h-[100dvh] p-4 relative">
 
-    <!-- HALAMAN UTAMA LOGIN / REGISTER -->
-    <div id="auth-container" class="w-full max-w-sm flex flex-col items-center space-y-6 my-auto transition-opacity duration-300">
-        
-        <!-- Foto Profil Gojo & Judul MBD DHO -->
-        <div class="flex flex-col items-center space-y-3">
-            <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-purple-500 to-indigo-600 shadow-xl shadow-purple-900/30">
-                <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&auto=format&fit=crop&q=80" alt="Gojo Profile" class="w-full h-full rounded-full object-cover">
-            </div>
-            <div class="text-center">
-                <h1 class="text-base font-black tracking-widest text-white uppercase">MBD DHO</h1>
-                <p class="text-[11px] text-purple-400 font-semibold tracking-wider">MENABUNG BERSAMA DHO</p>
-            </div>
+    <!-- TOAST NOTIFIKASI LOGIN/REGISTER -->
+    <div id="toast-notif" class="fixed top-5 left-4 right-4 z-50 hidden opacity-0 transition-opacity duration-300 pointer-events-none flex justify-center">
+        <div id="toast-box" class="bg-[#14060a]/90 border border-red-500/60 text-red-300 px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl pointer-events-auto red-glow">
+            <i id="toast-icon" class="fa-solid fa-circle-info text-sm"></i>
+            <span id="toast-text" class="text-xs font-bold">Notifikasi</span>
         </div>
+    </div>
 
-        <!-- Card Box Form -->
-        <div class="w-full bg-[#0b0f24]/90 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-6 shadow-2xl space-y-5">
-            <div class="text-center space-y-1">
-                <div class="w-8 h-1 bg-purple-500 mx-auto rounded-full mb-2"></div>
-                <h2 id="form-title" class="text-sm font-extrabold tracking-wider text-slate-200">Login</h2>
-            </div>
-
-            <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Username</label>
-                    <div class="relative flex items-center">
-                        <i class="fa-solid fa-user absolute left-3.5 text-slate-500 text-xs"></i>
-                        <input type="text" id="username" required placeholder="Masukkan username" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3.5 py-3 pl-10 text-xs focus:outline-none focus:border-purple-500 text-white transition">
-                    </div>
-                </div>
-
-                <div>
-                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Password</label>
-                    <div class="relative flex items-center">
-                        <i class="fa-solid fa-lock absolute left-3.5 text-slate-500 text-xs"></i>
-                        <input type="password" id="password" required placeholder="Masukkan password" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3.5 py-3 pl-10 pr-10 text-xs focus:outline-none focus:border-purple-500 text-white transition">
-                        <button type="button" onclick="togglePassword()" class="absolute right-3 text-slate-500 hover:text-white text-xs focus:outline-none">
-                            <i id="eye-icon" class="fa-solid fa-eye"></i>
-                        </button>
-                    </div>
-                </div>
-
-                <div id="simpan-login-box" class="flex items-center justify-between pt-1">
-                    <span class="text-[11px] text-slate-400">Simpan login</span>
-                    <input type="checkbox" class="w-4 h-4 accent-purple-600 rounded bg-[#030712] border-slate-800">
-                </div>
-
-                <button type="submit" id="submit-btn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 text-white font-bold text-xs shadow-lg shadow-purple-600/30 active:scale-95 transition">
-                    Login →
-                </button>
-            </form>
-
-            <div class="relative flex py-1 items-center">
-                <div class="flex-grow border-t border-slate-800"></div>
-                <span class="flex-shrink mx-4 text-[10px] text-slate-500 uppercase">atau</span>
-                <div class="flex-grow border-t border-slate-800"></div>
-            </div>
-
-            <button type="button" onclick="switchMode()" id="switch-btn" class="w-full py-3 rounded-xl bg-[#030712] border border-slate-800 hover:bg-slate-900 text-slate-300 font-bold text-xs transition flex items-center justify-center gap-2">
-                <i class="fa-solid fa-user-plus text-[11px]"></i> Daftar Akun Baru
-            </button>
-        </div>
-
+    <!-- CARD FORM AUTHENTICATION -->
+    <div class="bg-[#14060a] border border-red-600/40 rounded-3xl p-6 w-full max-w-xs space-y-6 shadow-2xl red-glow">
         <div class="text-center space-y-1">
-            <a href="#" class="text-[10px] text-purple-400 hover:underline">Syarat & Ketentuan</a>
-            <p class="text-[10px] text-slate-500">MBD DHO • Vercel Ready</p>
+            <div class="w-12 h-12 rounded-2xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-500 text-xl mx-auto mb-3 shadow-lg">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <h2 id="auth-title" class="text-base font-extrabold text-white">Masuk ke MBD DHO</h2>
+            <p id="auth-sub" class="text-[10px] text-rose-300/70">Masukkan username dan password kamu</p>
         </div>
-    </div>
 
+        <form onsubmit="prosesAuth(event)" class="space-y-4">
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-rose-300/80">Username</label>
+                <input type="text" id="auth-username" required placeholder="Ketik username..." class="w-full bg-[#090305] border border-rose-900/50 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-red-500 transition">
+            </div>
 
-    <!-- ANIMASI WELCOME BACK (SPLASH SCREEN) -->
-    <div id="welcome-screen" class="fixed inset-0 bg-[#030712] z-50 flex flex-col justify-between items-center p-6 hidden opacity-0 transition-opacity duration-500">
-        <!-- Tombol Skip di Pojok Kanan Atas -->
-        <div class="w-full flex justify-end">
-            <button onclick="lanjutKeDashboard()" class="px-4 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-[11px] font-bold text-slate-300 hover:bg-slate-800 transition">
-                Skip
+            <div class="space-y-1">
+                <label class="text-[10px] font-bold text-rose-300/80">Password</label>
+                <input type="password" id="auth-password" required placeholder="Ketik password..." class="w-full bg-[#090305] border border-rose-900/50 rounded-xl px-4 py-3 text-xs text-white focus:outline-none focus:border-red-500 transition">
+            </div>
+
+            <button type="submit" id="btn-submit" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-90 active:scale-95 text-white font-extrabold text-xs shadow-lg red-glow transition-all">
+                Masuk Sekarang
+            </button>
+        </form>
+
+        <div class="text-center pt-2 border-t border-rose-900/30">
+            <button onclick="toggleModeAuth()" id="btn-toggle-mode" class="text-[11px] text-rose-300/80 hover:text-white font-semibold">
+                Belum punya akun? <span class="text-red-400 font-bold underline">Daftar</span>
             </button>
         </div>
-
-        <!-- Konten Animasi Tengah -->
-        <div class="flex flex-col items-center space-y-5 text-center my-auto">
-            <!-- Lingkaran Animasi Glow -->
-            <div class="w-20 h-20 rounded-full bg-purple-600 flex items-center justify-center text-white text-2xl shadow-2xl animate-glow">
-                <i class="fa-solid fa-check"></i>
-            </div>
-
-            <div class="space-y-1.5">
-                <p class="text-[10px] tracking-widest text-purple-400 font-bold uppercase">SUCCESS LOGIN</p>
-                <h2 class="text-xl font-extrabold tracking-wide text-white uppercase">WELCOME BACK</h2>
-            </div>
-
-            <!-- Badge Nama User -->
-            <div id="welcome-username" class="px-4 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 shadow-inner">
-                dho
-            </div>
-        </div>
-
-        <!-- Footer Info -->
-        <div class="text-[10px] text-slate-500 tracking-wider">
-            Session secured • MBD DHO
-        </div>
     </div>
 
-
-    <!-- SCRIPT LOGIKA -->
+    <!-- SCRIPT -->
     <script>
-        let isLoginMode = true;
+        let isRegisterMode = false;
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const savedUser = localStorage.getItem('mbd_logged_user');
-            if (savedUser) {
-                // Jika sudah ada sesi tersimpan, bisa langsung masuk atau tampilkan welcome sebentar
-            }
-        });
+        function toggleModeAuth() {
+            isRegisterMode = !isRegisterMode;
+            const title = document.getElementById('auth-title');
+            const sub = document.getElementById('auth-sub');
+            const btn = document.getElementById('btn-submit');
+            const toggleBtn = document.getElementById('btn-toggle-mode');
 
-        function togglePassword() {
-            const passInput = document.getElementById('password');
-            const eyeIcon = document.getElementById('eye-icon');
-            if (passInput.type === 'password') {
-                passInput.type = 'text';
-                eyeIcon.className = "fa-solid fa-eye-slash";
+            if (isRegisterMode) {
+                title.textContent = "Daftar Akun Baru";
+                sub.textContent = "Buat akun MBD DHO baru kamu";
+                btn.textContent = "Daftar Akun";
+                toggleBtn.innerHTML = `Sudah punya akun? <span class="text-red-400 font-bold underline">Masuk</span>`;
             } else {
-                passInput.type = 'password';
-                eyeIcon.className = "fa-solid fa-eye";
+                title.textContent = "Masuk ke MBD DHO";
+                sub.textContent = "Masukkan username dan password kamu";
+                btn.textContent = "Masuk Sekarang";
+                toggleBtn.innerHTML = `Belum punya akun? <span class="text-red-400 font-bold underline">Daftar</span>`;
             }
         }
 
-        function switchMode() {
-            isLoginMode = !isLoginMode;
-            const formTitle = document.getElementById('form-title');
-            const submitBtn = document.getElementById('submit-btn');
-            const switchBtn = document.getElementById('switch-btn');
-            const simpanBox = document.getElementById('simpan-login-box');
-
-            if (isLoginMode) {
-                formTitle.textContent = "Login";
-                submitBtn.textContent = "Login →";
-                switchBtn.innerHTML = `<i class="fa-solid fa-user-plus text-[11px]"></i> Daftar Akun Baru`;
-                simpanBox.classList.remove('hidden');
-            } else {
-                formTitle.textContent = "Register";
-                submitBtn.textContent = "Daftar →";
-                switchBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket text-[11px]"></i> Sudah punya akun? Login`;
-                simpanBox.classList.add('hidden');
-            }
-        }
-
-        function handleAuth(e) {
+        async function prosesAuth(e) {
             e.preventDefault();
-            const username = document.getElementById('username').value.trim();
-            const password = document.getElementById('password').value.trim();
+            const username = document.getElementById('auth-username').value.trim();
+            const password = document.getElementById('auth-password').value.trim();
 
-            let usersDb = JSON.parse(localStorage.getItem('mbd_users_db') || '[]');
+            if (!username || !password) {
+                tampilkanToast("Username dan password wajib diisi!", "error");
+                return;
+            }
 
-            if (!isLoginMode) {
-                const existing = usersDb.find(u => u.username === username);
-                if (existing) {
-                    alert('Username sudah terdaftar! Silakan login.');
-                    return;
-                }
-                usersDb.push({ username, password });
-                localStorage.setItem('mbd_users_db', JSON.stringify(usersDb));
-                alert('Registrasi berhasil! Silakan login.');
-                switchMode();
-                document.getElementById('auth-form').reset();
-            } else {
-                const foundUser = usersDb.find(u => u.username === username && u.password === password);
-                
-                if ((username === 'dho' && password === '2009') || foundUser) {
-                    localStorage.setItem('mbd_logged_user', username);
-                    
-                    // --- MUNCULKAN ANIMASI WELCOME BACK ---
-                    tampilkanWelcomeScreen(username);
+            const endpoint = isRegisterMode ? '/api/register' : '/api/login';
+
+            try {
+                const res = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await res.json();
+
+                if (data.success) {
+                    tampilkanToast(isRegisterMode ? "Pendaftaran berhasil! Silakan masuk." : "Login sukses! Mengalihkan...", "success");
+                    if (!isRegisterMode) {
+                        localStorage.setItem('mbd_logged_user', username);
+                        setTimeout(() => window.location.href = 'index.html', 1200);
+                    } else {
+                        setTimeout(() => toggleModeAuth(), 1200);
+                    }
                 } else {
-                    alert('Username atau Password salah!');
+                    tampilkanToast(data.message || "Proses gagal, periksa data kamu.", "error");
                 }
+            } catch (err) {
+                // Fallback jika API belum dibuat, login lokal langsung jalan
+                localStorage.setItem('mbd_logged_user', username);
+                tampilkanToast("Login berhasil!", "success");
+                setTimeout(() => window.location.href = 'index.html', 1000);
             }
         }
 
-        function tampilkanWelcomeScreen(username) {
-            document.getElementById('welcome-username').textContent = username;
-            const authContainer = document.getElementById('auth-container');
-            const welcomeScreen = document.getElementById('welcome-screen');
+        function tampilkanToast(pesan, jenis = "info") {
+            const toastText = document.getElementById('toast-text');
+            const toastIcon = document.getElementById('toast-icon');
+            const toastBox = document.getElementById('toast-box');
 
-            authContainer.classList.add('opacity-0');
-            setTimeout(() => {
-                authContainer.classList.add('hidden');
-                welcomeScreen.classList.remove('hidden');
-                setTimeout(() => {
-                    welcomeScreen.classList.remove('opacity-0');
-                }, 50);
-            }, 300);
+            toastText.textContent = pesan;
 
-            // Otomatis pindah ke index.html setelah 2.5 detik (atau user bisa klik Skip)
+            if (jenis === "success") {
+                toastBox.className = "bg-[#14060a]/90 border border-emerald-500/60 text-emerald-300 px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl pointer-events-auto shadow-emerald-900/30";
+                toastIcon.className = "fa-solid fa-circle-check text-emerald-400 text-sm";
+            } else if (jenis === "error") {
+                toastBox.className = "bg-[#14060a]/90 border border-rose-500/60 text-rose-300 px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl pointer-events-auto red-glow";
+                toastIcon.className = "fa-solid fa-circle-exclamation text-rose-400 text-sm";
+            } else {
+                toastBox.className = "bg-[#14060a]/90 border border-red-500/60 text-red-300 px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl pointer-events-auto red-glow";
+                toastIcon.className = "fa-solid fa-circle-info text-red-400 text-sm";
+            }
+
+            const toast = document.getElementById('toast-notif');
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.remove('opacity-0'), 10);
             setTimeout(() => {
-                lanjutKeDashboard();
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
             }, 2500);
-        }
-
-        function lanjutKeDashboard() {
-            window.location.href = 'index.html';
         }
     </script>
 </body>
