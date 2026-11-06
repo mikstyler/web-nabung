@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MBD DHO - Daftar Chat</title>
+    <title>MBD DHO - Chat Pribadi</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -11,143 +11,124 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        @keyframes modalScale {
-            0% { transform: scale(0.85); opacity: 0; }
-            100% { transform: scale(1); opacity: 1; }
-        }
-        .animate-modal { animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
 <body class="bg-[#030712] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative">
 
-    <!-- HEADER -->
+    <!-- HEADER PRIVATE CHAT -->
     <header class="flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0">
-        <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
+        <button onclick="window.location.href='chatlist.html'" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
             <i class="fa-solid fa-chevron-left text-xs"></i>
         </button>
         <div class="text-center">
-            <h1 class="text-sm font-bold tracking-wide text-slate-200">Chat Pribadi</h1>
-            <p class="text-[9px] text-purple-400 font-medium">Daftar Percakapan</p>
+            <h1 id="target-username-title" class="text-sm font-bold tracking-wide text-slate-200">Chat Pribadi</h1>
+            <p class="text-[9px] text-purple-400 font-medium">● Secure Direct Message</p>
         </div>
-        <button onclick="tampilkanInfoCustom()" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
-            <i class="fa-solid fa-info text-xs text-purple-400"></i>
-        </button>
+        <div class="w-9"></div>
     </header>
 
-    <!-- LIST CHAT CONTAINER (ALA WHATSAPP) -->
-    <main id="chat-list-container" class="flex-grow p-4 overflow-y-auto space-y-3 no-scrollbar">
-        <!-- List akan dimuat via JS -->
+    <!-- ROOM PESAN PRIVAT -->
+    <main id="private-container" class="flex-grow p-4 overflow-y-auto space-y-4 no-scrollbar">
+        <div class="text-center py-10 text-slate-500 text-xs">Memuat pesan...</div>
     </main>
 
-    <!-- BOTTOM NAVIGATION -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-[#090d1e]/95 backdrop-blur-lg border-t border-slate-800/80 px-4 py-2.5 flex justify-around items-center z-20">
-        <a href="index.html" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-90 transition-transform">
-            <i class="fa-solid fa-house text-xs"></i>
-            <span class="text-[9px]">Home</span>
-        </a>
-        <a href="chatlist.html" class="flex flex-col items-center text-indigo-400 space-y-1 active:scale-90 transition-transform">
-            <i class="fa-solid fa-comments text-xs"></i>
-            <span class="text-[9px] font-bold">Chat</span>
-        </a>
-        <a href="index.html" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-95 transition-transform">
-            <div class="w-10 h-10 -mt-5 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-indigo-600/50 border-4 border-[#030712]">
-                <i class="fa-solid fa-users text-xs"></i>
-            </div>
-            <span class="text-[9px]">Group</span>
-        </a>
-        <a href="index.html" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-90 transition-transform">
-            <i class="fa-solid fa-circle-info text-xs"></i>
-            <span class="text-[9px]">Info</span>
-        </a>
-        <a href="index.html" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-90 transition-transform">
-            <i class="fa-solid fa-ellipsis-vertical text-xs"></i>
-            <span class="text-[9px]">Tools</span>
-        </a>
-    </nav>
-
-    <!-- CUSTOM MODAL (MENGGANTIKAN ALERT BROWSER) -->
-    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
-            <div class="w-14 h-14 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-xl mx-auto shadow-lg">
-                <i class="fa-solid fa-circle-info"></i>
-            </div>
-            <div class="space-y-1">
-                <h3 id="modal-title" class="text-sm font-extrabold text-white">Informasi Chat</h3>
-                <p id="modal-message" class="text-[11px] text-slate-400 leading-relaxed">Pesan sistem...</p>
-            </div>
-            <button onclick="tutupCustomModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 active:scale-95 text-white font-bold text-xs shadow-lg transition-all">
-                Oke
+    <!-- FORM INPUT PRIVAT -->
+    <footer class="p-3 bg-[#090d1e] border-t border-slate-800/80 flex-shrink-0 z-20">
+        <form onsubmit="kirimPesanPrivat(event)" class="flex items-center space-x-2">
+            <input type="text" id="privat-input" required placeholder="Tulis pesan pribadi..." class="flex-grow bg-[#030712] border border-slate-800 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-purple-500 text-white transition">
+            <button type="submit" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white active:scale-90 transition-all shadow-lg shadow-purple-600/30 flex-shrink-0">
+                <i class="fa-solid fa-paper-plane text-xs"></i>
             </button>
-        </div>
-    </div>
+        </form>
+    </footer>
 
     <!-- SCRIPT -->
     <script>
+        let currentUser = "";
+        let targetUser = "";
+
         document.addEventListener("DOMContentLoaded", () => {
-            const currentUser = localStorage.getItem('mbd_logged_user');
+            currentUser = localStorage.getItem('mbd_logged_user');
             if (!currentUser) {
                 window.location.href = 'login.html';
                 return;
             }
 
-            loadChatList(currentUser);
+            const urlParams = new URLSearchParams(window.location.search);
+            targetUser = urlParams.get('target');
+            if (!targetUser) {
+                window.location.href = 'chatlist.html';
+                return;
+            }
+
+            document.getElementById('target-username-title').textContent = `@${targetUser}`;
+            
+            // Daftarkan target ke list chat privat pengirim & penerima
+            tambahKeDaftarChat(currentUser, targetUser);
+            tambahKeDaftarChat(targetUser, currentUser);
+
+            loadPrivateMessages();
+            setInterval(loadPrivateMessages, 2500);
         });
 
-        function loadChatList(currentUser) {
-            const container = document.getElementById('chat-list-container');
-            const chatList = JSON.parse(localStorage.getItem(`mbd_private_chats_${currentUser}`) || '[]');
+        function tambahKeDaftarChat(owner, target) {
+            let chatList = JSON.parse(localStorage.getItem(`mbd_private_chats_${owner}`) || '[]');
+            if (!chatList.some(item => item.targetUser === target)) {
+                chatList.push({ targetUser: target });
+                localStorage.setItem(`mbd_private_chats_${owner}`, JSON.stringify(chatList));
+            }
+        }
 
-            if (chatList.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-20 space-y-3">
-                        <div class="w-16 h-16 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 text-xl mx-auto">
-                            <i class="fa-regular fa-comment-dots"></i>
-                        </div>
-                        <h3 class="text-xs font-bold text-slate-300">Belum ada percakapan</h3>
-                        <p class="text-[10px] text-slate-500 max-w-xs mx-auto">Buka Global Chat, klik profil seseorang, lalu pilih "Chat Pribadi" untuk memulai percakapan.</p>
-                    </div>
-                `;
+        function loadPrivateMessages() {
+            // Gunakan kunci unik bersama agar kedua belah pihak membaca room yang sama
+            const roomKey = `mbd_dm_${[currentUser, targetUser].sort().join('_')}`;
+            const messages = JSON.parse(localStorage.getItem(roomKey) || '[]');
+            
+            const container = document.getElementById('private-container');
+            if (messages.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-slate-500 text-xs">Kirim pesan pertama untuk memulai chat pribadi dengan @${targetUser}!</div>`;
                 return;
             }
 
             let html = "";
-            chatList.forEach(item => {
-                const storageKey = `mbd_dm_${[currentUser, item.targetUser].sort().join('_')}`;
-                const messages = JSON.parse(localStorage.getItem(storageKey) || '[]');
-                const lastMsg = messages.length > 0 ? messages[messages.length - 1].message : 'Ketuk untuk mulai mengobrol...';
-                const timeStr = messages.length > 0 ? messages[messages.length - 1].time : '';
-
+            messages.forEach(msg => {
+                const isMe = msg.sender === currentUser;
                 html += `
-                    <div onclick="window.location.href='privatechat.html?target=${encodeURIComponent(item.targetUser)}'" class="flex items-center justify-between p-3.5 rounded-2xl bg-[#0b0f24] border border-slate-800/80 active:scale-[0.98] transition-all cursor-pointer shadow-md">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 rounded-full bg-slate-900 border border-purple-500/50 flex items-center justify-center text-purple-400 font-extrabold text-sm uppercase">
-                                ${item.targetUser.charAt(0)}
+                    <div class="flex items-start space-x-2.5 ${isMe ? 'flex-row-reverse space-x-reverse' : ''}">
+                        <div class="max-w-[78%] space-y-1">
+                            <div class="p-3 rounded-2xl text-xs space-y-1.5 shadow-md ${isMe ? 'bg-purple-600 text-white rounded-tr-none' : 'bg-[#0b0f24] border border-slate-800 text-slate-200 rounded-tl-none'}">
+                                <p class="leading-relaxed break-words">${escapeHtml(msg.message)}</p>
                             </div>
-                            <div>
-                                <h4 class="text-xs font-extrabold text-white">@${item.targetUser}</h4>
-                                <p class="text-[10px] text-slate-400 truncate max-w-[180px] pt-0.5">${escapeHtml(lastMsg)}</p>
-                            </div>
+                            <span class="text-[8px] text-slate-500 block ${isMe ? 'text-right' : 'text-left'}">${msg.time}</span>
                         </div>
-                        <span class="text-[9px] text-slate-500 font-medium">${timeStr}</span>
                     </div>
                 `;
             });
 
             container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
         }
 
-        function tampilkanInfoCustom() {
-            document.getElementById('modal-title').textContent = "Panduan Chat Pribadi";
-            document.getElementById('modal-message').textContent = "Daftar ini akan terisi otomatis setelah kamu mengklik profil seseorang di Global Chat dan memulai obrolan privat.";
-            const modal = document.getElementById('custom-modal');
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
-        }
+        function kirimPesanPrivat(e) {
+            e.preventDefault();
+            const input = document.getElementById('privat-input');
+            const message = input.value.trim();
+            if (!message) return;
 
-        function tutupCustomModal() {
-            const modal = document.getElementById('custom-modal');
-            modal.classList.add('opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 300);
+            input.value = "";
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const roomKey = `mbd_dm_${[currentUser, targetUser].sort().join('_')}`;
+            let messages = JSON.parse(localStorage.getItem(roomKey) || '[]');
+            
+            messages.push({ sender: currentUser, message, time: timeStr });
+            localStorage.setItem(roomKey, JSON.stringify(messages));
+
+            // Pastikan masuk ke chat list kedua belah pihak
+            tambahKeDaftarChat(currentUser, targetUser);
+            tambahKeDaftarChat(targetUser, currentUser);
+
+            loadPrivateMessages();
         }
 
         function escapeHtml(text) {
