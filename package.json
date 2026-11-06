@@ -1,0 +1,8 @@
+{
+  "name": "web-nabung",
+  "version": "1.0.0",
+  "description": "MBD DHO Vercel App",
+  "dependencies": {
+    "mongoose": "^6.8.0"
+  }
+}
