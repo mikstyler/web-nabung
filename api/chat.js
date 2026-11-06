@@ -23,7 +23,8 @@ const chatSchema = new mongoose.Schema({
     username: { type: String, required: true },
     avatar: { type: String, default: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150' },
     role: { type: String, default: 'FREE' },
-    message: { type: String, required: true },
+    message: { type: String, default: '' },
+    image: { type: String, default: '' }, // Support Kirim Foto
     replyTo: {
         username: String,
         message: String
@@ -49,12 +50,12 @@ module.exports = async (req, res) => {
         }
 
         if (req.method === 'POST') {
-            const { username, avatar, message, replyTo } = req.body;
-            if (!username || !message) {
-                return res.status(400).json({ success: false, message: 'Pesan kosong!' });
+            const { username, avatar, message, image, replyTo } = req.body;
+            if (!username || (!message && !image)) {
+                return res.status(400).json({ success: false, message: 'Pesan atau foto tidak boleh kosong!' });
             }
 
-            const newChat = new Chat({ username, avatar, message, replyTo });
+            const newChat = new Chat({ username, avatar, message, image, replyTo });
             await newChat.save();
 
             return res.status(200).json({ success: true, data: newChat });
