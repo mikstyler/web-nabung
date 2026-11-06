@@ -16,6 +16,14 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         
+        .red-glow {
+            box-shadow: 0 0 20px rgba(239, 68, 68, 0.35);
+        }
+        .red-border-glow {
+            border-color: rgba(239, 68, 68, 0.5);
+            box-shadow: 0 0 12px rgba(239, 68, 68, 0.25);
+        }
+
         @keyframes modalScale {
             0% { transform: scale(0.85); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
@@ -25,23 +33,23 @@
         }
     </style>
 </head>
-<body id="main-body" class="bg-[#030712] text-white font-sans flex flex-col h-screen justify-between overflow-hidden relative transition-colors duration-300">
+<body id="main-body" class="bg-[#090305] text-white font-sans flex flex-col h-screen justify-between overflow-hidden relative transition-colors duration-300">
 
     <!-- TOP HEADER -->
-    <header id="main-header" class="flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0 transition-colors duration-300">
-        <button onclick="toggleSidebar()" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 hover:text-white active:scale-90 transition-all duration-150 shadow-md">
+    <header id="main-header" class="flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0 transition-colors duration-300">
+        <button onclick="toggleSidebar()" id="btn-sidebar-icon" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 hover:text-white active:scale-90 transition-all duration-150 shadow-md">
             <i class="fa-solid fa-ellipsis-vertical text-sm"></i>
         </button>
 
-        <h1 class="text-sm font-bold tracking-wide text-slate-200">Home</h1>
+        <h1 id="header-title" class="text-sm font-bold tracking-wide text-rose-100">Home</h1>
 
         <div class="flex items-center space-x-2">
-            <button onclick="window.location.href='profile.html'" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-400 hover:text-white active:scale-90 transition-all duration-150">
+            <button onclick="window.location.href='profile.html'" id="btn-profile-icon" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 hover:text-white active:scale-90 transition-all duration-150">
                 <i class="fa-solid fa-user text-xs"></i>
             </button>
-            <button class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-400 hover:text-white active:scale-90 transition-all duration-150 relative">
+            <button id="btn-bell-icon" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 hover:text-white active:scale-90 transition-all duration-150 relative">
                 <i class="fa-solid fa-bell text-xs"></i>
-                <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500"></span>
+                <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-red-500 animate-pulse"></span>
             </button>
         </div>
     </header>
@@ -49,148 +57,145 @@
     <!-- MAIN CONTENT AREA -->
     <main class="flex-grow p-4 overflow-y-auto no-scrollbar space-y-4 pb-24">
         
-        <!-- BANNER ANIMASI ANIME BERGERAK (SMOOTH LOOPING) -->
-        <div class="relative rounded-3xl overflow-hidden border border-slate-800/80 shadow-2xl bg-[#0b0f24] h-48 group">
-            <video autoplay muted loop playsinline class="w-full h-full object-cover opacity-80 group-hover:scale-105 transition-transform duration-700">
-                <source src="https://assets.mixkit.co/videos/preview/mixkit-digital-animation-of-screens-and-lights-31913-large.mp4" type="video/mp4">
-                Your browser does not support the video tag.
-            </video>
-            <div class="absolute inset-0 bg-gradient-to-t from-[#030712] via-[#030712]/20 to-transparent"></div>
+        <!-- BANNER GIF ANIME MATA MERAH -->
+        <div class="relative rounded-3xl overflow-hidden border border-rose-600/40 red-glow bg-[#14060a] h-48 group">
+            <img src="banner.gif" alt="Anime Red Banner" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700">
+            <div class="absolute inset-0 bg-gradient-to-t from-[#090305] via-[#090305]/30 to-transparent"></div>
             
             <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-end">
                 <div>
-                    <h2 class="text-xs font-extrabold tracking-wide text-white uppercase drop-shadow-md">MBD DHO PROJECT</h2>
-                    <p id="current-date" class="text-[10px] text-slate-300 font-medium">Jum, 6 Nov 2026</p>
+                    <h2 class="text-xs font-extrabold tracking-wide text-rose-400 uppercase drop-shadow-md">MBD DHO PROJECT</h2>
+                    <p id="current-date" class="text-[10px] text-rose-200/80 font-medium">Jum, 6 Nov 2026</p>
                 </div>
-                <div class="px-2.5 py-1 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white font-bold" id="clock">
+                <div class="px-2.5 py-1 rounded-xl bg-black/60 backdrop-blur-md border border-rose-500/30 text-[10px] font-mono text-rose-300 font-bold" id="clock">
                     15:36 WIB
                 </div>
             </div>
         </div>
 
         <!-- CARD PROFIL USER -->
-        <div onclick="window.location.href='profile.html'" class="relative rounded-3xl overflow-hidden border border-slate-800/80 bg-[#0b0f24] shadow-xl p-4 space-y-3 active:scale-[0.98] transition-all duration-150 cursor-pointer">
-            <div class="absolute top-0 left-0 right-0 h-10 bg-gradient-to-r from-purple-900/60 to-indigo-900/40 border-b border-slate-800/50"></div>
+        <div onclick="window.location.href='profile.html'" id="user-card" class="relative rounded-3xl overflow-hidden border border-rose-900/50 bg-[#14060a] shadow-xl p-4 space-y-3 active:scale-[0.98] transition-all duration-150 cursor-pointer">
+            <div class="absolute top-0 left-0 right-0 h-10 bg-gradient-to-r from-red-950/80 to-rose-900/40 border-b border-rose-900/30"></div>
             
             <div class="relative z-10 flex items-center justify-between pt-2">
                 <div class="flex items-center space-x-3">
-                    <div class="w-12 h-12 rounded-full bg-slate-900 border-2 border-purple-500/50 flex items-center justify-center overflow-hidden shadow-md">
+                    <div class="w-12 h-12 rounded-full bg-black border-2 border-red-600/80 flex items-center justify-center overflow-hidden shadow-md">
                         <img id="home-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="User Avatar" class="w-full h-full object-cover">
                     </div>
                     <div>
                         <h3 id="profile-username" class="text-sm font-extrabold text-white tracking-wide">dikaanjay</h3>
                     </div>
                 </div>
-                <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
+                <i class="fa-solid fa-chevron-right text-xs text-rose-500/70"></i>
             </div>
 
             <div class="flex items-center space-x-2 pt-1">
-                <span class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-[10px] font-bold text-slate-300">FREE</span>
-                <span class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-[10px] font-semibold text-slate-400 flex items-center gap-1.5">
+                <span class="px-3 py-1 rounded-xl bg-[#090305] border border-rose-900/40 text-[10px] font-bold text-rose-300">FREE</span>
+                <span class="px-3 py-1 rounded-xl bg-[#090305] border border-rose-900/40 text-[10px] font-semibold text-rose-300/80 flex items-center gap-1.5">
                     <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> GS · Off
                 </span>
-                <span id="card-date-badge" class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-[10px] font-semibold text-slate-400 flex items-center gap-1.5">
+                <span id="card-date-badge" class="px-3 py-1 rounded-xl bg-[#090305] border border-rose-900/40 text-[10px] font-semibold text-rose-300/80 flex items-center gap-1.5">
                     <i class="fa-regular fa-calendar text-[9px]"></i> 06/11/2026
                 </span>
             </div>
         </div>
 
         <!-- WIDGET GLOBAL CHAT PREVIEW -->
-        <div class="rounded-3xl border border-slate-800/80 bg-[#0b0f24] shadow-xl p-4 space-y-3">
+        <div id="chat-widget" class="rounded-3xl border border-rose-900/50 bg-[#14060a] shadow-xl p-4 space-y-3">
             <div class="flex justify-between items-center">
                 <div class="flex items-center space-x-2">
-                    <div class="w-7 h-7 rounded-lg bg-purple-600/20 border border-purple-500/40 flex items-center justify-center text-purple-400 text-xs">
+                    <div class="w-7 h-7 rounded-lg bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 text-xs">
                         <i class="fa-solid fa-globe"></i>
                     </div>
-                    <h3 class="text-xs font-bold text-white tracking-wide">Global Chat</h3>
+                    <h3 id="widget-chat-title" class="text-xs font-bold text-white tracking-wide">Global Chat</h3>
                 </div>
-                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="w-2 h-2 rounded-full bg-red-500 animate-ping"></span>
             </div>
 
-            <div class="bg-[#030712] border border-slate-800/80 rounded-2xl p-3">
-                <p id="home-chat-preview" class="text-xs text-slate-300 font-medium truncate">Memuat pesan terbaru...</p>
+            <div id="widget-chat-box" class="bg-[#090305] border border-rose-900/40 rounded-2xl p-3">
+                <p id="home-chat-preview" class="text-xs text-rose-200/90 font-medium truncate">Memuat pesan terbaru...</p>
             </div>
 
-            <button onclick="bukaChatGlobal()" class="w-full py-2.5 rounded-xl bg-slate-900 border border-slate-800 hover:bg-purple-600/20 active:scale-95 text-slate-200 hover:text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-md">
-                <i class="fa-regular fa-comment text-purple-400 text-xs"></i> Buka
+            <button onclick="bukaChatGlobal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-700 to-rose-700 hover:from-red-600 hover:to-rose-600 active:scale-95 text-white font-bold text-xs flex items-center justify-center gap-2 transition-all shadow-lg red-glow">
+                <i class="fa-regular fa-comment text-xs"></i> Buka Global Chat
             </button>
         </div>
 
     </main>
 
     <!-- SIDEBAR MENU -->
-    <div id="sidebar-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 hidden transition-opacity opacity-0" onclick="toggleSidebar()"></div>
-    <div id="sidebar-menu" class="fixed top-0 left-0 bottom-0 w-72 bg-[#090d1e] border-r border-slate-800 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between p-5 shadow-2xl">
+    <div id="sidebar-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-sm z-40 hidden transition-opacity opacity-0" onclick="toggleSidebar()"></div>
+    <div id="sidebar-menu" class="fixed top-0 left-0 bottom-0 w-72 bg-[#100407] border-r border-rose-900/40 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between p-5 shadow-2xl">
         <div class="space-y-6">
-            <div class="flex items-center space-x-3 pb-4 border-b border-slate-800/80">
-                <div class="w-10 h-10 rounded-full bg-purple-600/20 border border-purple-500/40 flex items-center justify-center text-purple-400 font-bold text-sm" id="sidebar-initial">
+            <div class="flex items-center space-x-3 pb-4 border-b border-rose-900/30">
+                <div class="w-10 h-10 rounded-full bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 font-bold text-sm" id="sidebar-initial">
                     D
                 </div>
                 <div>
                     <h4 id="sidebar-username" class="text-xs font-extrabold text-white">dikaanjay</h4>
-                    <span class="text-[10px] text-purple-400 font-semibold">Active Session</span>
+                    <span class="text-[10px] text-red-400 font-semibold">Red Member</span>
                 </div>
             </div>
 
             <div class="space-y-4">
                 <div>
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Utama</p>
-                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-purple-600/10 border border-purple-500/30 text-purple-300 text-xs font-bold active:scale-95 transition-all">
+                    <p class="text-[10px] font-bold text-rose-400/60 uppercase tracking-wider mb-2">Utama</p>
+                    <a href="#" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-red-600/20 border border-red-500/40 text-red-300 text-xs font-bold active:scale-95 transition-all">
                         <i class="fa-solid fa-house w-4"></i>
                         <span>Home</span>
                     </a>
                 </div>
 
                 <div>
-                    <p class="text-[10px] font-bold text-slate-500 uppercase tracking-wider mb-2">Chat</p>
-                    <a href="#" onclick="bukaChatGlobal()" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 hover:text-white active:scale-95 text-xs font-semibold transition-all">
-                        <i class="fa-solid fa-comments w-4 text-indigo-400"></i>
+                    <p class="text-[10px] font-bold text-rose-400/60 uppercase tracking-wider mb-2">Chat</p>
+                    <a href="#" onclick="bukaChatGlobal()" class="flex items-center space-x-3 px-3 py-2.5 rounded-xl bg-[#14060a] border border-rose-900/40 text-rose-200 hover:text-white active:scale-95 text-xs font-semibold transition-all">
+                        <i class="fa-solid fa-comments w-4 text-red-400"></i>
                         <span>Chat Global</span>
                     </a>
                 </div>
             </div>
         </div>
 
-        <div class="pt-4 border-t border-slate-800/80">
-            <button onclick="bukaModalLogout()" class="w-full flex items-center justify-center space-x-2 py-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-400 hover:bg-rose-500/20 active:scale-95 text-xs font-bold transition-all">
+        <div class="pt-4 border-t border-rose-900/30">
+            <button onclick="bukaModalLogout()" class="w-full flex items-center justify-center space-x-2 py-3 rounded-xl bg-red-500/10 border border-red-500/20 text-red-400 hover:bg-red-500/20 active:scale-95 text-xs font-bold transition-all">
                 <i class="fa-solid fa-power-off"></i>
                 <span>Logout</span>
             </button>
-            <p class="text-[9px] text-center text-slate-500 mt-3">MBD DHO v1.0</p>
+            <p class="text-[9px] text-center text-rose-400/50 mt-3">MBD DHO v1.0 (Red Edition)</p>
         </div>
     </div>
 
-    <!-- CUSTOM MODAL -->
-    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
-            <div id="modal-icon-container" class="w-14 h-14 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-purple-900/30">
+    <!-- CUSTOM POP-UP FUTURISTIK MERAH -->
+    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div id="custom-modal-box" class="bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal">
+            <div id="modal-icon-container" class="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-red-900/40">
                 <i id="modal-icon" class="fa-solid fa-circle-info"></i>
             </div>
             <div class="space-y-1">
                 <h3 id="modal-title" class="text-sm font-extrabold text-white">Informasi MBD</h3>
-                <p id="modal-message" class="text-[11px] text-slate-400 leading-relaxed">Pesan sistem...</p>
+                <p id="modal-message" class="text-[11px] text-rose-200/80 leading-relaxed">Pesan sistem...</p>
             </div>
-            <button onclick="tutupCustomModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 active:scale-95 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition-all">
+            <button onclick="tutupCustomModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-90 active:scale-95 text-white font-bold text-xs shadow-lg red-glow transition-all">
                 Oke
             </button>
         </div>
     </div>
 
     <!-- MODAL LOGOUT -->
-    <div id="logout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
-            <div class="w-14 h-14 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-rose-900/30">
+    <div id="logout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div id="logout-modal-box" class="bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal">
+            <div class="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-red-900/40">
                 <i class="fa-solid fa-power-off"></i>
             </div>
             <div class="space-y-1">
                 <h3 class="text-sm font-extrabold text-white">Konfirmasi Logout</h3>
-                <p class="text-[11px] text-slate-400">Apakah kamu yakin ingin keluar dari akun ini?</p>
+                <p class="text-[11px] text-rose-200/80">Apakah kamu yakin ingin keluar dari akun ini?</p>
             </div>
             <div class="flex items-center gap-2 pt-2">
-                <button onclick="tutupModalLogout()" class="flex-1 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 active:scale-95 text-xs font-bold transition-all">
+                <button onclick="tutupModalLogout()" class="flex-1 py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-300 active:scale-95 text-xs font-bold transition-all">
                     Batal
                 </button>
-                <button onclick="eksekusiLogout()" class="flex-1 py-2.5 rounded-xl bg-rose-600 hover:bg-rose-500 text-white active:scale-95 text-xs font-bold shadow-lg shadow-rose-600/30 transition-all">
+                <button onclick="eksekusiLogout()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white active:scale-95 text-xs font-bold shadow-lg red-glow transition-all">
                     Ya, Keluar
                 </button>
             </div>
@@ -198,26 +203,26 @@
     </div>
 
     <!-- BOTTOM NAVIGATION BAR -->
-    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-[#090d1e]/95 backdrop-blur-lg border-t border-slate-800/80 px-4 py-2.5 flex justify-around items-center z-20 transition-colors duration-300">
-        <a href="#" class="flex flex-col items-center text-indigo-400 space-y-1 active:scale-90 transition-transform">
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-[#100407]/95 backdrop-blur-lg border-t border-rose-950/60 px-4 py-2.5 flex justify-around items-center z-20 transition-colors duration-300">
+        <a href="#" class="flex flex-col items-center text-red-500 space-y-1 active:scale-90 transition-transform">
             <i class="fa-solid fa-house text-xs"></i>
             <span class="text-[9px] font-bold">Home</span>
         </a>
-        <a href="#" onclick="bukaDaftarChat()" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-90 transition-transform">
+        <a href="#" onclick="bukaDaftarChat()" class="flex flex-col items-center text-rose-400/60 hover:text-rose-200 space-y-1 active:scale-90 transition-transform">
             <i class="fa-solid fa-comments text-xs"></i>
             <span class="text-[9px]">Chat</span>
         </a>
-        <a href="#" onclick="bukaUlarTangga()" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-95 transition-transform">
-            <div class="w-10 h-10 -mt-5 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-indigo-600/50 border-4 border-[#030712]">
+        <a href="#" onclick="bukaUlarTangga()" class="flex flex-col items-center text-rose-400/60 hover:text-rose-200 space-y-1 active:scale-95 transition-transform">
+            <div class="w-10 h-10 -mt-5 bg-gradient-to-r from-red-600 to-rose-600 rounded-full flex items-center justify-center text-white shadow-lg red-glow border-4 border-[#090305]">
                 <i class="fa-solid fa-users text-xs"></i>
             </div>
             <span class="text-[9px]">Group</span>
         </a>
-        <a href="#" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-90 transition-transform">
+        <a href="#" class="flex flex-col items-center text-rose-400/60 hover:text-rose-200 space-y-1 active:scale-90 transition-transform">
             <i class="fa-solid fa-circle-info text-xs"></i>
             <span class="text-[9px]">Info</span>
         </a>
-        <a href="#" onclick="toggleSidebar()" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-90 transition-transform">
+        <a href="#" onclick="toggleSidebar()" class="flex flex-col items-center text-rose-400/60 hover:text-rose-200 space-y-1 active:scale-90 transition-transform">
             <i class="fa-solid fa-ellipsis-vertical text-xs"></i>
             <span class="text-[9px]">Tools</span>
         </a>
@@ -241,7 +246,7 @@
                 document.getElementById('home-user-avatar').src = savedAvatar;
             }
 
-            const savedTheme = localStorage.getItem('mbd_theme') || 'night';
+            const savedTheme = localStorage.getItem('mbd_theme') || 'red';
             applyTheme(savedTheme);
 
             updateDateTime();
@@ -273,10 +278,10 @@
             const icon = document.getElementById('modal-icon');
 
             if (type === 'success') {
-                iconContainer.className = "w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-emerald-900/30";
+                iconContainer.className = "w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-xl mx-auto shadow-lg";
                 icon.className = "fa-solid fa-circle-check";
             } else {
-                iconContainer.className = "w-14 h-14 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-purple-900/30";
+                iconContainer.className = "w-14 h-14 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 flex items-center justify-center text-xl mx-auto shadow-lg";
                 icon.className = "fa-solid fa-circle-info";
             }
 
@@ -295,15 +300,35 @@
             const body = document.getElementById('main-body');
             const header = document.getElementById('main-header');
             const bottomNav = document.getElementById('bottom-nav');
+            const userCard = document.getElementById('user-card');
+            const chatWidget = document.getElementById('chat-widget');
+            const widgetBox = document.getElementById('widget-chat-box');
+            const customModalBox = document.getElementById('custom-modal-box');
+            const logoutModalBox = document.getElementById('logout-modal-box');
+            const sidebarMenu = document.getElementById('sidebar-menu');
 
             if (mode === 'day') {
+                // TEMA PUTIH
                 body.className = "bg-slate-100 text-slate-900 font-sans flex flex-col h-screen justify-between overflow-hidden relative transition-colors duration-300";
                 header.className = "flex justify-between items-center px-4 py-3 bg-white border-b border-slate-200 z-10 flex-shrink-0 transition-colors duration-300";
                 bottomNav.className = "fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-200 px-4 py-2.5 flex justify-around items-center z-20 transition-colors duration-300";
+                userCard.className = "relative rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-xl p-4 space-y-3 cursor-pointer";
+                chatWidget.className = "rounded-3xl border border-slate-200 bg-white shadow-xl p-4 space-y-3";
+                widgetBox.className = "bg-slate-50 border border-slate-200 rounded-2xl p-3";
+                customModalBox.className = "bg-white border border-slate-200 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal text-slate-800";
+                logoutModalBox.className = "bg-white border border-slate-200 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal text-slate-800";
+                sidebarMenu.className = "fixed top-0 left-0 bottom-0 w-72 bg-white border-r border-slate-200 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between p-5 shadow-2xl text-slate-800";
             } else {
-                body.className = "bg-[#030712] text-white font-sans flex flex-col h-screen justify-between overflow-hidden relative transition-colors duration-300";
-                header.className = "flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0 transition-colors duration-300";
-                bottomNav.className = "fixed bottom-0 left-0 right-0 bg-[#090d1e]/95 backdrop-blur-lg border-t border-slate-800/80 px-4 py-2.5 flex justify-around items-center z-20 transition-colors duration-300";
+                // TEMA MERAH FUTURISTIK
+                body.className = "bg-[#090305] text-white font-sans flex flex-col h-screen justify-between overflow-hidden relative transition-colors duration-300";
+                header.className = "flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0 transition-colors duration-300";
+                bottomNav.className = "fixed bottom-0 left-0 right-0 bg-[#100407]/95 backdrop-blur-lg border-t border-rose-950/60 px-4 py-2.5 flex justify-around items-center z-20 transition-colors duration-300";
+                userCard.className = "relative rounded-3xl overflow-hidden border border-rose-900/50 bg-[#14060a] shadow-xl p-4 space-y-3 cursor-pointer";
+                chatWidget.className = "rounded-3xl border border-rose-900/50 bg-[#14060a] shadow-xl p-4 space-y-3";
+                widgetBox.className = "bg-[#090305] border border-rose-900/40 rounded-2xl p-3";
+                customModalBox.className = "bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal";
+                logoutModalBox.className = "bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal";
+                sidebarMenu.className = "fixed top-0 left-0 bottom-0 w-72 bg-[#100407] border-r border-rose-900/40 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between p-5 shadow-2xl";
             }
         }
 
