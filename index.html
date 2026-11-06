@@ -3,1056 +3,174 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Menabung Bersama Dho (MBD)</title>
+    <title>MBD DHO - Home</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-        html, body {
-            height: 100%;
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
+        body {
             font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-color);
-            background-image: var(--bg-image);
-            background-size: 200% 200%;
-            animation: gradientMove 15s ease infinite;
-            color: var(--text-color);
-            transition: color 0.3s ease, background 0.3s ease;
+            background-color: #030712;
+            color: #f8fafc;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
-<body id="app-body" class="flex flex-col justify-between h-full relative" style="--bg-color: #030712; --header-bg: #090d1e; --card-bg: #0b0f24; --border-color: #1e293b; --btn-bg: #4f46e5; --btn-text: #ffffff; --text-color: #f8fafc; --bg-image: radial-gradient(circle at 50% 50%, #0b0f24 0%, #030712 100%);">
+<body class="bg-[#030712] text-white font-sans flex flex-col h-screen justify-between overflow-hidden">
 
-    <!-- HEADER UTAMA (Tombol Menu Dipindah ke Kiri) -->
-    <header id="app-header" class="px-4 py-3 shadow-md flex justify-between items-center z-10 flex-shrink-0 backdrop-blur-md transition-colors duration-300" style="background-color: var(--header-bg); border-bottom: 1px solid var(--border-color);">
-        <!-- Kiri: Menu Bar (Titik/Garis Tiga) & Identitas Dho -->
-        <div class="flex items-center space-x-2.5">
-            <button onclick="toggleMenu()" class="w-8 h-8 rounded-xl flex items-center justify-center transition transform active:scale-75 duration-150 hover:opacity-80 focus:outline-none border shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <i class="fa-solid fa-bars text-sm"></i>
-            </button>
-            <div class="flex items-center space-x-1">
-                <span class="text-xs font-black tracking-wider text-indigo-400">DHO</span>
-                <i class="fa-solid fa-circle-check text-[10px] text-blue-500"></i>
-            </div>
-        </div>
+    <!-- TOP HEADER (Menu Kiri, Title Tengah, Tombol Kanan menyusul) -->
+    <header class="flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0">
+        <!-- Kiri: Tombol Menu / Garis Tiga -->
+        <button onclick="toggleMenu()" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 hover:text-white transition focus:outline-none">
+            <i class="fa-solid fa-bars text-sm"></i>
+        </button>
 
-        <!-- Kanan: Badge Owner, Jam Digital & Power/Quick Info -->
+        <!-- Tengah: Title "Home" -->
+        <h1 class="text-sm font-bold tracking-wide text-slate-200">Home</h1>
+
+        <!-- Kanan: Placeholder (Nanti ditambahkan belakangan sesuai permintaan) -->
         <div class="flex items-center space-x-2">
-            <span class="px-2 py-0.5 bg-rose-500/20 text-rose-400 border border-rose-500/30 rounded-lg text-[9px] font-bold flex items-center gap-1">
-                <i class="fa-solid fa-shield-halved text-[8px]"></i> Owner
-            </span>
-            <div class="px-2 py-0.5 bg-slate-900 border border-slate-800 rounded-lg text-[10px] font-mono text-slate-300" id="clock">
-                14:39:42
+            <div class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-400 text-xs">
+                <i class="fa-solid fa-user"></i>
+            </div>
+            <div class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-400 text-xs relative">
+                <i class="fa-solid fa-bell"></i>
+                <span class="absolute top-2 right-2 w-2 h-2 rounded-full bg-rose-500"></span>
             </div>
         </div>
     </header>
 
-    <!-- VIEW 1: HOME (BERJALAN & SELESAI + TAMPILAN FUTURISTIK BARU) -->
-    <div id="view-home" class="flex-grow flex flex-col overflow-y-auto no-scrollbar relative pb-24 p-4 space-y-4">
+    <!-- MAIN CONTENT AREA -->
+    <main class="flex-grow p-4 overflow-y-auto no-scrollbar space-y-4 pb-24">
         
-        <!-- BROADCAST MUSIC PLAYER CARD -->
-        <div class="bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-3 flex items-center justify-between shadow-lg flex-shrink-0">
-            <div class="flex items-center space-x-3">
-                <div class="w-9 h-9 rounded-xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center text-indigo-400 text-sm">
-                    <i class="fa-solid fa-bullhorn"></i>
-                </div>
+        <!-- BANNER UTAMA (Gojo Image & Overlay Info) -->
+        <div class="relative rounded-3xl overflow-hidden border border-slate-800/80 shadow-2xl bg-[#0b0f24] h-48">
+            <!-- Foto Tema Gojo -->
+            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=80" alt="Gojo Banner" class="w-full h-full object-cover opacity-75">
+            <!-- Gradasi Hitam Transparan -->
+            <div class="absolute inset-0 bg-gradient-to-t from-[#030712] via-[#030712]/20 to-transparent"></div>
+            
+            <!-- Teks di dalam Banner (Kiri Bawah & Kanan Bawah) -->
+            <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-end">
                 <div>
-                    <h3 class="text-[11px] font-bold text-slate-200 uppercase tracking-wider">BROADCAST</h3>
-                    <p class="text-[10px] text-slate-400">member ngelunjak aktif...</p>
+                    <h2 class="text-xs font-extrabold tracking-wide text-white uppercase drop-shadow-md">MBD DHO Project</h2>
+                    <p id="current-date" class="text-[10px] text-slate-300 font-medium">Jum, 6 Nov 2026</p>
+                </div>
+                <div class="px-2.5 py-1 rounded-xl bg-black/50 backdrop-blur-md border border-white/10 text-[10px] font-mono text-white font-bold" id="clock">
+                    15:36 WIB
                 </div>
             </div>
-            <div class="flex items-center space-x-2.5 text-slate-400 text-xs">
-                <button class="hover:text-white"><i class="fa-solid fa-step-backward"></i></button>
-                <button class="w-7 h-7 rounded-full bg-indigo-600 text-white flex items-center justify-center text-[10px] shadow-md shadow-indigo-600/40"><i class="fa-solid fa-play"></i></button>
-                <button class="hover:text-white"><i class="fa-solid fa-step-forward"></i></button>
-            </div>
         </div>
 
-        <!-- HERO BANNER ANIME -->
-        <div class="relative rounded-2xl overflow-hidden border border-slate-800/80 shadow-xl bg-slate-900 h-32 flex-shrink-0">
-            <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=600&auto=format&fit=crop&q=60" alt="Banner Anime" class="w-full h-full object-cover opacity-70">
-            <div class="absolute inset-0 bg-gradient-to-t from-[#030712] via-[#030712]/40 to-transparent"></div>
-            <div class="absolute bottom-3 left-3 z-10 space-y-1">
-                <div class="flex space-x-1.5">
-                    <span class="px-2 py-0.5 rounded bg-purple-500/30 text-purple-300 text-[9px] font-bold border border-purple-500/40">GAMER</span>
-                    <span class="px-2 py-0.5 rounded bg-pink-500/30 text-pink-300 text-[9px] font-bold border border-pink-500/40">NPC</span>
-                </div>
-                <h2 class="text-xs font-extrabold tracking-wide text-white uppercase">MENABUNG BERSAMA DHO</h2>
-            </div>
-        </div>
-
-        <!-- LIST TARGET TABUNGAN ASLI (TETAP BERFUNGSI PENUH) -->
-        <div id="target-count-badge" class="hidden">
-            <div class="px-3 py-1.5 rounded-xl text-xs font-bold inline-block border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color); color: var(--text-color);">
-                <span id="active-count">0</span> target <span id="badge-label-text">aktif</span>
-            </div>
-        </div>
-
-        <main id="empty-state" class="flex-grow flex flex-col justify-center items-center text-center p-6 space-y-3">
-            <div class="w-16 h-16 rounded-full flex items-center justify-center text-2xl shadow-inner border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <i class="fa-solid fa-piggy-bank"></i>
-            </div>
-            <h2 id="empty-title" class="text-sm font-bold">Belum ada target aktif</h2>
-            <p id="empty-desc" class="text-xs opacity-80 max-w-xs">Buat Goal atau Challenge baru untuk mulai menabung impianmu.</p>
-        </main>
-
-        <div id="target-list" class="space-y-3 hidden"></div>
-    </div>
-
-    <!-- VIEW CHAT AI ROOM -->
-    <div id="view-chat-ai" class="fixed inset-0 z-40 flex flex-col hidden transition-all duration-300 transform translate-y-full opacity-0" style="background-color: var(--bg-color); background-image: var(--bg-image);">
-        <header class="p-4 shadow-xs flex justify-between items-center flex-shrink-0" style="background-color: var(--header-bg); border-bottom: 1px solid var(--border-color);">
-            <div class="flex items-center space-x-3">
-                <button onclick="tutupChatAI()" class="w-9 h-9 rounded-xl flex items-center justify-center border shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                    <i class="fa-solid fa-arrow-left text-lg"></i>
-                </button>
-                <div class="flex items-center space-x-2">
-                    <div class="w-8 h-8 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-600 flex items-center justify-center text-white text-sm shadow-md animate-pulse">
-                        <i class="fa-solid fa-robot"></i>
+        <!-- CARD PROFIL USER (Otomatis Menyesuaikan Nama Login) -->
+        <div class="relative rounded-3xl overflow-hidden border border-slate-800/80 bg-[#0b0f24] shadow-xl p-4 space-y-3">
+            <!-- Header warna ungu di atas card -->
+            <div class="absolute top-0 left-0 right-0 h-10 bg-gradient-to-r from-purple-900/60 to-indigo-900/40 border-b border-slate-800/50"></div>
+            
+            <div class="relative z-10 flex items-center justify-between pt-2">
+                <div class="flex items-center space-x-3">
+                    <!-- Foto Profil Bulat -->
+                    <div class="w-12 h-12 rounded-full bg-slate-900 border-2 border-purple-500/50 flex items-center justify-center overflow-hidden shadow-md">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="User Avatar" class="w-full h-full object-cover">
                     </div>
                     <div>
-                        <h2 class="text-sm font-bold leading-tight">Gemini AI Assistant</h2>
-                        <span class="text-[10px] text-emerald-500 font-bold flex items-center gap-1"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping"></span> Online</span>
+                        <!-- Nama User Dinamis dari Login -->
+                        <h3 id="profile-username" class="text-sm font-extrabold text-white tracking-wide">dikaanjay</h3>
                     </div>
                 </div>
-            </div>
-        </header>
-
-        <div id="chat-messages" class="flex-grow p-4 space-y-3 overflow-y-auto no-scrollbar">
-            <div class="flex gap-2.5 max-w-[85%] items-start">
-                <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-600 text-white flex items-center justify-center text-xs flex-shrink-0 mt-0.5 shadow-sm">
-                    <i class="fa-solid fa-robot"></i>
-                </div>
-                <div class="p-3 rounded-2xl text-xs shadow-xs border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                    Halo Dho! Ada yang bisa saya bantu hari ini? Silakan tanya apa saja ya! 😊
-                </div>
-            </div>
-        </div>
-
-        <div class="p-3 border-t flex items-center gap-2 relative z-10 backdrop-blur-md" style="background-color: var(--header-bg); border-color: var(--border-color);">
-            <input type="text" id="input-ai-prompt" onkeypress="handleAIKeyPress(event)" placeholder="Ketik pesan untuk Gemini AI..." class="w-full border rounded-2xl px-4 py-3 text-xs focus:outline-none shadow-xs pr-10" style="background-color: var(--card-bg); border-color: var(--border-color); color: var(--text-color);">
-            <button onclick="kirimPesanAI()" id="btn-send-ai" class="w-12 h-12 rounded-full bg-gradient-to-tr from-sky-500 to-indigo-600 text-white flex items-center justify-center text-base shadow-lg flex-shrink-0 border-2 border-white/20">
-                <i class="fa-solid fa-paper-plane" id="icon-send-ai"></i>
-            </button>
-        </div>
-    </div>
-
-    <!-- VIEW ULAR TANGGA GAME ROOM -->
-    <div id="view-snake-game" class="fixed inset-0 z-50 flex flex-col hidden transition-all duration-300 transform scale-95 opacity-0" style="background-color: #1e3f20; background-image: radial-gradient(#2d5a31 15%, transparent 16%); background-size: 30px 30px;">
-        <div class="p-3 flex justify-between items-center bg-black/40 backdrop-blur-md text-white border-b border-white/10">
-            <button onclick="keluarGame()" class="px-4 py-2 rounded-xl bg-rose-600 font-bold text-xs flex items-center gap-2 shadow-lg">
-                <i class="fa-solid fa-arrow-left"></i> <span>Keluar</span>
-            </button>
-            <div id="game-status-text" class="text-xs font-bold bg-black/50 px-3 py-1.5 rounded-xl border border-white/20">Pilih Mode Permainan</div>
-            <button onclick="bukaAturanGame()" class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-sm font-bold shadow-lg">
-                <i class="fa-solid fa-info"></i>
-            </button>
-        </div>
-
-        <div class="flex-grow flex flex-col items-center justify-center p-3 relative overflow-hidden">
-            <div id="snake-menu-screen" class="w-full max-w-xs p-6 rounded-3xl bg-sky-400/90 backdrop-blur-md border-4 border-orange-500 shadow-2xl text-center space-y-4">
-                <h2 class="text-xl font-black text-white tracking-wider">SNAKES & LADDERS</h2>
-                <button onclick="mulaiGame('pvp')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 border-2 border-white/40">
-                    <i class="fa-solid fa-user-group"></i> Player vs Player
-                </button>
-                <button onclick="mulaiGame('bot')" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-orange-500 to-amber-500 text-white font-bold text-sm shadow-lg flex items-center justify-center gap-2 border-2 border-white/40">
-                    <i class="fa-solid fa-robot"></i> Player vs Bot
-                </button>
+                <i class="fa-solid fa-chevron-right text-xs text-slate-500"></i>
             </div>
 
-            <div id="snake-board-screen" class="w-full max-w-sm aspect-square bg-sky-900/80 rounded-2xl p-2 border-4 border-amber-600 shadow-2xl hidden grid grid-cols-10 gap-1 relative"></div>
-
-            <div id="snake-controls" class="w-full max-w-sm mt-3 flex justify-between items-center px-2 hidden">
-                <div id="player-turn-badge" class="px-3 py-2 rounded-xl bg-black/60 text-white text-xs font-bold border border-white/20">
-                    Giliran: <span id="current-player-name">Player 1</span>
-                </div>
-                <button onclick="lemparDadu()" id="btn-dadu" class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-600 flex items-center justify-center text-2xl text-white shadow-xl border-2 border-white/50 relative">
-                    <i id="dice-icon" class="fa-solid fa-dice-five animate-bounce"></i>
-                </button>
+            <!-- Badge Status & Tanggal di Bawah Card Profil -->
+            <div class="flex items-center space-x-2 pt-1">
+                <span class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-[10px] font-bold text-slate-300">FREE</span>
+                <span class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-[10px] font-semibold text-slate-400 flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> GS · Off
+                </span>
+                <span id="card-date-badge" class="px-3 py-1 rounded-xl bg-slate-900 border border-slate-800 text-[10px] font-semibold text-slate-400 flex items-center gap-1.5">
+                    <i class="fa-regular fa-calendar text-[9px]"></i> 06/11/2026
+                </span>
             </div>
         </div>
-    </div>
 
-    <!-- MODAL KEMENANGAN ULAR TANGGA -->
-    <div id="snake-win-modal" class="fixed inset-0 bg-black/70 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden">
-        <div class="w-full max-w-xs bg-amber-100 rounded-3xl p-6 border-4 border-amber-600 shadow-2xl text-center space-y-4">
-            <div class="w-16 h-16 rounded-2xl bg-amber-500 text-white text-3xl flex items-center justify-center mx-auto shadow-inner">
-                <i class="fa-solid fa-trophy animate-bounce"></i>
-            </div>
-            <h3 id="win-title" class="text-xl font-black text-amber-900">Pemenang!</h3>
-            <p id="win-desc" class="text-xs text-amber-800 font-medium">Berhasil mencapai puncak!</p>
-            <div class="pt-2 flex flex-col gap-2">
-                <button onclick="mulaiGame(currentGameMode)" class="w-full py-3 rounded-xl bg-emerald-600 text-white font-bold text-xs shadow-md">Main Lagi</button>
-                <button onclick="keluarGame()" class="w-full py-3 rounded-xl bg-rose-600 text-white font-bold text-xs shadow-md">Kembali ke Home</button>
-            </div>
-        </div>
-    </div>
+    </main>
 
-    <!-- VIEW 2: DETAIL TARGET -->
-    <div id="view-detail" class="fixed inset-0 z-40 flex flex-col translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto no-scrollbar" style="background-color: var(--bg-color); background-image: var(--bg-image);">
-        <header class="p-4 shadow-xs flex justify-between items-center flex-shrink-0" style="background-color: var(--header-bg); border-bottom: 1px solid var(--border-color);">
-            <div class="flex items-center space-x-3">
-                <button onclick="closeDetail()" class="w-9 h-9 rounded-xl flex items-center justify-center border shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                    <i class="fa-solid fa-arrow-left text-lg"></i>
-                </button>
-                <h2 class="text-base font-bold">Detail Target</h2>
-            </div>
-            <div class="flex items-center space-x-2">
-                <button onclick="openEditForm()" class="w-9 h-9 rounded-xl flex items-center justify-center border shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                    <i class="fa-solid fa-pen text-sm"></i>
-                </button>
-                <button onclick="toggleDetailMenu()" class="w-9 h-9 rounded-xl flex items-center justify-center border shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                    <i class="fa-solid fa-ellipsis-vertical text-lg"></i>
-                </button>
-            </div>
-        </header>
-
-        <div class="p-4 space-y-4 flex-grow overflow-y-auto no-scrollbar pb-24">
-            <div class="p-4 rounded-3xl border shadow-sm space-y-3 backdrop-blur-md" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <div class="flex justify-between items-center">
-                    <h3 id="detail-judul" class="text-base font-bold">Nama Target</h3>
-                    <span id="detail-persen" class="text-xs font-bold px-2.5 py-1 rounded-xl border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);">0%</span>
-                </div>
-                <div class="w-full h-2.5 rounded-full overflow-hidden" style="background-color: var(--border-color);">
-                    <div id="detail-progress-bar" class="h-full transition-all duration-500" style="width: 0%"></div>
-                </div>
-                <div class="text-center font-bold text-lg pt-1" id="detail-target-nominal">Rp0</div>
-                
-                <div class="flex justify-between text-xs pt-2 border-t opacity-90" style="border-color: var(--border-color);">
-                    <div>Terkumpul: <span id="detail-terkumpul" class="font-bold">Rp0</span></div>
-                    <div>Kekurangan: <span id="detail-kurang" class="font-bold">Rp0</span></div>
-                </div>
-                <div class="text-[11px] opacity-80 pt-1">Mulai <span id="detail-tanggal">--</span></div>
-                <div id="detail-catatan-box" class="text-xs p-2.5 rounded-xl border hidden" style="background-color: var(--header-bg); border-color: var(--border-color);">
-                    Catatan: <span id="detail-catatan"></span>
-                </div>
-            </div>
-
-            <button onclick="openTransaksiModal()" class="w-full py-3.5 rounded-2xl font-bold text-xs shadow-md transition duration-150" style="background-color: var(--btn-bg); color: var(--btn-text);">
-                + Tambah Tabungan
-            </button>
-
-            <div>
-                <h4 class="text-xs font-bold opacity-85 mb-2">Riwayat Terakhir</h4>
-                <div id="riwayat-list" class="space-y-2">
-                    <div class="text-xs opacity-50 italic">Belum ada transaksi.</div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- VIEW 3: FORM BUAT / EDIT NABUNG -->
-    <div id="view-form" class="fixed inset-0 z-40 flex flex-col translate-x-full transition-transform duration-300 ease-in-out overflow-y-auto no-scrollbar" style="background-color: var(--bg-color); background-image: var(--bg-image);">
-        <header class="p-4 shadow-xs flex items-center space-x-3 flex-shrink-0" style="background-color: var(--header-bg); border-bottom: 1px solid var(--border-color);">
-            <button onclick="closeForm()" class="w-9 h-9 rounded-xl flex items-center justify-center border shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                <i class="fa-solid fa-arrow-left text-lg"></i>
-            </button>
-            <h2 id="form-title" class="text-base font-bold">Buat Nabung</h2>
-        </header>
-
-        <form id="form-nabung" onsubmit="simpanTarget(event)" class="p-5 space-y-4 flex-grow overflow-y-auto no-scrollbar pb-24">
-            <div>
-                <label class="block text-xs font-semibold opacity-85 mb-1">Judul</label>
-                <input type="text" id="input-judul" required placeholder="Contoh: Beli HP Baru" class="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color); color: var(--text-color);">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold opacity-85 mb-1">Target nominal (Rp)</label>
-                <input type="number" id="input-target" required placeholder="0" class="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color); color: var(--text-color);">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold opacity-85 mb-1">Tanggal mulai</label>
-                <input type="date" id="input-tanggal" required class="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color); color: var(--text-color);">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold opacity-85 mb-1">Deadline (opsional)</label>
-                <input type="date" id="input-deadline" class="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color); color: var(--text-color);">
-            </div>
-            <div>
-                <label class="block text-xs font-semibold opacity-85 mb-1">Catatan</label>
-                <textarea id="input-catatan" rows="3" placeholder="Tulis motivasi atau rincian..." class="w-full border rounded-xl px-4 py-3 text-sm focus:outline-none resize-none shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color); color: var(--text-color);"></textarea>
-            </div>
-            <div>
-                <label class="block text-xs font-semibold opacity-85 mb-1">Gambar catatan (opsional)</label>
-                <label class="w-full border border-dashed rounded-2xl p-4 flex flex-col items-center justify-center space-y-2 cursor-pointer shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                    <i class="fa-solid fa-file-image text-2xl opacity-70"></i>
-                    <span id="label-gambar" class="text-xs opacity-75 font-medium text-center">Tap untuk pilih gambar dari file explorer</span>
-                    <input type="file" id="input-gambar" accept="image/*" class="hidden" onchange="previewGambar(this)">
-                </label>
-                <img id="preview-img" class="mt-2 rounded-xl h-28 w-full object-cover hidden border" style="border-color: var(--border-color);">
-            </div>
-            <div class="pt-4 flex space-x-3">
-                <button type="button" onclick="closeForm()" class="w-1/2 py-3 rounded-2xl border font-bold text-xs shadow-xs" style="border-color: var(--border-color); background-color: var(--card-bg);">Batal</button>
-                <button type="submit" class="w-1/2 py-3 rounded-2xl font-bold text-xs shadow-lg" style="background-color: var(--btn-bg); color: var(--btn-text);">Simpan</button>
-            </div>
-        </form>
-    </div>
-
-    <!-- MODAL TRANSAKSI -->
-    <div id="modal-transaksi" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
-        <div id="transaksi-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-4 transform scale-95 transition-transform duration-200 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-            <h3 class="text-base font-bold">Tambah Tabungan</h3>
-            <div class="p-1 rounded-2xl flex border" style="background-color: var(--header-bg); border-color: var(--border-color);">
-                <button type="button" id="tab-simpan" onclick="setJenisTransaksi('Simpan')" class="w-1/2 py-2 rounded-xl text-xs font-bold shadow-xs transition" style="background-color: var(--btn-bg); color: var(--btn-text);">Simpan</button>
-                <button type="button" id="tab-tarik" onclick="setJenisTransaksi('Tarik')" class="w-1/2 py-2 rounded-xl text-xs font-bold opacity-75 transition">Tarik</button>
-            </div>
-            <form onsubmit="prosesTransaksi(event)" class="space-y-3">
-                <div>
-                    <label class="block text-xs font-semibold opacity-85 mb-1">Nominal (Rp)</label>
-                    <input type="number" id="trx-nominal" required placeholder="0" class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color); color: var(--text-color);">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold opacity-85 mb-1">Tanggal</label>
-                    <input type="date" id="trx-tanggal" required class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color); color: var(--text-color);">
-                </div>
-                <div>
-                    <label class="block text-xs font-semibold opacity-85 mb-1">Catatan (opsional)</label>
-                    <input type="text" id="trx-catatan" placeholder="Contoh: Sisihan gaji" class="w-full border rounded-xl px-4 py-2.5 text-sm focus:outline-none shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color); color: var(--text-color);">
-                </div>
-                <div class="pt-2 flex justify-end space-x-2">
-                    <button type="button" onclick="closeTransaksiModal()" class="px-4 py-2 rounded-xl border text-xs font-semibold shadow-xs" style="border-color: var(--border-color); background-color: var(--header-bg);">Batal</button>
-                    <button type="submit" class="px-5 py-2 rounded-xl text-xs font-bold shadow-md" style="background-color: var(--btn-bg); color: var(--btn-text);">Simpan</button>
-                </div>
-            </form>
-        </div>
-    </div>
-
-    <!-- POPUP TARGET -->
-    <div id="target-popup" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
-        <div id="popup-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-            <h3 class="text-lg font-bold mb-2">Pilih Tipe Target</h3>
-            <button onclick="openFormNabung()" class="w-full p-3.5 rounded-2xl flex items-center space-x-3 text-left border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border" style="background-color: var(--card-bg); border-color: var(--border-color);"><i class="fa-solid fa-flag"></i></div>
-                <div><div class="text-sm font-bold">Nabung</div><div class="text-[11px] opacity-75">Buat target tabungan biasa</div></div>
-            </button>
-            <button onclick="showCustomAlert('Fitur Nabung Berkala akan dikembangkan!'); togglePopup();" class="w-full p-3.5 rounded-2xl flex items-center space-x-3 text-left border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);">
-                <div class="w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 border" style="background-color: var(--card-bg); border-color: var(--border-color);"><i class="fa-solid fa-trophy"></i></div>
-                <div><div class="text-sm font-bold">Nabung Berkala</div><div class="text-[11px] opacity-75">Target dengan setoran rutin</div></div>
-            </button>
-            <div class="pt-2 flex justify-end"><button onclick="togglePopup()" class="px-5 py-2 rounded-xl border text-xs font-semibold shadow-xs" style="border-color: var(--border-color); background-color: var(--card-bg);">Batal</button></div>
-        </div>
-    </div>
-
-    <!-- POPUP OPSI DETAIL -->
-    <div id="detail-menu-popup" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
-        <div id="detail-menu-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border" style="background-color: var(--card-bg); border-color: var(--border-color);">
-            <h3 class="text-base font-bold mb-1">Opsi Target</h3>
-            <button onclick="konfirmasiHapusTarget()" class="w-full bg-rose-500/10 hover:bg-rose-500/20 p-3.5 rounded-2xl flex items-center space-x-3 text-left border border-rose-500/30 text-rose-400 shadow-xs">
-                <i class="fa-solid fa-trash w-5 text-center"></i>
-                <div><div class="text-sm font-bold">Hapus</div><div class="text-[11px] text-rose-300">Hapus goal beserta semua transaksi</div></div>
-            </button>
-            <div class="pt-2 flex justify-end"><button onclick="toggleDetailMenu()" class="px-5 py-2 rounded-xl border text-xs font-semibold shadow-xs" style="border-color: var(--border-color); background-color: var(--card-bg);">Batal</button></div>
-        </div>
-    </div>
-
-    <!-- CUSTOM POPUP KONFIRMASI HAPUS -->
-    <div id="delete-confirm-modal" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
-        <div id="delete-modal-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border text-center" style="background-color: var(--card-bg); border-color: var(--border-color);">
-            <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-xl text-rose-500 bg-rose-500/20 shadow-inner"><i class="fa-solid fa-triangle-exclamation"></i></div>
-            <h3 class="text-base font-bold">Hapus Target</h3>
-            <p class="text-xs opacity-85">Yakin ingin menghapus target ini beserta riwayat transaksinya?</p>
-            <div class="pt-2 flex space-x-2">
-                <button onclick="closeDeleteConfirm()" class="w-1/2 py-2.5 rounded-xl border text-xs font-semibold shadow-xs" style="border-color: var(--border-color); background-color: var(--card-bg);">Batal</button>
-                <button onclick="hapusTargetAktif()" class="w-1/2 py-2.5 rounded-xl bg-rose-600 text-white text-xs font-bold shadow-md">Oke</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- POPUP MENU TEMA -->
-    <div id="theme-popup" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
-        <div id="theme-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-2 transform scale-95 transition-transform duration-200 border max-h-[80vh] overflow-y-auto no-scrollbar" style="background-color: var(--card-bg); border-color: var(--border-color);">
-            <h3 class="text-base font-bold mb-2">Tema Aplikasi</h3>
-            <button onclick="setTheme('choco')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);"><i class="fa-solid fa-mug-hot w-5 text-center"></i><div><div class="text-sm font-bold">Choco</div><div class="text-[10px] opacity-75">Hangat cozy (Light)</div></div></button>
-            <button onclick="setTheme('white')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);"><i class="fa-solid fa-sun w-5 text-center"></i><div><div class="text-sm font-bold">White Theme</div><div class="text-[10px] opacity-75">Clean cerah minimalis</div></div></button>
-            <button onclick="setTheme('blue')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);"><i class="fa-solid fa-droplet w-5 text-center text-blue-400"></i><div><div class="text-sm font-bold">Blue Ocean</div><div class="text-[10px] opacity-75">Navy gelap & biru segar</div></div></button>
-            <button onclick="setTheme('glow')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);"><i class="fa-solid fa-book-open w-5 text-center text-pink-400"></i><div><div class="text-sm font-bold">Glow Journal</div><div class="text-[10px] opacity-75">Pink pastel estetik</div></div></button>
-            <button onclick="setTheme('dark')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);"><i class="fa-solid fa-moon w-5 text-center text-rose-400"></i><div><div class="text-sm font-bold">Dark-Theme</div><div class="text-[10px] opacity-75">Workspace malam gelap</div></div></button>
-            <div class="pt-2 flex justify-end"><button onclick="toggleThemeModal()" class="px-5 py-2 rounded-xl border text-xs font-semibold shadow-xs" style="border-color: var(--border-color); background-color: var(--header-bg);">Batal</button></div>
-        </div>
-    </div>
-
-    <!-- POPUP MENU BAHASA -->
-    <div id="lang-popup" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
-        <div id="lang-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-2 transform scale-95 transition-transform duration-200 border max-h-[80vh] overflow-y-auto no-scrollbar" style="background-color: var(--card-bg); border-color: var(--border-color);">
-            <h3 class="text-base font-bold mb-2">Bahasa</h3>
-            <button onclick="setLang('id')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);"><i class="fa-solid fa-globe w-5 text-center"></i><div><div class="text-sm font-bold">Indonesia</div><div class="text-[10px] opacity-75">Bahasa Indonesia</div></div></button>
-            <button onclick="setLang('en')" class="w-full p-3 rounded-2xl flex items-center space-x-3 text-left border shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);"><i class="fa-solid fa-language w-5 text-center"></i><div><div class="text-sm font-bold">English</div><div class="text-[10px] opacity-75">English language</div></div></button>
-            <div class="pt-2 flex justify-end"><button onclick="toggleLangModal()" class="px-5 py-2 rounded-xl border text-xs font-semibold shadow-xs" style="border-color: var(--border-color); background-color: var(--header-bg);">Batal</button></div>
-        </div>
-    </div>
-
-    <!-- CUSTOM ALERT -->
-    <div id="custom-alert" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 flex items-center justify-center p-4 hidden transition-opacity opacity-0 duration-200">
-        <div id="alert-content" class="w-full max-w-xs rounded-3xl p-5 shadow-2xl space-y-3 transform scale-95 transition-transform duration-200 border text-center shadow-xl" style="background-color: var(--card-bg); border-color: var(--border-color);">
-            <div class="w-12 h-12 rounded-2xl mx-auto flex items-center justify-center text-xl shadow-inner border" style="background-color: var(--header-bg); border-color: var(--border-color);"><i class="fa-solid fa-bell"></i></div>
-            <h3 class="text-base font-bold">Pemberitahuan</h3>
-            <p id="alert-message-text" class="text-xs opacity-85">Pesan...</p>
-            <div class="pt-2 flex justify-center"><button onclick="closeCustomAlert()" class="w-full py-2.5 rounded-xl text-xs font-bold shadow-md" style="background-color: var(--btn-bg); color: var(--btn-text);">Oke</button></div>
-        </div>
-    </div>
-
-    <!-- SIDEBAR MENU -->
-    <div id="menu-overlay" class="fixed inset-0 bg-black/60 backdrop-blur-xs z-50 hidden opacity-0 transition-opacity duration-300">
-        <div id="sidebar" class="absolute top-0 left-0 bottom-0 w-3/4 max-w-xs shadow-2xl transform -translate-x-full transition-transform duration-300 ease-out flex flex-col justify-between border-r" style="background-color: var(--card-bg); border-color: var(--border-color);">
-            <div>
-                <div class="p-4 border-b flex justify-between items-center shadow-xs" style="background-color: var(--header-bg); border-color: var(--border-color);">
-                    <h3 class="text-base font-bold">Menu</h3>
-                    <button onclick="toggleMenu()" class="w-8 h-8 rounded-lg flex items-center justify-center border shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color);"><i class="fa-solid fa-xmark text-lg"></i></button>
-                </div>
-
-                <div class="p-3 space-y-2 overflow-y-auto max-h-[calc(100vh-120px)] no-scrollbar">
-                    <div class="rounded-xl border overflow-hidden shadow-xs" style="border-color: var(--border-color);">
-                        <button onclick="toggleCategory('cat-main', 'arrow-main')" class="w-full p-3 flex justify-between items-center text-xs font-bold uppercase tracking-wider opacity-85" style="background-color: var(--header-bg);">
-                            <span>Main Menu</span>
-                            <i id="arrow-main" class="fa-solid fa-chevron-down transition-transform duration-200"></i>
-                        </button>
-                        <div id="cat-main" class="p-1 space-y-1">
-                            <button onclick="toggleMenu(); bukaChatAI();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium hover:opacity-80">
-                                <i class="fa-solid fa-robot w-4 text-center text-indigo-400"></i><span>Chat AI</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <div class="rounded-xl border overflow-hidden shadow-xs" style="border-color: var(--border-color);">
-                        <button onclick="toggleCategory('cat-info', 'arrow-info')" class="w-full p-3 flex justify-between items-center text-xs font-bold uppercase tracking-wider opacity-85" style="background-color: var(--header-bg);">
-                            <span>Information</span>
-                            <i id="arrow-info" class="fa-solid fa-chevron-down transition-transform duration-200"></i>
-                        </button>
-                        <div id="cat-info" class="p-1 space-y-1">
-                            <button onclick="toggleMenu(); toggleThemeModal();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium hover:opacity-80"><i class="fa-solid fa-palette w-4 text-center"></i><span>Tema Aplikasi</span></button>
-                            <button onclick="toggleMenu(); toggleLangModal();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium hover:opacity-80"><i class="fa-solid fa-globe w-4 text-center"></i><span>Bahasa</span></button>
-                            <a href="https://t.me/randommulti_bot" target="_blank" onclick="toggleMenu();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium hover:opacity-80 no-underline" style="color: inherit;">
-                                <i class="fa-brands fa-telegram w-4 text-center text-sky-400"></i><span>Bot Telegram</span>
-                            </a>
-                            <a href="https://t.me/genzfo" target="_blank" onclick="toggleMenu();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium hover:opacity-80 no-underline" style="color: inherit;">
-                                <i class="fa-solid fa-bullhorn w-4 text-center text-amber-400"></i><span>Channel Update</span>
-                            </a>
-                        </div>
-                    </div>
-
-                    <div class="rounded-xl border overflow-hidden shadow-xs" style="border-color: var(--border-color);">
-                        <button onclick="toggleCategory('cat-game', 'arrow-game')" class="w-full p-3 flex justify-between items-center text-xs font-bold uppercase tracking-wider opacity-85" style="background-color: var(--header-bg);">
-                            <span>Permainan</span>
-                            <i id="arrow-game" class="fa-solid fa-chevron-down transition-transform duration-200"></i>
-                        </button>
-                        <div id="cat-game" class="p-1 space-y-1">
-                            <button onclick="toggleMenu(); bukaUlarTangga();" class="w-full p-2.5 rounded-lg flex items-center space-x-3 text-left text-xs font-medium hover:opacity-80"><i class="fa-solid fa-dice w-4 text-center"></i><span>Ular Tangga</span></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="p-3 text-center border-t text-[11px] font-semibold opacity-75 shadow-inner" style="background-color: var(--header-bg); border-color: var(--border-color);">
-                © Powered By Dho
-            </div>
-        </div>
-    </div>
-
-    <!-- FAB (+) -->
-    <div id="fab-btn" class="fixed bottom-20 right-5 z-20 transition-all duration-300">
-        <button onclick="togglePopup()" class="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl shadow-xl transition focus:outline-none" style="background-color: var(--btn-bg); color: var(--btn-text);">
-            <i class="fa-solid fa-plus" id="plus-icon"></i>
-        </button>
-    </div>
-
-    <!-- BOTTOM NAVBAR (Persis Model Panel Futuristik) -->
-    <nav class="border-t py-2 px-4 flex justify-around items-center text-xs font-medium fixed bottom-0 left-0 right-0 z-30 shadow-lg backdrop-blur-lg transition-colors duration-300" style="background-color: var(--header-bg); border-color: var(--border-color);">
-        <button id="nav-berjalan" onclick="switchTab('berjalan')" class="flex flex-col items-center text-indigo-400 font-bold focus:outline-none"><i class="fa-solid fa-house text-sm mb-0.5"></i><span class="text-[9px]">Home</span></button>
-        <button onclick="bukaChatAI()" class="flex flex-col items-center opacity-65 hover:opacity-100 focus:outline-none"><i class="fa-solid fa-comments text-sm mb-0.5"></i><span class="text-[9px]">Chat</span></button>
-        <button onclick="bukaUlarTangga()" class="flex flex-col items-center opacity-65 hover:opacity-100 focus:outline-none">
-            <div class="w-9 h-9 -mt-4 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-indigo-600/50 border-4 border-[#030712]">
+    <!-- BOTTOM NAVIGATION BAR -->
+    <nav class="fixed bottom-0 left-0 right-0 bg-[#090d1e]/95 backdrop-blur-lg border-t border-slate-800/80 px-4 py-2.5 flex justify-around items-center z-20">
+        <a href="#" class="flex flex-col items-center text-indigo-400 space-y-1">
+            <i class="fa-solid fa-house text-xs"></i>
+            <span class="text-[9px] font-bold">Home</span>
+        </a>
+        <a href="#" onclick="bukaChatAI()" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1">
+            <i class="fa-solid fa-comments text-xs"></i>
+            <span class="text-[9px]">Chat</span>
+        </a>
+        <a href="#" onclick="bukaUlarTangga()" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1">
+            <div class="w-10 h-10 -mt-5 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-indigo-600/50 border-4 border-[#030712]">
                 <i class="fa-solid fa-users text-xs"></i>
             </div>
             <span class="text-[9px]">Group</span>
-        </button>
-        <button onclick="toggleThemeModal()" class="flex flex-col items-center opacity-65 hover:opacity-100 focus:outline-none"><i class="fa-solid fa-circle-info text-sm mb-0.5"></i><span class="text-[9px]">Info</span></button>
-        <button onclick="toggleMenu()" class="flex flex-col items-center opacity-65 hover:opacity-100 focus:outline-none"><i class="fa-solid fa-toolbox text-sm mb-0.5"></i><span class="text-[9px]">Tools</span></button>
+        </a>
+        <a href="#" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1">
+            <i class="fa-solid fa-circle-info text-xs"></i>
+            <span class="text-[9px]">Info</span>
+        </a>
+        <a href="#" onclick="toggleMenu()" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1">
+            <i class="fa-solid fa-toolbox text-xs"></i>
+            <span class="text-[9px]">Tools</span>
+        </a>
     </nav>
 
-    <!-- SCRIPT UTAMA & LOGIKA TABUNGAN & GAME -->
+    <!-- SCRIPT UTAMA -->
     <script>
-        let base64Gambar = "";
-        let currentTargetId = null;
-        let jenisTrx = "Simpan";
-        let activeTab = "berjalan";
-
-        let currentGameMode = 'pvp';
-        let p1Pos = 0;
-        let p2Pos = 0;
-        let currentTurn = 1;
-        let isRolling = false;
-
-        const snakesAndLadders = {
-            2: 38, 7: 14, 8: 31, 15: 26, 21: 42, 28: 84, 36: 44, 51: 67, 71: 91, 78: 98, 87: 94,
-            16: 6, 47: 26, 49: 11, 56: 53, 62: 19, 64: 60, 87: 24, 93: 73, 95: 75, 99: 78
-        };
-
         document.addEventListener("DOMContentLoaded", () => {
-            document.getElementById('input-tanggal').valueAsDate = new Date();
-            document.getElementById('trx-tanggal').valueAsDate = new Date();
-            loadTheme();
-            renderTargets();
-            generateBoard();
+            // Cek apakah user sudah login
+            const loggedUser = localStorage.getItem('mbd_logged_user');
+            if (!loggedUser) {
+                window.location.href = 'login.html';
+                return;
+            }
 
-            // Real-time clock updater
-            setInterval(() => {
-                const now = new Date();
-                document.getElementById('clock').innerText = now.toTimeString().split(' ')[0];
-            }, 1000);
+            // Tampilkan nama user sesuai akun yang login
+            document.getElementById('profile-username').textContent = loggedUser;
+
+            // Set Tanggal & Jam Realtime
+            updateDateTime();
+            setInterval(updateDateTime, 1000);
         });
 
-        function hapticFeedback() {
-            if (navigator.vibrate) navigator.vibrate(40);
+        function updateDateTime() {
+            const now = new Date();
+            
+            // Format Hari & Tanggal (Contoh: Jum, 6 Nov 2026)
+            const optionsDate = { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('id-ID', optionsDate);
+
+            // Format Jam WIB (Contoh: 15:36 WIB)
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            document.getElementById('clock').textContent = `${hours}:${minutes} WIB`;
+
+            // Format tanggal card (06/11/2026)
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            document.getElementById('card-date-badge').innerHTML = `<i class="fa-regular fa-calendar text-[9px]"></i> ${day}/${month}/${year}`;
         }
 
-        // --- Logika Chat AI ---
-        function bukaChatAI() {
-            hapticFeedback();
-            const aiView = document.getElementById('view-chat-ai');
-            aiView.classList.remove('hidden');
-            setTimeout(() => {
-                aiView.classList.remove('translate-y-full', 'opacity-0');
-                aiView.classList.add('translate-y-0', 'opacity-100');
-            }, 10);
-        }
-
-        function tutupChatAI() {
-            hapticFeedback();
-            const aiView = document.getElementById('view-chat-ai');
-            aiView.classList.remove('translate-y-0', 'opacity-100');
-            aiView.classList.add('translate-y-full', 'opacity-0');
-            setTimeout(() => { aiView.classList.add('hidden'); }, 300);
-        }
-
-        function handleAIKeyPress(e) { if (e.key === 'Enter') kirimPesanAI(); }
-
-        async function kirimPesanAI() {
-            const inputEl = document.getElementById('input-ai-prompt');
-            const promptText = inputEl.value.trim();
-            if (!promptText) return;
-            hapticFeedback();
-            inputEl.value = '';
-
-            const chatContainer = document.getElementById('chat-messages');
-            const userBubble = document.createElement('div');
-            userBubble.className = "flex justify-end gap-2.5 max-w-[85%] ml-auto items-start";
-            userBubble.innerHTML = `<div class="p-3 rounded-2xl text-xs font-medium text-white shadow-xs" style="background-color: var(--btn-bg);">${promptText}</div>`;
-            chatContainer.appendChild(userBubble);
-
-            const botBubbleId = 'bot-reply-' + Date.now();
-            const botBubble = document.createElement('div');
-            botBubble.className = "flex gap-2.5 max-w-[85%] items-start";
-            botBubble.id = botBubbleId;
-            botBubble.innerHTML = `
-                <div class="w-7 h-7 rounded-full bg-gradient-to-tr from-sky-400 to-indigo-600 text-white flex items-center justify-center text-xs flex-shrink-0 mt-0.5 shadow-sm">
-                    <i class="fa-solid fa-robot"></i>
-                </div>
-                <div class="p-3 rounded-2xl text-xs border italic opacity-80" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                    <i class="fa-solid fa-circle-notch animate-spin mr-1 text-indigo-500"></i> Gemini sedang berpikir...
-                </div>
-            `;
-            chatContainer.appendChild(botBubble);
-            chatContainer.scrollTop = chatContainer.scrollHeight;
-
-            try {
-                const response = await fetch(`https://apis.davidcyril.name.ng/ai/gemini-3-pro?prompt=${encodeURIComponent(promptText)}`);
-                const result = await response.json();
-                let replyMessage = "Maaf, terjadi kesalahan saat menghubungi server AI.";
-                if (result && result.success && result.data) replyMessage = result.data;
-                else if (result && result.message) replyMessage = result.message;
-                document.getElementById(botBubbleId).querySelector('.p-3').innerHTML = replyMessage.replace(/\n/g, '<br>');
-            } catch (err) {
-                document.getElementById(botBubbleId).querySelector('.p-3').innerHTML = "Gagal terhubung ke AI. Periksa koneksi internet.";
-            } finally {
-                chatContainer.scrollTop = chatContainer.scrollHeight;
-            }
-        }
-
-        // --- Logika Game Ular Tangga ---
-        function bukaUlarTangga() {
-            hapticFeedback();
-            const gameView = document.getElementById('view-snake-game');
-            gameView.classList.remove('hidden');
-            setTimeout(() => {
-                gameView.classList.remove('scale-95', 'opacity-0');
-                gameView.classList.add('scale-100', 'opacity-100');
-            }, 10);
-            document.getElementById('snake-menu-screen').classList.remove('hidden');
-            document.getElementById('snake-board-screen').classList.add('hidden');
-            document.getElementById('snake-controls').classList.add('hidden');
-        }
-
-        function keluarGame() {
-            hapticFeedback();
-            const gameView = document.getElementById('view-snake-game');
-            gameView.classList.remove('scale-100', 'opacity-100');
-            gameView.classList.add('scale-95', 'opacity-0');
-            setTimeout(() => {
-                gameView.classList.add('hidden');
-                document.getElementById('snake-win-modal').classList.add('hidden');
-            }, 300);
-        }
-
-        function bukaAturanGame() {
-            hapticFeedback();
-            showCustomAlert("Aturan: Capai kotak 100 untuk menang! Tangga menaikkan, ular menjatuhkan.");
-        }
-
-        function mulaiGame(mode) {
-            hapticFeedback();
-            currentGameMode = mode;
-            p1Pos = 0; p2Pos = 0; currentTurn = 1;
-            document.getElementById('snake-menu-screen').classList.add('hidden');
-            document.getElementById('snake-board-screen').classList.remove('hidden');
-            document.getElementById('snake-controls').classList.remove('hidden');
-            document.getElementById('game-status-text').textContent = mode === 'bot' ? "Player vs Bot" : "P1 vs P2";
-            document.getElementById('snake-win-modal').classList.add('hidden');
-            updateBoardUI();
-        }
-
-        function generateBoard() {
-            const board = document.getElementById('snake-board-screen');
-            board.innerHTML = '';
-            for (let r = 9; r >= 0; r--) {
-                for (let c = 0; c < 10; c++) {
-                    let num = (r % 2 === 1) ? r * 10 + (10 - c) : r * 10 + c + 1;
-                    const cell = document.createElement('div');
-                    cell.className = "rounded-lg flex flex-col justify-between p-1 text-[9px] font-bold text-white/90 relative border border-white/10";
-                    cell.style.backgroundColor = (r + c) % 2 === 0 ? 'rgba(255,255,255,0.12)' : 'rgba(0,0,0,0.2)';
-                    cell.id = `cell-${num}`;
-                    cell.innerHTML = `<span>${num}</span><div id="tokens-${num}" class="flex gap-0.5 justify-center items-center absolute inset-0"></div>`;
-                    board.appendChild(cell);
-                }
-            }
-        }
-
-        function updateBoardUI() {
-            for (let i = 1; i <= 100; i++) {
-                const tokenContainer = document.getElementById(`tokens-${i}`);
-                if (tokenContainer) tokenContainer.innerHTML = '';
-            }
-            if (p1Pos > 0) {
-                document.getElementById(`tokens-${p1Pos}`).innerHTML += `<div class="w-3.5 h-3.5 rounded-full bg-rose-500 border border-white flex items-center justify-center text-[7px] text-white font-black">1</div>`;
-            }
-            if (p2Pos > 0) {
-                document.getElementById(`tokens-${p2Pos}`).innerHTML += `<div class="w-3.5 h-3.5 rounded-full bg-amber-400 border border-white flex items-center justify-center text-[7px] text-black font-black">${currentGameMode === 'bot' ? 'B' : '2'}</div>`;
-            }
-            document.getElementById('current-player-name').textContent = currentTurn === 1 ? "Player 1" : (currentGameMode === 'bot' ? "Bot" : "Player 2");
-        }
-
-        function lemparDadu() {
-            if (isRolling) return;
-            isRolling = true;
-            hapticFeedback();
-            const finalRoll = Math.floor(Math.random() * 6) + 1;
-            setTimeout(() => {
-                gerakkanPemain(finalRoll);
-            }, 300);
-        }
-
-        function gerakkanPemain(angkah) {
-            if (currentTurn === 1) {
-                p1Pos = Math.min(100, p1Pos + angkah);
-                if (snakesAndLadders[p1Pos]) p1Pos = snakesAndLadders[p1Pos];
-                updateBoardUI();
-                if (p1Pos === 100) { selesaiGame("Player 1 Menang!"); return; }
-                currentTurn = 2;
-                updateBoardUI();
-                isRolling = false;
-                if (currentGameMode === 'bot') setTimeout(giliranBot, 600);
-            } else {
-                p2Pos = Math.min(100, p2Pos + angkah);
-                if (snakesAndLadders[p2Pos]) p2Pos = snakesAndLadders[p2Pos];
-                updateBoardUI();
-                if (p2Pos === 100) { selesaiGame(currentGameMode === 'bot' ? "Bot Menang!" : "Player 2 Menang!"); return; }
-                currentTurn = 1;
-                updateBoardUI();
-                isRolling = false;
-            }
-        }
-
-        function giliranBot() {
-            if (currentTurn !== 2) return;
-            isRolling = true;
-            setTimeout(() => {
-                const botRoll = Math.floor(Math.random() * 6) + 1;
-                p2Pos = Math.min(100, p2Pos + botRoll);
-                if (snakesAndLadders[p2Pos]) p2Pos = snakesAndLadders[p2Pos];
-                updateBoardUI();
-                if (p2Pos === 100) { selesaiGame("Bot Menang!"); return; }
-                currentTurn = 1;
-                updateBoardUI();
-                isRolling = false;
-            }, 500);
-        }
-
-        function selesaiGame(pesan) {
-            hapticFeedback();
-            document.getElementById('win-title').textContent = pesan;
-            document.getElementById('snake-win-modal').classList.remove('hidden');
-        }
-
-        function toggleCategory(contentId, arrowId) {
-            hapticFeedback();
-            const content = document.getElementById(contentId);
-            const arrow = document.getElementById(arrowId);
-            if (content.style.display === "none") {
-                content.style.display = "block";
-                arrow.style.transform = "rotate(0deg)";
-            } else {
-                content.style.display = "none";
-                arrow.style.transform = "rotate(-90deg)";
-            }
-        }
-
-        function showCustomAlert(msg) {
-            hapticFeedback();
-            document.getElementById('alert-message-text').textContent = msg;
-            const modal = document.getElementById('custom-alert');
-            modal.classList.remove('hidden');
-            setTimeout(() => { modal.classList.remove('opacity-0'); }, 10);
-        }
-        function closeCustomAlert() {
-            hapticFeedback();
-            document.getElementById('custom-alert').classList.add('hidden');
-        }
-
-        function konfirmasiHapusTarget() {
-            hapticFeedback();
-            toggleDetailMenu();
-            document.getElementById('delete-confirm-modal').classList.remove('hidden');
-        }
-        function closeDeleteConfirm() { document.getElementById('delete-confirm-modal').classList.add('hidden'); }
-
-        function setTheme(theme) {
-            hapticFeedback();
-            applyThemeConfig(theme);
-            localStorage.setItem('app_theme', theme);
-            toggleThemeModal();
-        }
-
-        function applyThemeConfig(theme) {
-            let config = {};
-            if (theme === 'choco') {
-                config = { bg: '#fdfbf7', header: '#f5f0eb', card: '#ffffff', border: '#e6dfd5', btnBg: '#2c2621', btnText: '#f5f2eb', text: '#2c2621', bgImage: 'linear-gradient(135deg, #fdfbf7 0%, #f0eae1 100%)' };
-            } else if (theme === 'white') {
-                config = { bg: '#ffffff', header: '#f8fafc', card: '#ffffff', border: '#e2e8f0', btnBg: '#0f172a', btnText: '#ffffff', text: '#0f172a', bgImage: 'linear-gradient(135deg, #ffffff 0%, #f1f5f9 100%)' };
-            } else if (theme === 'blue') {
-                config = { bg: '#0f172a', header: '#1e293b', card: '#1e293b', border: '#334155', btnBg: '#38bdf8', btnText: '#0f172a', text: '#f8fafc', bgImage: 'linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%)' };
-            } else if (theme === 'glow') {
-                config = { bg: '#4c0519', header: '#831843', card: '#831843', border: '#be185d', btnBg: '#f472b6', btnText: '#4c0519', text: '#ffffff', bgImage: 'linear-gradient(135deg, #500724 0%, #831843 100%)' };
-            } else if (theme === 'dark') {
-                config = { bg: '#09090b', header: '#18181b', card: '#18181b', border: '#27272a', btnBg: '#f43f5e', btnText: '#ffffff', text: '#f4f4f5', bgImage: 'radial-gradient(circle at 50% 50%, #18181b 0%, #09090b 100%)' };
-            }
-            document.documentElement.style.setProperty('--bg-color', config.bg);
-            document.documentElement.style.setProperty('--header-bg', config.header);
-            document.documentElement.style.setProperty('--card-bg', config.card);
-            document.documentElement.style.setProperty('--border-color', config.border);
-            document.documentElement.style.setProperty('--btn-bg', config.btnBg);
-            document.documentElement.style.setProperty('--btn-text', config.btnText);
-            document.documentElement.style.setProperty('--text-color', config.text);
-            document.documentElement.style.setProperty('--bg-image', config.bgImage);
-        }
-
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('app_theme') || 'dark';
-            applyThemeConfig(savedTheme);
-        }
-
-        function toggleThemeModal() {
-            hapticFeedback();
-            const modal = document.getElementById('theme-popup');
-            modal.classList.toggle('hidden');
-        }
-
-        function toggleLangModal() {
-            hapticFeedback();
-            document.getElementById('lang-popup').classList.toggle('hidden');
-        }
-
-        function setLang(lang) {
-            hapticFeedback();
-            toggleLangModal();
-            showCustomAlert(lang === 'id' ? 'Bahasa diubah ke Indonesia' : 'Language switched to English');
-        }
-
-        function switchTab(tab) {
-            hapticFeedback();
-            activeTab = tab;
-            renderTargets();
-        }
-
-        const menuOverlay = document.getElementById('menu-overlay');
-        const sidebar = document.getElementById('sidebar');
         function toggleMenu() {
-            hapticFeedback();
-            if (menuOverlay.classList.contains('hidden')) {
-                menuOverlay.classList.remove('hidden');
-                setTimeout(() => { menuOverlay.classList.remove('opacity-0'); sidebar.classList.remove('-translate-x-full'); }, 10);
-            } else {
-                menuOverlay.classList.add('opacity-0');
-                sidebar.classList.add('-translate-x-full');
-                setTimeout(() => menuOverlay.classList.add('hidden'), 300);
-            }
-        }
-        menuOverlay.addEventListener('click', (e) => { if (e.target === menuOverlay) toggleMenu(); });
-
-        const popup = document.getElementById('target-popup');
-        function togglePopup() {
-            hapticFeedback();
-            popup.classList.toggle('hidden');
+            alert('Menu Tools / Sidebar');
         }
 
-        function openFormNabung() {
-            hapticFeedback();
-            togglePopup();
-            currentTargetId = null;
-            document.getElementById('form-title').textContent = "Buat Nabung";
-            document.getElementById('form-nabung').reset();
-            document.getElementById('input-tanggal').valueAsDate = new Date();
-            document.getElementById('preview-img').classList.add('hidden');
-            document.getElementById('label-gambar').textContent = "Tap untuk pilih gambar dari file explorer";
-            base64Gambar = "";
-            document.getElementById('view-form').classList.remove('translate-x-full');
+        function bukaChatAI() {
+            alert('Fitur Chat AI');
         }
 
-        function openEditForm() {
-            hapticFeedback();
-            const listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
-            const item = listNabung.find(t => t.id === currentTargetId);
-            if (!item) return;
-            currentTargetId = item.id;
-            document.getElementById('form-title').textContent = "Edit Nabung";
-            document.getElementById('input-judul').value = item.judul;
-            document.getElementById('input-target').value = item.targetNominal;
-            document.getElementById('input-tanggal').value = item.tanggal;
-            document.getElementById('input-deadline').value = item.deadline || '';
-            document.getElementById('input-catatan').value = item.catatan || '';
-            base64Gambar = item.gambar;
-            if (base64Gambar) {
-                const preview = document.getElementById('preview-img');
-                preview.src = base64Gambar;
-                preview.classList.remove('hidden');
-            }
-            document.getElementById('view-form').classList.remove('translate-x-full');
-        }
-
-        function closeForm() {
-            hapticFeedback();
-            document.getElementById('view-form').classList.add('translate-x-full');
-        }
-
-        function previewGambar(input) {
-            if (input.files && input.files[0]) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    base64Gambar = e.target.result;
-                    const preview = document.getElementById('preview-img');
-                    preview.src = base64Gambar;
-                    preview.classList.remove('hidden');
-                    document.getElementById('label-gambar').textContent = input.files[0].name;
-                }
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-
-        function simpanTarget(e) {
-            e.preventDefault();
-            hapticFeedback();
-            const judul = document.getElementById('input-judul').value;
-            const targetNominal = parseFloat(document.getElementById('input-target').value);
-            const tanggal = document.getElementById('input-tanggal').value;
-            const deadline = document.getElementById('input-deadline').value;
-            const catatan = document.getElementById('input-catatan').value;
-
-            let listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
-            if (currentTargetId) {
-                listNabung = listNabung.map(item => item.id === currentTargetId ? { ...item, judul, targetNominal, tanggal, deadline, catatan, gambar: base64Gambar || item.gambar } : item);
-            } else {
-                listNabung.push({ id: Date.now(), judul, targetNominal, terkumpul: 0, tanggal, deadline, catatan, gambar: base64Gambar || 'https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?auto=format&fit=crop&w=400&q=80', riwayat: [] });
-            }
-            localStorage.setItem('targets_nabung', JSON.stringify(listNabung));
-            closeForm();
-            renderTargets();
-            if (currentTargetId) openDetail(currentTargetId);
-        }
-
-        function openDetail(id) {
-            hapticFeedback();
-            currentTargetId = id;
-            renderDetailContent();
-            document.getElementById('view-detail').classList.remove('translate-x-full');
-        }
-
-        function closeDetail() {
-            hapticFeedback();
-            document.getElementById('view-detail').classList.add('translate-x-full');
-            renderTargets();
-        }
-
-        function renderDetailContent() {
-            const listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
-            const item = listNabung.find(t => t.id === currentTargetId);
-            if (!item) return;
-
-            const persen = Math.min(100, Math.round((item.terkumpul / item.targetNominal) * 100));
-            document.getElementById('detail-judul').textContent = item.judul;
-            document.getElementById('detail-persen').textContent = persen + '%';
-            document.getElementById('detail-progress-bar').style.width = persen + '%';
-            document.getElementById('detail-target-nominal').textContent = formatRupiah(item.targetNominal);
-            document.getElementById('detail-terkumpul').textContent = formatRupiah(item.terkumpul);
-            document.getElementById('detail-kurang').textContent = formatRupiah(Math.max(0, item.targetNominal - item.terkumpul));
-            document.getElementById('detail-tanggal').textContent = item.tanggal;
-
-            const catatanBox = document.getElementById('detail-catatan-box');
-            if (item.catatan) {
-                document.getElementById('detail-catatan').textContent = item.catatan;
-                catatanBox.classList.remove('hidden');
-            } else { catatanBox.classList.add('hidden'); }
-
-            const riwayatList = document.getElementById('riwayat-list');
-            if (!item.riwayat || item.riwayat.length === 0) {
-                riwayatList.innerHTML = `<div class="text-xs opacity-50 italic">Belum ada transaksi.</div>`;
-            } else {
-                riwayatList.innerHTML = item.riwayat.slice().reverse().map(trx => `
-                    <div class="p-3 rounded-2xl border flex justify-between items-center shadow-xs" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-8 h-8 rounded-xl flex items-center justify-center ${trx.jenis === 'Simpan' ? 'bg-emerald-500/20 text-emerald-400' : 'bg-rose-500/20 text-rose-400'}">
-                                <i class="fa-solid fa-arrow-${trx.jenis === 'Simpan' ? 'down' : 'up'} text-xs"></i>
-                            </div>
-                            <div>
-                                <div class="text-xs font-bold">${formatRupiah(trx.nominal)}</div>
-                                <div class="text-[10px] opacity-75">${trx.tanggal} ${trx.catatan ? '• ' + trx.catatan : ''}</div>
-                            </div>
-                        </div>
-                        <span class="text-[10px] font-bold px-2 py-0.5 rounded-lg" style="background-color: var(--header-bg);">${trx.jenis}</span>
-                    </div>
-                `).join('');
-            }
-        }
-
-        function openTransaksiModal() {
-            hapticFeedback();
-            document.getElementById('modal-transaksi').classList.remove('hidden');
-        }
-
-        function closeTransaksiModal() {
-            hapticFeedback();
-            document.getElementById('modal-transaksi').classList.add('hidden');
-            document.getElementById('trx-nominal').value = '';
-            document.getElementById('trx-catatan').value = '';
-        }
-
-        function setJenisTransaksi(jenis) {
-            hapticFeedback();
-            jenisTrx = jenis;
-            const btnSimpan = document.getElementById('tab-simpan');
-            const btnTarik = document.getElementById('tab-tarik');
-            if (jenis === 'Simpan') {
-                btnSimpan.style.backgroundColor = "var(--btn-bg)"; btnSimpan.style.color = "var(--btn-text)"; btnSimpan.style.opacity = "1";
-                btnTarik.style.backgroundColor = "transparent"; btnTarik.style.color = "var(--text-color)"; btnTarik.style.opacity = "0.75";
-            } else {
-                btnTarik.style.backgroundColor = "var(--btn-bg)"; btnTarik.style.color = "var(--btn-text)"; btnTarik.style.opacity = "1";
-                btnSimpan.style.backgroundColor = "transparent"; btnSimpan.style.color = "var(--text-color)"; btnSimpan.style.opacity = "0.75";
-            }
-        }
-
-        function prosesTransaksi(e) {
-            e.preventDefault();
-            hapticFeedback();
-            const nominal = parseFloat(document.getElementById('trx-nominal').value);
-            const tanggal = document.getElementById('trx-tanggal').value;
-            const catatan = document.getElementById('trx-catatan').value;
-
-            let listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
-            listNabung = listNabung.map(item => {
-                if (item.id === currentTargetId) {
-                    if (!item.riwayat) item.riwayat = [];
-                    item.riwayat.push({ jenis: jenisTrx, nominal, tanggal, catatan });
-                    if (jenisTrx === 'Simpan') item.terkumpul += nominal;
-                    else item.terkumpul = Math.max(0, item.terkumpul - nominal);
-                }
-                return item;
-            });
-            localStorage.setItem('targets_nabung', JSON.stringify(listNabung));
-            closeTransaksiModal();
-            renderDetailContent();
-        }
-
-        function toggleDetailMenu() {
-            hapticFeedback();
-            document.getElementById('detail-menu-popup').classList.toggle('hidden');
-        }
-
-        function hapusTargetAktif() {
-            hapticFeedback();
-            closeDeleteConfirm();
-            let listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
-            listNabung = listNabung.filter(t => t.id !== currentTargetId);
-            localStorage.setItem('targets_nabung', JSON.stringify(listNabung));
-            closeDetail();
-            renderTargets();
-        }
-
-        function formatRupiah(angka) {
-            return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(angka);
-        }
-
-        function renderTargets() {
-            const listNabung = JSON.parse(localStorage.getItem('targets_nabung') || '[]');
-            const emptyState = document.getElementById('empty-state');
-            const targetList = document.getElementById('target-list');
-            const countBadge = document.getElementById('target-count-badge');
-            const activeCount = document.getElementById('active-count');
-            const emptyTitle = document.getElementById('empty-title');
-            const emptyDesc = document.getElementById('empty-desc');
-
-            const filteredList = listNabung.filter(item => {
-                const persen = (item.terkumpul / item.targetNominal) * 100;
-                return activeTab === 'berjalan' ? persen < 100 : persen >= 100;
-            });
-
-            if (filteredList.length === 0) {
-                emptyState.classList.remove('hidden');
-                targetList.classList.add('hidden');
-                countBadge.classList.add('hidden');
-                emptyTitle.textContent = activeTab === 'berjalan' ? "Belum ada target aktif" : "Belum ada target selesai";
-                emptyDesc.textContent = activeTab === 'berjalan' ? "Buat Goal atau Challenge baru untuk mulai menabung." : "Target 100% akan tampil di sini.";
-            } else {
-                emptyState.classList.add('hidden');
-                targetList.classList.remove('hidden');
-                countBadge.classList.remove('hidden');
-                activeCount.textContent = filteredList.length;
-
-                targetList.innerHTML = filteredList.map(item => {
-                    const persen = Math.min(100, Math.round((item.terkumpul / item.targetNominal) * 100));
-                    const isComplete = persen >= 100;
-                    return `
-                        <div onclick="openDetail(${item.id})" class="rounded-2xl p-3 border shadow-sm flex items-center space-x-3 cursor-pointer" style="background-color: var(--card-bg); border-color: var(--border-color);">
-                            <img src="${item.gambar}" class="w-20 h-20 rounded-xl object-cover flex-shrink-0 border" style="border-color: var(--border-color);">
-                            <div class="flex-grow min-w-0">
-                                <div class="flex justify-between items-center mb-1">
-                                    <h4 class="text-sm font-bold truncate">${item.judul}</h4>
-                                    <span class="text-xs font-bold px-2 py-0.5 rounded-lg" style="background-color: ${isComplete ? '#15803d' : 'var(--header-bg)'}; color: ${isComplete ? '#ffffff' : 'inherit'};">${persen}%</span>
-                                </div>
-                                <div class="text-[11px] opacity-80">Terkumpul: <span class="font-semibold">${formatRupiah(item.terkumpul)}</span></div>
-                                <div class="text-[11px] opacity-80 mb-2">Target: <span class="font-semibold">${formatRupiah(item.targetNominal)}</span></div>
-                                <div class="w-full h-2 rounded-full overflow-hidden" style="background-color: var(--border-color);">
-                                    <div class="h-full transition-all duration-500" style="width: ${persen}%; background-color: ${isComplete ? '#22c55e' : 'var(--btn-bg)'};"></div>
-                                </div>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
+        function bukaUlarTangga() {
+            alert('Fitur Permainan Ular Tangga');
         }
     </script>
 </body>
