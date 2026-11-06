@@ -3,245 +3,279 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>MBD DHO - Profil & Pengaturan</title>
+    <title>MBD DHO - Login & Register</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #030712;
+            color: #f8fafc;
             user-select: none;
             -webkit-tap-highlight-color: transparent;
         }
-        .no-scrollbar::-webkit-scrollbar { display: none; }
-        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-
-        @keyframes slideDown {
-            0% { transform: translateY(-100%); opacity: 0; }
-            100% { transform: translateY(0); opacity: 1; }
+        @keyframes pulseGlow {
+            0%, 100% { transform: scale(1); opacity: 0.9; box-shadow: 0 0 20px rgba(168, 85, 247, 0.4); }
+            50% { transform: scale(1.08); opacity: 1; box-shadow: 0 0 40px rgba(168, 85, 247, 0.8); }
         }
-        .animate-toast {
-            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        .animate-glow {
+            animation: pulseGlow 2.5s ease-in-out infinite;
+        }
+        @keyframes modalScale {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-modal {
+            animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
     </style>
 </head>
-<body id="body-theme" class="bg-[#030712] text-white font-sans flex flex-col h-screen justify-between overflow-hidden transition-colors duration-300">
+<body class="bg-[#030712] text-white flex flex-col items-center justify-center min-h-screen p-4 overflow-y-auto relative">
 
-    <!-- TOAST NOTIFICATION NGAMBANG DI ATAS -->
-    <div id="toast-notif" class="fixed top-4 left-4 right-4 z-50 hidden opacity-0 transition-opacity duration-300 pointer-events-none flex justify-center">
-        <div class="bg-[#0b0f24] border border-emerald-500/40 text-emerald-400 px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 pointer-events-auto animate-toast backdrop-blur-xl">
-            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm">
-                <i class="fa-solid fa-check"></i>
+    <!-- HALAMAN UTAMA LOGIN / REGISTER -->
+    <div id="auth-container" class="w-full max-w-sm flex flex-col items-center space-y-6 my-auto transition-opacity duration-300">
+        
+        <!-- Foto Profil Gojo & Judul MBD DHO -->
+        <div class="flex flex-col items-center space-y-3">
+            <div class="w-24 h-24 rounded-full p-1 bg-gradient-to-tr from-purple-500 to-indigo-600 shadow-xl shadow-purple-900/30">
+                <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=300&auto=format&fit=crop&q=80" alt="Gojo Profile" class="w-full h-full rounded-full object-cover">
             </div>
-            <div>
-                <h4 class="text-xs font-extrabold text-white" id="toast-title">Berhasil!</h4>
-                <p class="text-[10px] text-slate-300" id="toast-msg">Perubahan berhasil disimpan.</p>
+            <div class="text-center">
+                <h1 class="text-base font-black tracking-widest text-white uppercase">MBD DHO</h1>
+                <p class="text-[11px] text-purple-400 font-semibold tracking-wider">MENABUNG BERSAMA DHO</p>
             </div>
+        </div>
+
+        <!-- Card Box Form -->
+        <div class="w-full bg-[#0b0f24]/90 backdrop-blur-xl border border-slate-800/80 rounded-3xl p-6 shadow-2xl space-y-5">
+            <div class="text-center space-y-1">
+                <div class="w-8 h-1 bg-purple-500 mx-auto rounded-full mb-2"></div>
+                <h2 id="form-title" class="text-sm font-extrabold tracking-wider text-slate-200">Login</h2>
+            </div>
+
+            <form id="auth-form" onsubmit="handleAuth(event)" class="space-y-4">
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Username</label>
+                    <div class="relative flex items-center">
+                        <i class="fa-solid fa-user absolute left-3.5 text-slate-500 text-xs"></i>
+                        <input type="text" id="username" required placeholder="Masukkan username" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3.5 py-3 pl-10 text-xs focus:outline-none focus:border-purple-500 text-white transition">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-[11px] font-semibold text-slate-400 mb-1">Password</label>
+                    <div class="relative flex items-center">
+                        <i class="fa-solid fa-lock absolute left-3.5 text-slate-500 text-xs"></i>
+                        <input type="password" id="password" required placeholder="Masukkan password" class="w-full bg-[#030712] border border-slate-800 rounded-xl px-3.5 py-3 pl-10 pr-10 text-xs focus:outline-none focus:border-purple-500 text-white transition">
+                        <button type="button" onclick="togglePassword()" class="absolute right-3 text-slate-500 hover:text-white text-xs focus:outline-none">
+                            <i id="eye-icon" class="fa-solid fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div id="simpan-login-box" class="flex items-center justify-between pt-1">
+                    <span class="text-[11px] text-slate-400">Simpan login</span>
+                    <input type="checkbox" class="w-4 h-4 accent-purple-600 rounded bg-[#030712] border-slate-800">
+                </div>
+
+                <button type="submit" id="submit-btn" class="w-full py-3.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 active:scale-95 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition-all">
+                    Login →
+                </button>
+            </form>
+
+            <div class="relative flex py-1 items-center">
+                <div class="flex-grow border-t border-slate-800"></div>
+                <span class="flex-shrink mx-4 text-[10px] text-slate-500 uppercase">atau</span>
+                <div class="flex-grow border-t border-slate-800"></div>
+            </div>
+
+            <button type="button" onclick="switchMode()" id="switch-btn" class="w-full py-3 rounded-xl bg-[#030712] border border-slate-800 hover:bg-slate-900 active:scale-95 text-slate-300 font-bold text-xs transition-all flex items-center justify-center gap-2">
+                <i class="fa-solid fa-user-plus text-[11px]"></i> Daftar Akun Baru
+            </button>
+        </div>
+
+        <div class="text-center space-y-1">
+            <a href="#" class="text-[10px] text-purple-400 hover:underline">Syarat & Ketentuan</a>
+            <p class="text-[10px] text-slate-500">MBD DHO • Vercel Ready</p>
         </div>
     </div>
 
-    <!-- TOP HEADER WITH BACK BUTTON -->
-    <header id="header-theme" class="flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0 transition-colors duration-300">
-        <!-- TOMBOL KEMBALI DILENGKAPI EFEK KLIK DAN DUAL-NAVIGASI -->
-        <button type="button" onclick="kembaliKeHome()" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 hover:text-white active:scale-90 active:bg-purple-900/40 transition-all duration-150">
-            <i class="fa-solid fa-chevron-left text-xs"></i>
-        </button>
-        <h1 class="text-sm font-bold tracking-wide text-slate-200">Profil & Pengaturan</h1>
-        <div class="w-9"></div>
-    </header>
 
-    <!-- MAIN CONTENT -->
-    <main class="flex-grow p-4 overflow-y-auto no-scrollbar space-y-5 pb-10">
-        
-        <!-- KARTU PROFIL UTAMA -->
-        <div id="card-theme" class="relative rounded-3xl overflow-hidden border border-slate-800/80 bg-[#0b0f24] shadow-xl p-4 space-y-3 transition-colors duration-300">
-            <div class="absolute top-0 left-0 right-0 h-10 bg-gradient-to-r from-purple-900/60 to-indigo-900/40 border-b border-slate-800/50"></div>
+    <!-- CUSTOM POP-UP NOTIFIKASI (MENGGANTIKAN ALERT POLOSAN) -->
+    <div id="custom-alert" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
+            <!-- Ikon Status -->
+            <div id="alert-icon-container" class="w-14 h-14 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-purple-900/30">
+                <i id="alert-icon" class="fa-solid fa-circle-info"></i>
+            </div>
             
-            <div class="relative z-10 flex items-center space-x-3 pt-2">
-                <div class="w-14 h-14 rounded-full bg-slate-900 border-2 border-purple-500/50 flex items-center justify-center overflow-hidden shadow-md">
-                    <img id="selected-preview-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover">
-                </div>
-                <div>
-                    <h3 id="profile-username" class="text-sm font-extrabold text-white tracking-wide">dikaanjay</h3>
-                    <p class="text-[10px] text-purple-400 font-semibold">MBD DHO Member</p>
-                </div>
+            <div class="space-y-1">
+                <h3 id="alert-title" class="text-sm font-extrabold text-white">Notifikasi MBD</h3>
+                <p id="alert-message" class="text-[11px] text-slate-400 leading-relaxed">Pesan informasi sistem di sini.</p>
+            </div>
+
+            <!-- Tombol "Oke" Kustom -->
+            <button onclick="tutupCustomAlert()" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 active:scale-95 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition-all">
+                Oke
+            </button>
+        </div>
+    </div>
+
+
+    <!-- ANIMASI WELCOME BACK (SPLASH SCREEN) -->
+    <div id="welcome-screen" class="fixed inset-0 bg-[#030712] z-50 flex flex-col justify-between items-center p-6 hidden opacity-0 transition-opacity duration-500">
+        <div class="w-full flex justify-end">
+            <button onclick="lanjutKeDashboard()" class="px-4 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-[11px] font-bold text-slate-300 hover:bg-slate-800 active:scale-95 transition">
+                Skip
+            </button>
+        </div>
+
+        <div class="flex flex-col items-center space-y-5 text-center my-auto">
+            <div class="w-20 h-20 rounded-full bg-purple-600 flex items-center justify-center text-white text-2xl shadow-2xl animate-glow">
+                <i class="fa-solid fa-check"></i>
+            </div>
+
+            <div class="space-y-1.5">
+                <p class="text-[10px] tracking-widest text-purple-400 font-bold uppercase">SUCCESS LOGIN</p>
+                <h2 class="text-xl font-extrabold tracking-wide text-white uppercase">WELCOME BACK</h2>
+            </div>
+
+            <div id="welcome-username" class="px-4 py-1.5 rounded-full bg-slate-900 border border-slate-800 text-xs font-semibold text-slate-300 shadow-inner">
+                dho
             </div>
         </div>
 
-        <!-- PENGATURAN TEMA (NIGHT / DAY) -->
-        <div class="space-y-2">
-            <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider px-1">TEMA APLIKASI</h3>
-            <div id="box-theme-settings" class="bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 space-y-3 transition-colors duration-300">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h4 class="text-xs font-bold text-white">Mode Tampilan</h4>
-                        <p class="text-[10px] text-slate-400">Pilih tema gelap futuristik atau terang bersih.</p>
-                    </div>
-                </div>
-                <div class="grid grid-cols-2 gap-2 pt-1">
-                    <button onclick="setTheme('night')" id="btn-theme-night" class="py-2.5 rounded-xl bg-purple-600 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all active:scale-95">
-                        <i class="fa-solid fa-moon"></i> Night (Hitam)
-                    </button>
-                    <button onclick="setTheme('day')" id="btn-theme-day" class="py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
-                        <i class="fa-solid fa-sun"></i> Day (Putih)
-                    </button>
-                </div>
-            </div>
+        <div class="text-[10px] text-slate-500 tracking-wider">
+            Session secured • MBD DHO
         </div>
+    </div>
 
-        <!-- PENGATURAN NOTIFIKASI CHAT GLOBAL -->
-        <div class="space-y-2">
-            <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider px-1">NOTIFIKASI</h3>
-            <div id="box-notif-settings" class="bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 flex items-center justify-between transition-colors duration-300">
-                <div>
-                    <h4 class="text-xs font-bold text-white">Mute Notifikasi Chat Global</h4>
-                    <p class="text-[10px] text-slate-400">Matikan suara pemberitahuan pesan masuk.</p>
-                </div>
-                <input type="checkbox" id="mute-toggle" onchange="toggleMuteNotif()" class="w-5 h-5 accent-purple-600 rounded bg-[#030712] border-slate-800 cursor-pointer">
-            </div>
-        </div>
 
-        <!-- PILIHAN FOTO PROFIL -->
-        <div class="space-y-2">
-            <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider px-1">PILIH FOTO PROFIL</h3>
-            <div id="box-photo-settings" class="bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 space-y-3 transition-colors duration-300">
-                <p class="text-[10px] text-slate-400">Geser ke samping untuk memilih preset foto:</p>
-                
-                <div class="flex space-x-3 overflow-x-auto no-scrollbar py-1" id="avatar-list">
-                    <div onclick="selectAvatar(this, 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80')" class="flex-shrink-0 w-16 h-16 rounded-2xl border-2 border-purple-500 overflow-hidden cursor-pointer p-0.5 bg-slate-900 avatar-option transition-all active:scale-90">
-                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl">
-                    </div>
-                    <div onclick="selectAvatar(this, 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150&auto=format&fit=crop&q=80')" class="flex-shrink-0 w-16 h-16 rounded-2xl border-2 border-transparent overflow-hidden cursor-pointer p-0.5 bg-slate-900 avatar-option transition-all active:scale-90">
-                        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl">
-                    </div>
-                    <div onclick="selectAvatar(this, 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80')" class="flex-shrink-0 w-16 h-16 rounded-2xl border-2 border-transparent overflow-hidden cursor-pointer p-0.5 bg-slate-900 avatar-option transition-all active:scale-90">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl">
-                    </div>
-                    <div onclick="selectAvatar(this, 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80')" class="flex-shrink-0 w-16 h-16 rounded-2xl border-2 border-transparent overflow-hidden cursor-pointer p-0.5 bg-slate-900 avatar-option transition-all active:scale-90">
-                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl">
-                    </div>
-                </div>
-
-                <button onclick="simpanFotoProfil()" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 active:scale-95 text-white font-bold text-xs shadow-lg shadow-purple-600/35 transition-all">
-                    Simpan Foto Profil
-                </button>
-            </div>
-        </div>
-
-    </main>
-
-    <!-- SCRIPT LOGIKA PROFIL -->
+    <!-- SCRIPT UTAMA -->
     <script>
-        let selectedAvatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80";
+        let isLoginMode = true;
+        let alertCallback = null;
 
-        document.addEventListener("DOMContentLoaded", () => {
-            const loggedUser = localStorage.getItem('mbd_logged_user');
-            if (!loggedUser) {
-                window.location.href = 'login.html';
-                return;
-            }
+        function showCustomAlert(title, message, type = 'success', callback = null) {
+            document.getElementById('alert-title').textContent = title;
+            document.getElementById('alert-message').textContent = message;
+            alertCallback = callback;
 
-            document.getElementById('profile-username').textContent = loggedUser;
+            const iconContainer = document.getElementById('alert-icon-container');
+            const icon = document.getElementById('alert-icon');
 
-            const savedTheme = localStorage.getItem('mbd_theme') || 'night';
-            setTheme(savedTheme, false);
-
-            const savedAvatar = localStorage.getItem('mbd_user_avatar_' + loggedUser);
-            if (savedAvatar) {
-                selectedAvatarUrl = savedAvatar;
-                document.getElementById('selected-preview-img').src = savedAvatar;
-            }
-
-            const isMuted = localStorage.getItem('mbd_mute_chat') === 'true';
-            document.getElementById('mute-toggle').checked = isMuted;
-        });
-
-        // FUNGSI KEMBALI PASTI BERHASIL (DUAL FALLBACK)
-        function kembaliKeHome() {
-            if (window.history.length > 1 && document.referrer.includes(window.location.host)) {
-                window.history.back();
+            if (type === 'success') {
+                iconContainer.className = "w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-emerald-900/30";
+                icon.className = "fa-solid fa-circle-check";
             } else {
-                window.location.href = './index.html';
+                iconContainer.className = "w-14 h-14 rounded-full bg-rose-500/20 border border-rose-500/40 text-rose-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-rose-900/30";
+                icon.className = "fa-solid fa-triangle-exclamation";
             }
+
+            const modal = document.getElementById('custom-alert');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
         }
 
-        function selectAvatar(element, url) {
-            document.querySelectorAll('.avatar-option').forEach(el => {
-                el.classList.remove('border-purple-500');
-                el.classList.add('border-transparent');
-            });
-            element.classList.remove('border-transparent');
-            element.classList.add('border-purple-500');
-            selectedAvatarUrl = url;
-            document.getElementById('selected-preview-img').src = url;
+        function tutupCustomAlert() {
+            const modal = document.getElementById('custom-alert');
+            modal.classList.add('opacity-0');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+                if (alertCallback) {
+                    alertCallback();
+                    alertCallback = null;
+                }
+            }, 300);
         }
 
-        function simpanFotoProfil() {
-            const loggedUser = localStorage.getItem('mbd_logged_user');
-            localStorage.setItem('mbd_user_avatar_' + loggedUser, selectedAvatarUrl);
-            showToast("Berhasil Menyimpan", "Foto profil berhasil diperbarui!");
-        }
-
-        function setTheme(mode, showNotification = true) {
-            localStorage.setItem('mbd_theme', mode);
-            const body = document.getElementById('body-theme');
-            const header = document.getElementById('header-theme');
-            const card = document.getElementById('card-theme');
-            const boxTheme = document.getElementById('box-theme-settings');
-            const boxNotif = document.getElementById('box-notif-settings');
-            const boxPhoto = document.getElementById('box-photo-settings');
-            const btnNight = document.getElementById('btn-theme-night');
-            const btnDay = document.getElementById('btn-theme-day');
-
-            if (mode === 'day') {
-                body.className = "bg-slate-100 text-slate-900 font-sans flex flex-col h-screen justify-between overflow-hidden transition-colors duration-300";
-                header.className = "flex justify-between items-center px-4 py-3 bg-white border-b border-slate-200 z-10 flex-shrink-0 transition-colors duration-300";
-                card.className = "relative rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-lg p-4 space-y-3 transition-colors duration-300";
-                boxTheme.className = "bg-white border border-slate-200 rounded-2xl p-4 space-y-3 transition-colors duration-300 shadow-sm";
-                boxNotif.className = "bg-white border border-slate-200 rounded-2xl p-4 flex items-center justify-between transition-colors duration-300 shadow-sm";
-                boxPhoto.className = "bg-white border border-slate-200 rounded-2xl p-4 space-y-3 transition-colors duration-300 shadow-sm";
-                
-                btnNight.className = "py-2.5 rounded-xl bg-slate-200 text-slate-700 text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95";
-                btnDay.className = "py-2.5 rounded-xl bg-purple-600 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all active:scale-95";
-                
-                if (showNotification) showToast("Tema Diubah", "Mengubah ke mode terang (Day).");
+        function togglePassword() {
+            const passInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            if (passInput.type === 'password') {
+                passInput.type = 'text';
+                eyeIcon.className = "fa-solid fa-eye-slash";
             } else {
-                body.className = "bg-[#030712] text-white font-sans flex flex-col h-screen justify-between overflow-hidden transition-colors duration-300";
-                header.className = "flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0 transition-colors duration-300";
-                card.className = "relative rounded-3xl overflow-hidden border border-slate-800/80 bg-[#0b0f24] shadow-xl p-4 space-y-3 transition-colors duration-300";
-                boxTheme.className = "bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 space-y-3 transition-colors duration-300";
-                boxNotif.className = "bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 flex items-center justify-between transition-colors duration-300";
-                boxPhoto.className = "bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 space-y-3 transition-colors duration-300";
-                
-                btnNight.className = "py-2.5 rounded-xl bg-purple-600 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all active:scale-95";
-                btnDay.className = "py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95";
-                
-                if (showNotification) showToast("Tema Diubah", "Mengubah ke mode gelap (Night).");
+                passInput.type = 'password';
+                eyeIcon.className = "fa-solid fa-eye";
             }
         }
 
-        function toggleMuteNotif() {
-            const isMuted = document.getElementById('mute-toggle').checked;
-            localStorage.setItem('mbd_mute_chat', isMuted);
-            if (isMuted) {
-                showToast("Notifikasi Dimatikan", "Suara chat global dimatikan.");
+        function switchMode() {
+            isLoginMode = !isLoginMode;
+            const formTitle = document.getElementById('form-title');
+            const submitBtn = document.getElementById('submit-btn');
+            const switchBtn = document.getElementById('switch-btn');
+            const simpanBox = document.getElementById('simpan-login-box');
+
+            if (isLoginMode) {
+                formTitle.textContent = "Login";
+                submitBtn.textContent = "Login →";
+                switchBtn.innerHTML = `<i class="fa-solid fa-user-plus text-[11px]"></i> Daftar Akun Baru`;
+                simpanBox.classList.remove('hidden');
             } else {
-                showToast("Notifikasi Diaktifkan", "Suara chat global dihidupkan.");
+                formTitle.textContent = "Register";
+                submitBtn.textContent = "Daftar →";
+                switchBtn.innerHTML = `<i class="fa-solid fa-right-to-bracket text-[11px]"></i> Sudah punya akun? Login`;
+                simpanBox.classList.add('hidden');
             }
         }
 
-        function showToast(title, msg) {
-            const toast = document.getElementById('toast-notif');
-            document.getElementById('toast-title').textContent = title;
-            document.getElementById('toast-msg').textContent = msg;
+        async function handleAuth(e) {
+            e.preventDefault();
+            const username = document.getElementById('username').value.trim();
+            const password = document.getElementById('password').value.trim();
 
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.remove('opacity-0'), 10);
+            const endpoint = isLoginMode ? '/api/login' : '/api/register';
+
+            try {
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ username, password })
+                });
+                const data = await response.json();
+
+                if (data.success) {
+                    if (isLoginMode) {
+                        localStorage.setItem('mbd_logged_user', data.user.username);
+                        tampilkanWelcomeScreen(data.user.username);
+                    } else {
+                        showCustomAlert("Registrasi Berhasil", data.message, "success", () => {
+                            switchMode();
+                            document.getElementById('auth-form').reset();
+                        });
+                    }
+                } else {
+                    showCustomAlert("Gagal", data.message, "error");
+                }
+            } catch (err) {
+                showCustomAlert("Kesalahan Server", "Gagal terhubung ke database server Vercel.", "error");
+            }
+        }
+
+        function tampilkanWelcomeScreen(username) {
+            document.getElementById('welcome-username').textContent = username;
+            const authContainer = document.getElementById('auth-container');
+            const welcomeScreen = document.getElementById('welcome-screen');
+
+            authContainer.classList.add('opacity-0');
+            setTimeout(() => {
+                authContainer.classList.add('hidden');
+                welcomeScreen.classList.remove('hidden');
+                setTimeout(() => {
+                    welcomeScreen.classList.remove('opacity-0');
+                }, 50);
+            }, 300);
 
             setTimeout(() => {
-                toast.classList.add('opacity-0');
-                setTimeout(() => toast.classList.add('hidden'), 300);
+                lanjutKeDashboard();
             }, 2500);
+        }
+
+        function lanjutKeDashboard() {
+            window.location.href = 'index.html';
         }
     </script>
 </body>
