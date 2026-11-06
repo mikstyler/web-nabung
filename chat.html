@@ -24,7 +24,7 @@
 </head>
 <body id="chat-body" class="bg-[#030712] text-white font-sans flex flex-col h-screen justify-between overflow-hidden relative">
 
-    <!-- TOAST NOTIFIKASI NGAMBANG DI ATAS (BILA ADA CHAT MASUK) -->
+    <!-- TOAST NOTIFIKASI NGAMBANG DI ATAS -->
     <div id="toast-chat" class="fixed top-4 left-4 right-4 z-50 hidden opacity-0 transition-opacity duration-300 pointer-events-none flex justify-center">
         <div class="bg-[#0b0f24]/90 border border-indigo-500/40 text-indigo-300 px-4 py-2.5 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl pointer-events-auto">
             <i class="fa-solid fa-bell text-indigo-400 text-xs"></i>
@@ -56,14 +56,13 @@
 
     <!-- ROOM AREA PESAN CHAT -->
     <main id="chat-container" class="flex-grow p-4 overflow-y-auto space-y-4 no-scrollbar">
-        <!-- Chat items akan dirender di sini via JS -->
-        <div class="text-center py-10 text-slate-500 text-xs flex flex-col items-center space-y-2">
+        <div id="loading-state" class="text-center py-10 text-slate-500 text-xs flex flex-col items-center space-y-2">
             <i class="fa-solid fa-spinner fa-spin text-lg text-purple-500"></i>
             <span>Memuat obrolan global...</span>
         </div>
     </main>
 
-    <!-- BOX REPLY PREVIEW (BILA USER REPLIES PESAN ORANG LAIN) -->
+    <!-- BOX REPLY PREVIEW -->
     <div id="reply-preview" class="hidden bg-[#090d1e] border-t border-slate-800 px-4 py-2 flex items-center justify-between flex-shrink-0">
         <div class="space-y-0.5 border-l-2 border-purple-500 pl-2">
             <p id="reply-user" class="text-[10px] font-bold text-purple-400">Membalas User</p>
@@ -84,7 +83,7 @@
         </form>
     </footer>
 
-    <!-- CUSTOM MODAL POP-UP RULE -->
+    <!-- MODAL RULE -->
     <div id="rule-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
         <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
             <div class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-lg mx-auto">
@@ -100,12 +99,13 @@
         </div>
     </div>
 
-    <!-- SCRIPT REALTIME SYNC & LOGIKA CHAT -->
+    <!-- SCRIPT -->
     <script>
         let currentUser = "";
         let currentAvatar = "";
         let currentReply = null;
         let lastMessageCount = 0;
+        let isFirstLoad = true;
 
         document.addEventListener("DOMContentLoaded", () => {
             currentUser = localStorage.getItem('mbd_logged_user');
@@ -117,7 +117,6 @@
             currentAvatar = localStorage.getItem('mbd_user_avatar_' + currentUser) || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';
 
             loadMessages();
-            // Polling Realtime Otomatis Setiap 3 Detik
             setInterval(loadMessages, 3000);
         });
 
@@ -127,15 +126,19 @@
                 const data = await res.json();
 
                 if (data.success) {
-                    // Cek jika ada pesan baru untuk munculkan notifikasi
-                    if (lastMessageCount > 0 && data.messages.length > lastMessageCount) {
+                    if (!isFirstLoad && data.messages.length > lastMessageCount) {
                         tampilkanNotifToast();
                     }
                     lastMessageCount = data.messages.length;
+                    isFirstLoad = false;
                     renderChatList(data.messages);
+                } else {
+                    document.getElementById('chat-container').innerHTML = `<div class="text-center py-10 text-rose-400 text-xs">Gagal memuat pesan dari server.</div>`;
                 }
             } catch (err) {
-                console.error("Gagal sinkronisasi chat");
+                if (isFirstLoad) {
+                    document.getElementById('chat-container').innerHTML = `<div class="text-center py-10 text-rose-400 text-xs">Koneksi ke server API gagal. Periksa kembali file api/chat.js di GitHub.</div>`;
+                }
             }
         }
 
@@ -185,7 +188,7 @@
             const shouldScroll = container.scrollTop + container.clientHeight >= container.scrollHeight - 100;
             container.innerHTML = html;
             
-            if (shouldScroll || container.scrollTop === 0) {
+            if (shouldScroll || isFirstLoad) {
                 container.scrollTop = container.scrollHeight;
             }
         }
@@ -232,7 +235,7 @@
 
         function tampilkanNotifToast() {
             const isMuted = localStorage.getItem('mbd_mute_chat') === 'true';
-            if (isMuted) return; // Mute jika opsi mute diaktifkan di profil
+            if (isMuted) return;
 
             const toast = document.getElementById('toast-chat');
             toast.classList.remove('hidden');
