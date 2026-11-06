@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MBD DHO - Profil & Pengaturan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+
+        /* Animasi Toast Notification di Atas */
+        @keyframes slideDown {
+            0% { transform: translateY(-100%); opacity: 0; }
+            100% { transform: translateY(0); opacity: 1; }
+        }
+        .animate-toast {
+            animation: slideDown 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+    </style>
+</head>
+<body id="body-theme" class="bg-[#030712] text-white font-sans flex flex-col h-screen justify-between overflow-hidden transition-colors duration-300">
+
+    <!-- TOAST NOTIFICATION NGAMBANG DI ATAS -->
+    <div id="toast-notif" class="fixed top-4 left-4 right-4 z-50 hidden opacity-0 transition-opacity duration-300 pointer-events-none flex justify-center">
+        <div class="bg-[#0b0f24] border border-emerald-500/40 text-emerald-400 px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 pointer-events-auto animate-toast backdrop-blur-xl">
+            <div class="w-8 h-8 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400 text-sm">
+                <i class="fa-solid fa-check"></i>
+            </div>
+            <div>
+                <h4 class="text-xs font-extrabold text-white" id="toast-title">Berhasil!</h4>
+                <p class="text-[10px] text-slate-300" id="toast-msg">Perubahan berhasil disimpan.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- TOP HEADER -->
+    <header id="header-theme" class="flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0 transition-colors duration-300">
+        <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 hover:text-white active:scale-90 transition-all">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <h1 class="text-sm font-bold tracking-wide text-slate-200">Profil & Pengaturan</h1>
+        <div class="w-9"></div> <!-- Spacer -->
+    </header>
+
+    <!-- MAIN CONTENT -->
+    <main class="flex-grow p-4 overflow-y-auto no-scrollbar space-y-5 pb-10">
+        
+        <!-- KARTU PROFIL UTAMA -->
+        <div id="card-theme" class="relative rounded-3xl overflow-hidden border border-slate-800/80 bg-[#0b0f24] shadow-xl p-4 space-y-3 transition-colors duration-300">
+            <div class="absolute top-0 left-0 right-0 h-10 bg-gradient-to-r from-purple-900/60 to-indigo-900/40 border-b border-slate-800/50"></div>
+            
+            <div class="relative z-10 flex items-center space-x-3 pt-2">
+                <div class="w-14 h-14 rounded-full bg-slate-900 border-2 border-purple-500/50 flex items-center justify-center overflow-hidden shadow-md">
+                    <img id="selected-preview-img" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" alt="Avatar" class="w-full h-full object-cover">
+                </div>
+                <div>
+                    <h3 id="profile-username" class="text-sm font-extrabold text-white tracking-wide">dikaanjay</h3>
+                    <p class="text-[10px] text-purple-400 font-semibold">MBD DHO Member</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- PENGATURAN TEMA (NIGHT / DAY) -->
+        <div class="space-y-2">
+            <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider px-1">TEMA APLIKASI</h3>
+            <div id="box-theme-settings" class="bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 space-y-3 transition-colors duration-300">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <h4 class="text-xs font-bold text-white">Mode Tampilan</h4>
+                        <p class="text-[10px] text-slate-400">Pilih tema gelap futuristik atau terang bersih.</p>
+                    </div>
+                </div>
+                <!-- Tombol Switch Tema -->
+                <div class="grid grid-cols-2 gap-2 pt-1">
+                    <button onclick="setTheme('night')" id="btn-theme-night" class="py-2.5 rounded-xl bg-purple-600 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all active:scale-95">
+                        <i class="fa-solid fa-moon"></i> Night (Hitam)
+                    </button>
+                    <button onclick="setTheme('day')" id="btn-theme-day" class="py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95">
+                        <i class="fa-solid fa-sun"></i> Day (Putih)
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- PENGATURAN NOTIFIKASI CHAT GLOBAL -->
+        <div class="space-y-2">
+            <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider px-1">NOTIFIKASI</h3>
+            <div id="box-notif-settings" class="bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 flex items-center justify-between transition-colors duration-300">
+                <div>
+                    <h4 class="text-xs font-bold text-white">Mute Notifikasi Chat Global</h4>
+                    <p class="text-[10px] text-slate-400">Matikan suara pemberitahuan pesan masuk.</p>
+                </div>
+                <input type="checkbox" id="mute-toggle" onchange="toggleMuteNotif()" class="w-5 h-5 accent-purple-600 rounded bg-[#030712] border-slate-800 cursor-pointer">
+            </div>
+        </div>
+
+        <!-- PILIHAN FOTO PROFIL (SCROLLABLE HORIZONTAL) -->
+        <div class="space-y-2">
+            <h3 class="text-[11px] font-extrabold text-slate-400 uppercase tracking-wider px-1">PILIH FOTO PROFIL</h3>
+            <div id="box-photo-settings" class="bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 space-y-3 transition-colors duration-300">
+                <p class="text-[10px] text-slate-400">Geser ke samping untuk memilih preset foto:</p>
+                
+                <!-- Horizontal Scroll Avatar List -->
+                <div class="flex space-x-3 overflow-x-auto no-scrollbar py-1" id="avatar-list">
+                    <!-- Avatar 1 -->
+                    <div onclick="selectAvatar(this, 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80')" class="flex-shrink-0 w-16 h-16 rounded-2xl border-2 border-purple-500 overflow-hidden cursor-pointer p-0.5 bg-slate-900 avatar-option transition-all active:scale-90">
+                        <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl">
+                    </div>
+                    <!-- Avatar 2 (Gojo) -->
+                    <div onclick="selectAvatar(this, 'https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150&auto=format&fit=crop&q=80')" class="flex-shrink-0 w-16 h-16 rounded-2xl border-2 border-transparent overflow-hidden cursor-pointer p-0.5 bg-slate-900 avatar-option transition-all active:scale-90">
+                        <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl">
+                    </div>
+                    <!-- Avatar 3 -->
+                    <div onclick="selectAvatar(this, 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80')" class="flex-shrink-0 w-16 h-16 rounded-2xl border-2 border-transparent overflow-hidden cursor-pointer p-0.5 bg-slate-900 avatar-option transition-all active:scale-90">
+                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl">
+                    </div>
+                    <!-- Avatar 4 -->
+                    <div onclick="selectAvatar(this, 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80')" class="flex-shrink-0 w-16 h-16 rounded-2xl border-2 border-transparent overflow-hidden cursor-pointer p-0.5 bg-slate-900 avatar-option transition-all active:scale-90">
+                        <img src="https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl">
+                    </div>
+                    <!-- Avatar 5 -->
+                    <div onclick="selectAvatar(this, 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80')" class="flex-shrink-0 w-16 h-16 rounded-2xl border-2 border-transparent overflow-hidden cursor-pointer p-0.5 bg-slate-900 avatar-option transition-all active:scale-90">
+                        <img src="https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl">
+                    </div>
+                    <!-- Avatar 6 -->
+                    <div onclick="selectAvatar(this, 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80')" class="flex-shrink-0 w-16 h-16 rounded-2xl border-2 border-transparent overflow-hidden cursor-pointer p-0.5 bg-slate-900 avatar-option transition-all active:scale-90">
+                        <img src="https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=150&auto=format&fit=crop&q=80" class="w-full h-full object-cover rounded-xl">
+                    </div>
+                </div>
+
+                <!-- Tombol Simpan Foto Profile -->
+                <button onclick="simpanFotoProfil()" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 active:scale-95 text-white font-bold text-xs shadow-lg shadow-purple-600/35 transition-all">
+                    Simpan Foto Profil
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SCRIPT LOGIKA PROFIL & PENGATURAN -->
+    <script>
+        let selectedAvatarUrl = "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const loggedUser = localStorage.getItem('mbd_logged_user');
+            if (!loggedUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            document.getElementById('profile-username').textContent = loggedUser;
+
+            // Load saved settings
+            const savedTheme = localStorage.getItem('mbd_theme') || 'night';
+            setTheme(savedTheme, false);
+
+            const savedAvatar = localStorage.getItem('mbd_user_avatar_' + loggedUser);
+            if (savedAvatar) {
+                selectedAvatarUrl = savedAvatar;
+                document.getElementById('selected-preview-img').src = savedAvatar;
+            }
+
+            const isMuted = localStorage.getItem('mbd_mute_chat') === 'true';
+            document.getElementById('mute-toggle').checked = isMuted;
+        });
+
+        // Pilih Avatar
+        function selectAvatar(element, url) {
+            document.querySelectorAll('.avatar-option').forEach(el => {
+                el.classList.remove('border-purple-500');
+                el.classList.add('border-transparent');
+            });
+            element.classList.remove('border-transparent');
+            element.classList.add('border-purple-500');
+            selectedAvatarUrl = url;
+            document.getElementById('selected-preview-img').src = url;
+        }
+
+        // Simpan Foto Profil + Toast Notif Otomatis di Atas
+        function simpanFotoProfil() {
+            const loggedUser = localStorage.getItem('mbd_logged_user');
+            localStorage.setItem('mbd_user_avatar_' + loggedUser, selectedAvatarUrl);
+            showToast("Berhasil Menyimpan", "Foto profil berhasil diperbarui!");
+        }
+
+        // Pengaturan Tema Keseluruhan (Night / Day)
+        function setTheme(mode, showNotification = true) {
+            localStorage.setItem('mbd_theme', mode);
+            const body = document.getElementById('body-theme');
+            const header = document.getElementById('header-theme');
+            const card = document.getElementById('card-theme');
+            const boxTheme = document.getElementById('box-theme-settings');
+            const boxNotif = document.getElementById('box-notif-settings');
+            const boxPhoto = document.getElementById('box-photo-settings');
+            const btnNight = document.getElementById('btn-theme-night');
+            const btnDay = document.getElementById('btn-theme-day');
+
+            if (mode === 'day') {
+                // TEMA PUTIH (DAY)
+                body.className = "bg-slate-100 text-slate-900 font-sans flex flex-col h-screen justify-between overflow-hidden transition-colors duration-300";
+                header.className = "flex justify-between items-center px-4 py-3 bg-white border-b border-slate-200 z-10 flex-shrink-0 transition-colors duration-300";
+                card.className = "relative rounded-3xl overflow-hidden border border-slate-200 bg-white shadow-lg p-4 space-y-3 transition-colors duration-300";
+                boxTheme.className = "bg-white border border-slate-200 rounded-2xl p-4 space-y-3 transition-colors duration-300 shadow-sm";
+                boxNotif.className = "bg-white border border-slate-200 rounded-2xl p-4 flex items-center justify-between transition-colors duration-300 shadow-sm";
+                boxPhoto.className = "bg-white border border-slate-200 rounded-2xl p-4 space-y-3 transition-colors duration-300 shadow-sm";
+                
+                btnNight.className = "py-2.5 rounded-xl bg-slate-200 text-slate-700 text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95";
+                btnDay.className = "py-2.5 rounded-xl bg-purple-600 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all active:scale-95";
+                
+                if (showNotification) showToast("Tema Diubah", "Mengubah ke mode terang (Day).");
+            } else {
+                // TEMA HITAM (NIGHT)
+                body.className = "bg-[#030712] text-white font-sans flex flex-col h-screen justify-between overflow-hidden transition-colors duration-300";
+                header.className = "flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0 transition-colors duration-300";
+                card.className = "relative rounded-3xl overflow-hidden border border-slate-800/80 bg-[#0b0f24] shadow-xl p-4 space-y-3 transition-colors duration-300";
+                boxTheme.className = "bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 space-y-3 transition-colors duration-300";
+                boxNotif.className = "bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 flex items-center justify-between transition-colors duration-300";
+                boxPhoto.className = "bg-[#0b0f24] border border-slate-800/80 rounded-2xl p-4 space-y-3 transition-colors duration-300";
+                
+                btnNight.className = "py-2.5 rounded-xl bg-purple-600 text-white text-xs font-bold flex items-center justify-center gap-2 shadow-lg shadow-purple-600/30 transition-all active:scale-95";
+                btnDay.className = "py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-400 text-xs font-bold flex items-center justify-center gap-2 transition-all active:scale-95";
+                
+                if (showNotification) showToast("Tema Diubah", "Mengubah ke mode gelap (Night).");
+            }
+        }
+
+        // Toggle Mute Notif Chat Global
+        function toggleMuteNotif() {
+            const isMuted = document.getElementById('mute-toggle').checked;
+            localStorage.setItem('mbd_mute_chat', isMuted);
+            if (isMuted) {
+                showToast("Notifikasi Dimatikan", "Suara chat global dimatikan.");
+            } else {
+                showToast("Notifikasi Diaktifkan", "Suara chat global dihidupkan.");
+            }
+        }
+
+        // Fungsi Toast Notification Mengambang di Atas
+        function showToast(title, msg) {
+            const toast = document.getElementById('toast-notif');
+            document.getElementById('toast-title').textContent = title;
+            document.getElementById('toast-msg').textContent = msg;
+
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.remove('opacity-0'), 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
