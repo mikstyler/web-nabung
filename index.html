@@ -139,6 +139,22 @@
         </div>
     </div>
 
+    <!-- CUSTOM POP-UP UTAMA -->
+    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
+            <div id="modal-icon-container" class="w-14 h-14 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-purple-900/30">
+                <i id="modal-icon" class="fa-solid fa-circle-info"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 id="modal-title" class="text-sm font-extrabold text-white">Informasi MBD</h3>
+                <p id="modal-message" class="text-[11px] text-slate-400 leading-relaxed">Pesan sistem...</p>
+            </div>
+            <button onclick="tutupCustomModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 active:scale-95 text-white font-bold text-xs shadow-lg shadow-purple-600/30 transition-all">
+                Oke
+            </button>
+        </div>
+    </div>
+
     <!-- MODAL LOGOUT -->
     <div id="logout-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
         <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
@@ -186,7 +202,7 @@
         </a>
     </nav>
 
-    <!-- SCRIPT UTAMA WITH THEME & AVATAR SYNC -->
+    <!-- SCRIPT UTAMA -->
     <script>
         document.addEventListener("DOMContentLoaded", () => {
             const loggedUser = localStorage.getItem('mbd_logged_user');
@@ -195,24 +211,47 @@
                 return;
             }
 
-            // Sync Nama Username
             document.getElementById('profile-username').textContent = loggedUser;
             document.getElementById('sidebar-username').textContent = loggedUser;
             document.getElementById('sidebar-initial').textContent = loggedUser.charAt(0).toUpperCase();
 
-            // Sync Foto Avatar dari LocalStorage
             const savedAvatar = localStorage.getItem('mbd_user_avatar_' + loggedUser);
             if (savedAvatar) {
                 document.getElementById('home-user-avatar').src = savedAvatar;
             }
 
-            // Sync Tema Aplikasi (Night/Day) dari LocalStorage
             const savedTheme = localStorage.getItem('mbd_theme') || 'night';
             applyTheme(savedTheme);
 
             updateDateTime();
             setInterval(updateDateTime, 1000);
         });
+
+        function showCustomModal(title, message, type = 'info') {
+            document.getElementById('modal-title').textContent = title;
+            document.getElementById('modal-message').textContent = message;
+
+            const iconContainer = document.getElementById('modal-icon-container');
+            const icon = document.getElementById('modal-icon');
+
+            if (type === 'success') {
+                iconContainer.className = "w-14 h-14 rounded-full bg-emerald-500/20 border border-emerald-500/40 text-emerald-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-emerald-900/30";
+                icon.className = "fa-solid fa-circle-check";
+            } else {
+                iconContainer.className = "w-14 h-14 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-purple-900/30";
+                icon.className = "fa-solid fa-circle-info";
+            }
+
+            const modal = document.getElementById('custom-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function tutupCustomModal() {
+            const modal = document.getElementById('custom-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
 
         function applyTheme(mode) {
             const body = document.getElementById('main-body');
@@ -269,11 +308,11 @@
         }
 
         function bukaChatGlobal() {
-            alert('Fitur Chat Global akan segera diaktifkan!');
+            window.location.href = 'chat.html';
         }
 
         function bukaUlarTangga() {
-            alert('Fitur Permainan Ular Tangga!');
+            showCustomModal("Permainan Group", "Fitur Permainan Ular Tangga akan segera hadir!", "info");
         }
 
         function updateDateTime() {
