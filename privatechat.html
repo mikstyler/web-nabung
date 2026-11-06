@@ -11,13 +11,18 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes modalScale {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-modal { animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
 <body class="bg-[#030712] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative">
 
     <!-- HEADER PRIVATE CHAT -->
     <header class="flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0">
-        <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
+        <button onclick="window.location.href='chatlist.html'" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
             <i class="fa-solid fa-chevron-left text-xs"></i>
         </button>
         <div class="text-center">
@@ -29,7 +34,7 @@
 
     <!-- ROOM PESAN PRIVAT -->
     <main id="private-container" class="flex-grow p-4 overflow-y-auto space-y-4 no-scrollbar">
-        <div class="text-center py-10 text-slate-500 text-xs">Belum ada riwayat pesan privat dengan user ini.</div>
+        <div class="text-center py-10 text-slate-500 text-xs">Memuat pesan...</div>
     </main>
 
     <!-- FORM INPUT PRIVAT -->
@@ -42,6 +47,7 @@
         </form>
     </footer>
 
+    <!-- SCRIPT -->
     <script>
         let currentUser = "";
         let targetUser = "";
@@ -56,14 +62,26 @@
             const urlParams = new URLSearchParams(window.location.search);
             targetUser = urlParams.get('target');
             if (!targetUser) {
-                window.location.href = 'index.html';
+                window.location.href = 'chatlist.html';
                 return;
             }
 
             document.getElementById('target-username-title').textContent = `@${targetUser}`;
+            
+            // Daftarkan target ke list chat privat user jika belum ada
+            tambahKeDaftarChat(currentUser, targetUser);
+
             loadPrivateMessages();
             setInterval(loadPrivateMessages, 3000);
         });
+
+        function tambahKeDaftarChat(user, target) {
+            let chatList = JSON.parse(localStorage.getItem(`mbd_private_chats_${user}`) || '[]');
+            if (!chatList.some(item => item.targetUser === target)) {
+                chatList.push({ targetUser: target });
+                localStorage.setItem(`mbd_private_chats_${user}`, JSON.stringify(chatList));
+            }
+        }
 
         function loadPrivateMessages() {
             const storageKey = `mbd_dm_${[currentUser, targetUser].sort().join('_')}`;
@@ -108,6 +126,9 @@
             
             messages.push({ sender: currentUser, message, time: timeStr });
             localStorage.setItem(storageKey, JSON.stringify(messages));
+
+            // Pastikan masuk ke chat list pengirim
+            tambahKeDaftarChat(currentUser, targetUser);
 
             loadPrivateMessages();
         }
