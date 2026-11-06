@@ -11,6 +11,7 @@
         body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .red-glow { box-shadow: 0 0 20px rgba(239, 68, 68, 0.35); }
         @keyframes modalScale {
             0% { transform: scale(0.85); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
@@ -18,19 +19,19 @@
         .animate-modal { animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body class="bg-[#030712] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative">
+<body id="page-body" class="bg-[#090305] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative transition-colors duration-300">
 
     <!-- HEADER -->
-    <header class="flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0">
-        <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
+    <header id="page-header" class="flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0 transition-colors duration-300">
+        <button onclick="window.location.href='index.html'" id="back-btn" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all">
             <i class="fa-solid fa-chevron-left text-xs"></i>
         </button>
         <div class="text-center">
-            <h1 class="text-sm font-bold tracking-wide text-slate-200">Chat Pribadi</h1>
-            <p class="text-[9px] text-purple-400 font-medium">Daftar Percakapan</p>
+            <h1 class="text-sm font-bold tracking-wide text-rose-100">Chat Pribadi</h1>
+            <p class="text-[9px] text-red-400 font-medium">Daftar Percakapan</p>
         </div>
-        <button onclick="tampilkanInfoCustom()" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
-            <i class="fa-solid fa-info text-xs text-purple-400"></i>
+        <button onclick="tampilkanInfoCustom()" id="info-btn" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all">
+            <i class="fa-solid fa-info text-xs text-red-400"></i>
         </button>
     </header>
 
@@ -40,42 +41,42 @@
     </main>
 
     <!-- BOTTOM NAVIGATION -->
-    <nav class="fixed bottom-0 left-0 right-0 bg-[#090d1e]/95 backdrop-blur-lg border-t border-slate-800/80 px-4 py-2.5 flex justify-around items-center z-20">
-        <a href="index.html" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-90 transition-transform">
+    <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-[#100407]/95 backdrop-blur-lg border-t border-rose-950/60 px-4 py-2.5 flex justify-around items-center z-20 transition-colors duration-300">
+        <a href="index.html" class="flex flex-col items-center text-rose-400/60 hover:text-rose-200 space-y-1 active:scale-90 transition-transform">
             <i class="fa-solid fa-house text-xs"></i>
             <span class="text-[9px]">Home</span>
         </a>
-        <a href="chatlist.html" class="flex flex-col items-center text-indigo-400 space-y-1 active:scale-90 transition-transform">
+        <a href="chatlist.html" class="flex flex-col items-center text-red-500 space-y-1 active:scale-90 transition-transform">
             <i class="fa-solid fa-comments text-xs"></i>
             <span class="text-[9px] font-bold">Chat</span>
         </a>
-        <a href="index.html" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-95 transition-transform">
-            <div class="w-10 h-10 -mt-5 bg-indigo-600 rounded-full flex items-center justify-center text-white shadow-lg shadow-indigo-600/50 border-4 border-[#030712]">
+        <a href="index.html" class="flex flex-col items-center text-rose-400/60 hover:text-rose-200 space-y-1 active:scale-95 transition-transform">
+            <div class="w-10 h-10 -mt-5 bg-gradient-to-r from-red-600 to-rose-600 rounded-full flex items-center justify-center text-white shadow-lg red-glow border-4 border-[#090305]">
                 <i class="fa-solid fa-users text-xs"></i>
             </div>
             <span class="text-[9px]">Group</span>
         </a>
-        <a href="index.html" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-90 transition-transform">
+        <a href="index.html" class="flex flex-col items-center text-rose-400/60 hover:text-rose-200 space-y-1 active:scale-90 transition-transform">
             <i class="fa-solid fa-circle-info text-xs"></i>
             <span class="text-[9px]">Info</span>
         </a>
-        <a href="index.html" class="flex flex-col items-center text-slate-500 hover:text-slate-300 space-y-1 active:scale-90 transition-transform">
+        <a href="index.html" class="flex flex-col items-center text-rose-400/60 hover:text-rose-200 space-y-1 active:scale-90 transition-transform">
             <i class="fa-solid fa-ellipsis-vertical text-xs"></i>
             <span class="text-[9px]">Tools</span>
         </a>
     </nav>
 
     <!-- CUSTOM MODAL -->
-    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
-            <div class="w-14 h-14 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-xl mx-auto shadow-lg">
+    <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div id="modal-box" class="bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal">
+            <div class="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 flex items-center justify-center text-xl mx-auto shadow-lg">
                 <i class="fa-solid fa-circle-info"></i>
             </div>
             <div class="space-y-1">
                 <h3 id="modal-title" class="text-sm font-extrabold text-white">Informasi Chat</h3>
-                <p id="modal-message" class="text-[11px] text-slate-400 leading-relaxed">Pesan sistem...</p>
+                <p id="modal-message" class="text-[11px] text-rose-200/80 leading-relaxed">Pesan sistem...</p>
             </div>
-            <button onclick="tutupCustomModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 hover:opacity-90 active:scale-95 text-white font-bold text-xs shadow-lg transition-all">
+            <button onclick="tutupCustomModal()" class="w-full py-3 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-90 active:scale-95 text-white font-bold text-xs shadow-lg red-glow transition-all">
                 Oke
             </button>
         </div>
@@ -90,20 +91,48 @@
                 return;
             }
 
+            const savedTheme = localStorage.getItem('mbd_theme') || 'red';
+            applyTheme(savedTheme);
             loadChatList(currentUser);
         });
+
+        function applyTheme(mode) {
+            const body = document.getElementById('page-body');
+            const header = document.getElementById('page-header');
+            const bottomNav = document.getElementById('bottom-nav');
+            const modalBox = document.getElementById('modal-box');
+            const backBtn = document.getElementById('back-btn');
+            const infoBtn = document.getElementById('info-btn');
+
+            if (mode === 'day') {
+                body.className = "bg-slate-100 text-slate-900 font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative transition-colors duration-300";
+                header.className = "flex justify-between items-center px-4 py-3 bg-white border-b border-slate-200 z-10 flex-shrink-0 transition-colors duration-300";
+                bottomNav.className = "fixed bottom-0 left-0 right-0 bg-white/95 backdrop-blur-lg border-t border-slate-200 px-4 py-2.5 flex justify-around items-center z-20 transition-colors duration-300";
+                modalBox.className = "bg-white border border-slate-200 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal text-slate-900";
+                backBtn.className = "w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 active:scale-90 transition-all";
+                infoBtn.className = "w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 active:scale-90 transition-all";
+            } else {
+                body.className = "bg-[#090305] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative transition-colors duration-300";
+                header.className = "flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0 transition-colors duration-300";
+                bottomNav.className = "fixed bottom-0 left-0 right-0 bg-[#100407]/95 backdrop-blur-lg border-t border-rose-950/60 px-4 py-2.5 flex justify-around items-center z-20 transition-colors duration-300";
+                modalBox.className = "bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal";
+                backBtn.className = "w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all";
+                infoBtn.className = "w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all";
+            }
+        }
 
         function loadChatList(currentUser) {
             const container = document.getElementById('chat-list-container');
             const chatList = JSON.parse(localStorage.getItem(`mbd_private_chats_${currentUser}`) || '[]');
+            const savedTheme = localStorage.getItem('mbd_theme') || 'red';
 
             if (chatList.length === 0) {
                 container.innerHTML = `
                     <div class="text-center py-20 space-y-3">
-                        <div class="w-16 h-16 rounded-full bg-slate-900 border border-slate-800 flex items-center justify-center text-slate-500 text-xl mx-auto">
+                        <div class="w-16 h-16 rounded-full ${savedTheme === 'day' ? 'bg-slate-200 border-slate-300 text-slate-400' : 'bg-[#14060a] border-rose-900/40 text-rose-400'} border flex items-center justify-center text-xl mx-auto shadow-md">
                             <i class="fa-regular fa-comment-dots"></i>
                         </div>
-                        <h3 class="text-xs font-bold text-slate-300">Belum ada percakapan</h3>
+                        <h3 class="text-xs font-bold ${savedTheme === 'day' ? 'text-slate-700' : 'text-slate-300'}">Belum ada percakapan</h3>
                         <p class="text-[10px] text-slate-500 max-w-xs mx-auto">Buka Global Chat, klik profil seseorang, lalu pilih "Chat Pribadi" untuk memulai percakapan.</p>
                     </div>
                 `;
@@ -117,14 +146,18 @@
                 const lastMsg = messages.length > 0 ? messages[messages.length - 1].message : 'Ketuk untuk mulai mengobrol...';
                 const timeStr = messages.length > 0 ? messages[messages.length - 1].time : '';
 
+                const cardClass = savedTheme === 'day' 
+                    ? 'bg-white border-slate-200 text-slate-900 shadow-md' 
+                    : 'bg-[#14060a] border-rose-900/40 text-white shadow-lg';
+
                 html += `
-                    <div onclick="bukaRuangChat('${item.targetUser}')" class="flex items-center justify-between p-3.5 rounded-2xl bg-[#0b0f24] border border-slate-800/80 active:scale-[0.98] transition-all cursor-pointer shadow-md">
+                    <div onclick="bukaRuangChat('${item.targetUser}')" class="flex items-center justify-between p-3.5 rounded-2xl border ${cardClass} active:scale-[0.98] transition-all cursor-pointer">
                         <div class="flex items-center space-x-3">
-                            <div class="w-12 h-12 rounded-full bg-slate-900 border border-purple-500/50 flex items-center justify-center text-purple-400 font-extrabold text-sm uppercase">
+                            <div class="w-12 h-12 rounded-full ${savedTheme === 'day' ? 'bg-slate-100 border-slate-300 text-red-600' : 'bg-black border-red-600/60 text-red-400'} border-2 flex items-center justify-center font-extrabold text-sm uppercase shadow-sm">
                                 ${item.targetUser.charAt(0)}
                             </div>
                             <div>
-                                <h4 class="text-xs font-extrabold text-white">@${item.targetUser}</h4>
+                                <h4 class="text-xs font-extrabold">@${item.targetUser}</h4>
                                 <p class="text-[10px] text-slate-400 truncate max-w-[180px] pt-0.5">${escapeHtml(lastMsg)}</p>
                             </div>
                         </div>
