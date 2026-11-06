@@ -2,16 +2,21 @@ const mongoose = require('mongoose');
 
 const MONGODB_URI = 'mongodb+srv://newshot-user:dhoo-2009@cluster0.kkteamf.mongodb.net/my-panel?retryWrites=true&w=majority';
 
-let cachedDb = null;
+let cached = global.mongoose;
+if (!cached) {
+    cached = global.mongoose = { conn: null, promise: null };
+}
 
-async function connectToDatabase() {
-    if (cachedDb) return cachedDb;
-    const db = await mongoose.connect(MONGODB_URI, {
-        useNewUrlParser: true,
-        useUnifiedTopology: true,
-    });
-    cachedDb = db;
-    return db;
+async function connectDB() {
+    if (cached.conn) return cached.conn;
+    if (!cached.promise) {
+        cached.promise = mongoose.connect(MONGODB_URI, {
+            useNewUrlParser: true,
+            useUnifiedTopology: true,
+        }).then((mongoose) => mongoose);
+    }
+    cached.conn = await cached.promise;
+    return cached.conn;
 }
 
 const chatSchema = new mongoose.Schema({
@@ -36,7 +41,7 @@ module.exports = async (req, res) => {
     if (req.method === 'OPTIONS') return res.status(200).end();
 
     try {
-        await connectToDatabase();
+        await connectDB();
 
         if (req.method === 'GET') {
             const messages = await Chat.find().sort({ createdAt: -1 }).limit(50);
@@ -46,7 +51,7 @@ module.exports = async (req, res) => {
         if (req.method === 'POST') {
             const { username, avatar, message, replyTo } = req.body;
             if (!username || !message) {
-                return res.status(400).json({ success: false, message: 'Pesan tidak boleh kosong!' });
+                return res.status(400).json({ success: false, message: 'Pesan kosong!' });
             }
 
             const newChat = new Chat({ username, avatar, message, replyTo });
@@ -57,6 +62,6 @@ module.exports = async (req, res) => {
 
         return res.status(405).json({ success: false, message: 'Method not allowed' });
     } catch (error) {
-        return res.status(500).json({ success: false, message: 'Terjadi kesalahan pada server chat.' });
+        return res.status(500).json({ success: false, message: error.message });
     }
 };
