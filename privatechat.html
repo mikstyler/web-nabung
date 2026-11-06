@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MBD DHO - Chat Pribadi</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    </style>
+</head>
+<body class="bg-[#030712] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative">
+
+    <!-- HEADER PRIVATE CHAT -->
+    <header class="flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0">
+        <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <div class="text-center">
+            <h1 id="target-username-title" class="text-sm font-bold tracking-wide text-slate-200">Chat Pribadi</h1>
+            <p class="text-[9px] text-purple-400 font-medium">● Secure Direct Message</p>
+        </div>
+        <div class="w-9"></div>
+    </header>
+
+    <!-- ROOM PESAN PRIVAT -->
+    <main id="private-container" class="flex-grow p-4 overflow-y-auto space-y-4 no-scrollbar">
+        <div class="text-center py-10 text-slate-500 text-xs">Belum ada riwayat pesan privat dengan user ini.</div>
+    </main>
+
+    <!-- FORM INPUT PRIVAT -->
+    <footer class="p-3 bg-[#090d1e] border-t border-slate-800/80 flex-shrink-0 z-20">
+        <form onsubmit="kirimPesanPrivat(event)" class="flex items-center space-x-2">
+            <input type="text" id="privat-input" required placeholder="Tulis pesan pribadi..." class="flex-grow bg-[#030712] border border-slate-800 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-purple-500 text-white transition">
+            <button type="submit" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white active:scale-90 transition-all shadow-lg shadow-purple-600/30 flex-shrink-0">
+                <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+        </form>
+    </footer>
+
+    <script>
+        let currentUser = "";
+        let targetUser = "";
+
+        document.addEventListener("DOMContentLoaded", () => {
+            currentUser = localStorage.getItem('mbd_logged_user');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            const urlParams = new URLSearchParams(window.location.search);
+            targetUser = urlParams.get('target');
+            if (!targetUser) {
+                window.location.href = 'index.html';
+                return;
+            }
+
+            document.getElementById('target-username-title').textContent = `@${targetUser}`;
+            loadPrivateMessages();
+            setInterval(loadPrivateMessages, 3000);
+        });
+
+        function loadPrivateMessages() {
+            const storageKey = `mbd_dm_${[currentUser, targetUser].sort().join('_')}`;
+            const messages = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            
+            const container = document.getElementById('private-container');
+            if (messages.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-slate-500 text-xs">Kirim pesan pertama untuk memulai chat pribadi dengan @${targetUser}!</div>`;
+                return;
+            }
+
+            let html = "";
+            messages.forEach(msg => {
+                const isMe = msg.sender === currentUser;
+                html += `
+                    <div class="flex items-start space-x-2.5 ${isMe ? 'flex-row-reverse space-x-reverse' : ''}">
+                        <div class="max-w-[78%] space-y-1">
+                            <div class="p-3 rounded-2xl text-xs space-y-1.5 shadow-md ${isMe ? 'bg-purple-600 text-white rounded-tr-none' : 'bg-[#0b0f24] border border-slate-800 text-slate-200 rounded-tl-none'}">
+                                <p class="leading-relaxed break-words">${escapeHtml(msg.message)}</p>
+                            </div>
+                            <span class="text-[8px] text-slate-500 block ${isMe ? 'text-right' : 'text-left'}">${msg.time}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = html;
+            container.scrollTop = container.scrollHeight;
+        }
+
+        function kirimPesanPrivat(e) {
+            e.preventDefault();
+            const input = document.getElementById('privat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            input.value = "";
+            const timeStr = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+            const storageKey = `mbd_dm_${[currentUser, targetUser].sort().join('_')}`;
+            let messages = JSON.parse(localStorage.getItem(storageKey) || '[]');
+            
+            messages.push({ sender: currentUser, message, time: timeStr });
+            localStorage.setItem(storageKey, JSON.stringify(messages));
+
+            loadPrivateMessages();
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+</html>
