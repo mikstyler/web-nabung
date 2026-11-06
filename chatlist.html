@@ -34,7 +34,7 @@
         </button>
     </header>
 
-    <!-- LIST CHAT CONTAINER (ALA WHATSAPP) -->
+    <!-- LIST CHAT CONTAINER -->
     <main id="chat-list-container" class="flex-grow p-4 overflow-y-auto space-y-3 no-scrollbar">
         <!-- List akan dimuat via JS -->
     </main>
@@ -65,7 +65,7 @@
         </a>
     </nav>
 
-    <!-- CUSTOM MODAL (MENGGANTIKAN ALERT BROWSER) -->
+    <!-- CUSTOM MODAL -->
     <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
         <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
             <div class="w-14 h-14 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-xl mx-auto shadow-lg">
@@ -95,7 +95,7 @@
 
         function loadChatList(currentUser) {
             const container = document.getElementById('chat-list-container');
-            const chatList = JSON.parse(localStorage.getItem('mbd_private_chats') || '[]');
+            const chatList = JSON.parse(localStorage.getItem(`mbd_private_chats_${currentUser}`) || '[]');
 
             if (chatList.length === 0) {
                 container.innerHTML = `
@@ -118,7 +118,7 @@
                 const timeStr = messages.length > 0 ? messages[messages.length - 1].time : '';
 
                 html += `
-                    <div onclick="window.location.href='privatechat.html?target=${encodeURIComponent(item.targetUser)}'" class="flex items-center justify-between p-3.5 rounded-2xl bg-[#0b0f24] border border-slate-800/80 active:scale-[0.98] transition-all cursor-pointer shadow-md">
+                    <div onclick="bukaRuangChat('${item.targetUser}')" class="flex items-center justify-between p-3.5 rounded-2xl bg-[#0b0f24] border border-slate-800/80 active:scale-[0.98] transition-all cursor-pointer shadow-md">
                         <div class="flex items-center space-x-3">
                             <div class="w-12 h-12 rounded-full bg-slate-900 border border-purple-500/50 flex items-center justify-center text-purple-400 font-extrabold text-sm uppercase">
                                 ${item.targetUser.charAt(0)}
@@ -134,6 +134,10 @@
             });
 
             container.innerHTML = html;
+        }
+
+        function bukaRuangChat(target) {
+            window.location.href = `privatechat.html?target=${encodeURIComponent(target)}`;
         }
 
         function tampilkanInfoCustom() {
