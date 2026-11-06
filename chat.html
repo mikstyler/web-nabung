@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MBD DHO - Global Chat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            user-select: none;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        @keyframes modalScale {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-modal { animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body id="chat-body" class="bg-[#030712] text-white font-sans flex flex-col h-screen justify-between overflow-hidden relative">
+
+    <!-- TOAST NOTIFIKASI NGAMBANG DI ATAS (BILA ADA CHAT MASUK) -->
+    <div id="toast-chat" class="fixed top-4 left-4 right-4 z-50 hidden opacity-0 transition-opacity duration-300 pointer-events-none flex justify-center">
+        <div class="bg-[#0b0f24]/90 border border-indigo-500/40 text-indigo-300 px-4 py-2.5 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl pointer-events-auto">
+            <i class="fa-solid fa-bell text-indigo-400 text-xs"></i>
+            <span id="toast-text" class="text-xs font-semibold">Pesan baru masuk di Chat Global</span>
+        </div>
+    </div>
+
+    <!-- HEADER CHAT -->
+    <header class="flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0">
+        <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <div class="text-center">
+            <h1 class="text-sm font-bold tracking-wide text-slate-200">Global Chat</h1>
+            <p class="text-[9px] text-emerald-400 font-medium">● Realtime Sync Active</p>
+        </div>
+        <button onclick="bukaRuleModal()" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
+            <i class="fa-solid fa-hammer text-xs text-purple-400"></i>
+        </button>
+    </header>
+
+    <!-- BANNER PERATURAN CHAT -->
+    <div class="bg-gradient-to-r from-purple-950/40 to-slate-900/60 border-b border-purple-900/30 px-4 py-2 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center space-x-2 text-[10px] text-purple-300 font-semibold">
+            <i class="fa-solid fa-bullhorn text-purple-400"></i>
+            <span>BACA RULE — Dilarang Spam / Toxic berlebihan</span>
+        </div>
+    </div>
+
+    <!-- ROOM AREA PESAN CHAT -->
+    <main id="chat-container" class="flex-grow p-4 overflow-y-auto space-y-4 no-scrollbar">
+        <!-- Chat items akan dirender di sini via JS -->
+        <div class="text-center py-10 text-slate-500 text-xs flex flex-col items-center space-y-2">
+            <i class="fa-solid fa-spinner fa-spin text-lg text-purple-500"></i>
+            <span>Memuat obrolan global...</span>
+        </div>
+    </main>
+
+    <!-- BOX REPLY PREVIEW (BILA USER REPLIES PESAN ORANG LAIN) -->
+    <div id="reply-preview" class="hidden bg-[#090d1e] border-t border-slate-800 px-4 py-2 flex items-center justify-between flex-shrink-0">
+        <div class="space-y-0.5 border-l-2 border-purple-500 pl-2">
+            <p id="reply-user" class="text-[10px] font-bold text-purple-400">Membalas User</p>
+            <p id="reply-msg" class="text-[10px] text-slate-400 truncate max-w-xs">Isi pesan yang dibalas...</p>
+        </div>
+        <button onclick="batalReply()" class="text-slate-500 hover:text-rose-400 p-1">
+            <i class="fa-solid fa-xmark text-xs"></i>
+        </button>
+    </div>
+
+    <!-- FORM INPUT CHAT DI BAWAH -->
+    <footer class="p-3 bg-[#090d1e] border-t border-slate-800/80 flex-shrink-0 z-10">
+        <form onsubmit="kirimPesan(event)" class="flex items-center space-x-2">
+            <input type="text" id="chat-input" required placeholder="Tulis pesan ke Global Chat..." class="flex-grow bg-[#030712] border border-slate-800 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-purple-500 text-white transition">
+            <button type="submit" id="send-btn" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white active:scale-90 transition-all shadow-lg shadow-purple-600/30">
+                <i class="fa-solid fa-paper-plane text-xs"></i>
+            </button>
+        </form>
+    </footer>
+
+    <!-- CUSTOM MODAL POP-UP RULE -->
+    <div id="rule-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
+            <div class="w-12 h-12 rounded-full bg-purple-500/20 border border-purple-500/40 text-purple-400 flex items-center justify-center text-lg mx-auto">
+                <i class="fa-solid fa-shield-halved"></i>
+            </div>
+            <div class="space-y-1">
+                <h3 class="text-sm font-extrabold text-white">Aturan Chat Global</h3>
+                <p class="text-[11px] text-slate-400 leading-relaxed">Hormati sesama pengguna MBD. Dilarang menyebarkan iklan terlarang atau promosi berlebihan.</p>
+            </div>
+            <button onclick="tutupRuleModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs shadow-lg shadow-purple-600/30 active:scale-95 transition-all">
+                Oke, Paham
+            </button>
+        </div>
+    </div>
+
+    <!-- SCRIPT REALTIME SYNC & LOGIKA CHAT -->
+    <script>
+        let currentUser = "";
+        let currentAvatar = "";
+        let currentReply = null;
+        let lastMessageCount = 0;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            currentUser = localStorage.getItem('mbd_logged_user');
+            if (!currentUser) {
+                window.location.href = 'login.html';
+                return;
+            }
+
+            currentAvatar = localStorage.getItem('mbd_user_avatar_' + currentUser) || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';
+
+            loadMessages();
+            // Polling Realtime Otomatis Setiap 3 Detik
+            setInterval(loadMessages, 3000);
+        });
+
+        async function loadMessages() {
+            try {
+                const res = await fetch('/api/chat');
+                const data = await res.json();
+
+                if (data.success) {
+                    // Cek jika ada pesan baru untuk munculkan notifikasi
+                    if (lastMessageCount > 0 && data.messages.length > lastMessageCount) {
+                        tampilkanNotifToast();
+                    }
+                    lastMessageCount = data.messages.length;
+                    renderChatList(data.messages);
+                }
+            } catch (err) {
+                console.error("Gagal sinkronisasi chat");
+            }
+        }
+
+        function renderChatList(messages) {
+            const container = document.getElementById('chat-container');
+            if (messages.length === 0) {
+                container.innerHTML = `<div class="text-center py-10 text-slate-500 text-xs">Belum ada obrolan. Jadilah yang pertama mengirim pesan!</div>`;
+                return;
+            }
+
+            let html = "";
+            messages.forEach(msg => {
+                const isMe = msg.username === currentUser;
+                const timeStr = new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+                html += `
+                    <div class="flex items-start space-x-2.5 ${isMe ? 'flex-row-reverse space-x-reverse' : ''}">
+                        <img src="${msg.avatar}" class="w-8 h-8 rounded-full border border-purple-500/40 object-cover flex-shrink-0 mt-1">
+                        
+                        <div class="max-w-[78%] space-y-1">
+                            <div class="flex items-center space-x-2 ${isMe ? 'justify-end' : ''}">
+                                <span class="text-[10px] font-extrabold ${isMe ? 'text-purple-400' : 'text-slate-300'}">${msg.username}</span>
+                                <span class="px-1.5 py-0.2 rounded bg-purple-900/40 border border-purple-500/30 text-[8px] font-bold text-purple-300">${msg.role || 'FREE'}</span>
+                                <span class="text-[8px] text-slate-500">${timeStr}</span>
+                            </div>
+
+                            <div class="p-3 rounded-2xl text-xs space-y-1.5 shadow-md ${isMe ? 'bg-purple-600 text-white rounded-tr-none' : 'bg-[#0b0f24] border border-slate-800 text-slate-200 rounded-tl-none'}">
+                                ${msg.replyTo ? `
+                                    <div class="p-2 rounded-xl bg-black/30 border-l-2 border-purple-400 text-[10px] space-y-0.5 opacity-90">
+                                        <p class="font-bold text-purple-300">@${msg.replyTo.username}</p>
+                                        <p class="truncate text-slate-300">${msg.replyTo.message}</p>
+                                    </div>
+                                ` : ''}
+                                <p class="leading-relaxed break-words">${escapeHtml(msg.message)}</p>
+                            </div>
+
+                            <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
+                                <button onclick="setReply('${msg.username}', '${escapeHtml(msg.message)}')" class="text-[9px] text-slate-500 hover:text-purple-400 transition flex items-center gap-1">
+                                    <i class="fa-solid fa-reply"></i> Balas
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            const shouldScroll = container.scrollTop + container.clientHeight >= container.scrollHeight - 100;
+            container.innerHTML = html;
+            
+            if (shouldScroll || container.scrollTop === 0) {
+                container.scrollTop = container.scrollHeight;
+            }
+        }
+
+        async function kirimPesan(e) {
+            e.preventDefault();
+            const input = document.getElementById('chat-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            input.value = "";
+            const payload = {
+                username: currentUser,
+                avatar: currentAvatar,
+                message: message,
+                replyTo: currentReply
+            };
+
+            batalReply();
+
+            try {
+                await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+                loadMessages();
+            } catch (err) {
+                console.error("Gagal terkirim");
+            }
+        }
+
+        function setReply(username, msg) {
+            currentReply = { username, message: msg };
+            document.getElementById('reply-user').textContent = `Membalas @${username}`;
+            document.getElementById('reply-msg').textContent = msg;
+            document.getElementById('reply-preview').classList.remove('hidden');
+        }
+
+        function batalReply() {
+            currentReply = null;
+            document.getElementById('reply-preview').classList.add('hidden');
+        }
+
+        function tampilkanNotifToast() {
+            const isMuted = localStorage.getItem('mbd_mute_chat') === 'true';
+            if (isMuted) return; // Mute jika opsi mute diaktifkan di profil
+
+            const toast = document.getElementById('toast-chat');
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.remove('opacity-0'), 10);
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.classList.add('hidden'), 300);
+            }, 2500);
+        }
+
+        function bukaRuleModal() {
+            const modal = document.getElementById('rule-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function tutupRuleModal() {
+            const modal = document.getElementById('rule-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function escapeHtml(text) {
+            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+        }
+    </script>
+</body>
+</html>
