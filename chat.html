@@ -22,7 +22,7 @@
         .animate-modal { animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
     </style>
 </head>
-<body id="chat-body" class="bg-[#030712] text-white font-sans flex flex-col h-screen justify-between overflow-hidden relative">
+<body id="chat-body" class="bg-[#030712] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative">
 
     <!-- TOAST NOTIFIKASI NGAMBANG DI ATAS -->
     <div id="toast-chat" class="fixed top-4 left-4 right-4 z-50 hidden opacity-0 transition-opacity duration-300 pointer-events-none flex justify-center">
@@ -73,11 +73,11 @@
         </button>
     </div>
 
-    <!-- FORM INPUT CHAT DI BAWAH -->
-    <footer class="p-3 bg-[#090d1e] border-t border-slate-800/80 flex-shrink-0 z-10">
+    <!-- FORM INPUT CHAT DI BAWAH (FIXED POSISI) -->
+    <footer class="p-3 bg-[#090d1e] border-t border-slate-800/80 flex-shrink-0 z-20 pb-safe">
         <form onsubmit="kirimPesan(event)" class="flex items-center space-x-2">
             <input type="text" id="chat-input" required placeholder="Tulis pesan ke Global Chat..." class="flex-grow bg-[#030712] border border-slate-800 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-purple-500 text-white transition">
-            <button type="submit" id="send-btn" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white active:scale-90 transition-all shadow-lg shadow-purple-600/30">
+            <button type="submit" id="send-btn" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white active:scale-90 transition-all shadow-lg shadow-purple-600/30 flex-shrink-0">
                 <i class="fa-solid fa-paper-plane text-xs"></i>
             </button>
         </form>
@@ -132,13 +132,9 @@
                     lastMessageCount = data.messages.length;
                     isFirstLoad = false;
                     renderChatList(data.messages);
-                } else {
-                    document.getElementById('chat-container').innerHTML = `<div class="text-center py-10 text-rose-400 text-xs">Gagal memuat pesan dari server.</div>`;
                 }
             } catch (err) {
-                if (isFirstLoad) {
-                    document.getElementById('chat-container').innerHTML = `<div class="text-center py-10 text-rose-400 text-xs">Koneksi ke server API gagal. Periksa kembali file api/chat.js di GitHub.</div>`;
-                }
+                console.error("Gagal sinkronisasi");
             }
         }
 
