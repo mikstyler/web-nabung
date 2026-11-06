@@ -24,7 +24,7 @@
 </head>
 <body id="chat-body" class="bg-[#030712] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative">
 
-    <!-- TOAST NOTIFIKASI NGAMBANG DI ATAS -->
+    <!-- TOAST NOTIFIKASI -->
     <div id="toast-chat" class="fixed top-4 left-4 right-4 z-50 hidden opacity-0 transition-opacity duration-300 pointer-events-none flex justify-center">
         <div class="bg-[#0b0f24]/90 border border-indigo-500/40 text-indigo-300 px-4 py-2.5 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl pointer-events-auto">
             <i class="fa-solid fa-bell text-indigo-400 text-xs"></i>
@@ -32,7 +32,7 @@
         </div>
     </div>
 
-    <!-- HEADER CHAT -->
+    <!-- HEADER -->
     <header class="flex justify-between items-center px-4 py-3 bg-[#030712] border-b border-slate-900 z-10 flex-shrink-0">
         <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#0b0f24] border border-slate-800/80 flex items-center justify-center text-slate-300 active:scale-90 transition-all">
             <i class="fa-solid fa-chevron-left text-xs"></i>
@@ -46,7 +46,7 @@
         </button>
     </header>
 
-    <!-- BANNER PERATURAN CHAT -->
+    <!-- BANNER RULE -->
     <div class="bg-gradient-to-r from-purple-950/40 to-slate-900/60 border-b border-purple-900/30 px-4 py-2 flex items-center justify-between flex-shrink-0">
         <div class="flex items-center space-x-2 text-[10px] text-purple-300 font-semibold">
             <i class="fa-solid fa-bullhorn text-purple-400"></i>
@@ -54,7 +54,7 @@
         </div>
     </div>
 
-    <!-- ROOM AREA PESAN CHAT -->
+    <!-- CHAT CONTAINER -->
     <main id="chat-container" class="flex-grow p-4 overflow-y-auto space-y-4 no-scrollbar">
         <div id="loading-state" class="text-center py-10 text-slate-500 text-xs flex flex-col items-center space-y-2">
             <i class="fa-solid fa-spinner fa-spin text-lg text-purple-500"></i>
@@ -62,26 +62,63 @@
         </div>
     </main>
 
-    <!-- BOX REPLY PREVIEW -->
+    <!-- PREVIEW REPLY -->
     <div id="reply-preview" class="hidden bg-[#090d1e] border-t border-slate-800 px-4 py-2 flex items-center justify-between flex-shrink-0">
         <div class="space-y-0.5 border-l-2 border-purple-500 pl-2">
             <p id="reply-user" class="text-[10px] font-bold text-purple-400">Membalas User</p>
-            <p id="reply-msg" class="text-[10px] text-slate-400 truncate max-w-xs">Isi pesan yang dibalas...</p>
+            <p id="reply-msg" class="text-[10px] text-slate-400 truncate max-w-xs">Isi pesan...</p>
         </div>
         <button onclick="batalReply()" class="text-slate-500 hover:text-rose-400 p-1">
             <i class="fa-solid fa-xmark text-xs"></i>
         </button>
     </div>
 
-    <!-- FORM INPUT CHAT DI BAWAH (FIXED POSISI) -->
-    <footer class="p-3 bg-[#090d1e] border-t border-slate-800/80 flex-shrink-0 z-20 pb-safe">
+    <!-- PREVIEW IMAGE UPLOAD -->
+    <div id="image-preview-container" class="hidden bg-[#090d1e] border-t border-slate-800 p-3 flex items-center justify-between flex-shrink-0">
+        <div class="flex items-center space-x-3">
+            <img id="img-preview-tag" src="" class="w-12 h-12 rounded-xl object-cover border border-purple-500">
+            <span class="text-xs text-slate-300">Foto siap dikirim</span>
+        </div>
+        <button onclick="batalFoto()" class="text-slate-400 hover:text-rose-400 px-2 py-1 text-xs">Batalkan</button>
+    </div>
+
+    <!-- FORM INPUT -->
+    <footer class="p-3 bg-[#090d1e] border-t border-slate-800/80 flex-shrink-0 z-20">
         <form onsubmit="kirimPesan(event)" class="flex items-center space-x-2">
-            <input type="text" id="chat-input" required placeholder="Tulis pesan ke Global Chat..." class="flex-grow bg-[#030712] border border-slate-800 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-purple-500 text-white transition">
-            <button type="submit" id="send-btn" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white active:scale-90 transition-all shadow-lg shadow-purple-600/30 flex-shrink-0">
+            <!-- Tombol Lampiran Foto -->
+            <label class="w-10 h-10 rounded-2xl bg-[#030712] border border-slate-800 flex items-center justify-center text-slate-400 hover:text-white cursor-pointer flex-shrink-0 active:scale-95 transition-all">
+                <i class="fa-solid fa-image text-xs"></i>
+                <input type="file" accept="image/*" onchange="previewFoto(event)" class="hidden">
+            </label>
+
+            <input type="text" id="chat-input" placeholder="Tulis pesan ke Global Chat..." class="flex-grow bg-[#030712] border border-slate-800 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-purple-500 text-white transition">
+            
+            <button type="submit" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-purple-600 to-indigo-600 flex items-center justify-center text-white active:scale-90 transition-all shadow-lg shadow-purple-600/30 flex-shrink-0">
                 <i class="fa-solid fa-paper-plane text-xs"></i>
             </button>
         </form>
     </footer>
+
+    <!-- MODAL PROFIL USER SAAT DIKLIK -->
+    <div id="user-profile-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
+        <div class="bg-[#0b0f24] border border-slate-800 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal">
+            <div class="w-20 h-20 rounded-full bg-slate-900 border-2 border-purple-500 mx-auto overflow-hidden shadow-xl">
+                <img id="modal-user-avatar" src="" class="w-full h-full object-cover">
+            </div>
+            <div class="space-y-1">
+                <h3 id="modal-user-name" class="text-sm font-extrabold text-white">Username</h3>
+                <p class="text-[10px] text-purple-400 font-semibold">MBD DHO Member</p>
+            </div>
+            <div class="flex items-center gap-2 pt-2">
+                <button onclick="tutupUserProfileModal()" class="flex-1 py-2.5 rounded-xl bg-slate-900 border border-slate-800 text-slate-300 active:scale-95 text-xs font-bold transition-all">
+                    Tutup
+                </button>
+                <button onclick="bukaChatPribadiDariModal()" class="flex-1 py-2.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white active:scale-95 text-xs font-bold shadow-lg shadow-purple-600/30 transition-all">
+                    Chat Pribadi
+                </button>
+            </div>
+        </div>
+    </div>
 
     <!-- MODAL RULE -->
     <div id="rule-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/70 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
@@ -91,9 +128,9 @@
             </div>
             <div class="space-y-1">
                 <h3 class="text-sm font-extrabold text-white">Aturan Chat Global</h3>
-                <p class="text-[11px] text-slate-400 leading-relaxed">Hormati sesama pengguna MBD. Dilarang menyebarkan iklan terlarang atau promosi berlebihan.</p>
+                <p class="text-[11px] text-slate-400 leading-relaxed">Hormati sesama pengguna MBD. Dilarang menyebarkan iklan terlarang.</p>
             </div>
-            <button onclick="tutupRuleModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs shadow-lg shadow-purple-600/30 active:scale-95 transition-all">
+            <button onclick="tutupRuleModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-bold text-xs shadow-lg active:scale-95 transition-all">
                 Oke, Paham
             </button>
         </div>
@@ -104,6 +141,8 @@
         let currentUser = "";
         let currentAvatar = "";
         let currentReply = null;
+        let base64Image = "";
+        let selectedTargetUser = "";
         let lastMessageCount = 0;
         let isFirstLoad = true;
 
@@ -141,7 +180,7 @@
         function renderChatList(messages) {
             const container = document.getElementById('chat-container');
             if (messages.length === 0) {
-                container.innerHTML = `<div class="text-center py-10 text-slate-500 text-xs">Belum ada obrolan. Jadilah yang pertama mengirim pesan!</div>`;
+                container.innerHTML = `<div class="text-center py-10 text-slate-500 text-xs">Belum ada obrolan.</div>`;
                 return;
             }
 
@@ -152,11 +191,11 @@
 
                 html += `
                     <div class="flex items-start space-x-2.5 ${isMe ? 'flex-row-reverse space-x-reverse' : ''}">
-                        <img src="${msg.avatar}" class="w-8 h-8 rounded-full border border-purple-500/40 object-cover flex-shrink-0 mt-1">
+                        <img src="${msg.avatar}" onclick="bukaUserProfile('${msg.username}', '${msg.avatar}')" class="w-8 h-8 rounded-full border border-purple-500/40 object-cover flex-shrink-0 mt-1 cursor-pointer hover:scale-105 transition-transform">
                         
                         <div class="max-w-[78%] space-y-1">
                             <div class="flex items-center space-x-2 ${isMe ? 'justify-end' : ''}">
-                                <span class="text-[10px] font-extrabold ${isMe ? 'text-purple-400' : 'text-slate-300'}">${msg.username}</span>
+                                <span onclick="bukaUserProfile('${msg.username}', '${msg.avatar}')" class="text-[10px] font-extrabold ${isMe ? 'text-purple-400' : 'text-slate-300'} cursor-pointer hover:underline">${msg.username}</span>
                                 <span class="px-1.5 py-0.2 rounded bg-purple-900/40 border border-purple-500/30 text-[8px] font-bold text-purple-300">${msg.role || 'FREE'}</span>
                                 <span class="text-[8px] text-slate-500">${timeStr}</span>
                             </div>
@@ -168,11 +207,14 @@
                                         <p class="truncate text-slate-300">${msg.replyTo.message}</p>
                                     </div>
                                 ` : ''}
-                                <p class="leading-relaxed break-words">${escapeHtml(msg.message)}</p>
+
+                                ${msg.image ? `<img src="${msg.image}" class="rounded-xl max-h-48 w-full object-cover cursor-pointer mb-1" onclick="window.open('${msg.image}')">` : ''}
+                                
+                                ${msg.message ? `<p class="leading-relaxed break-words">${escapeHtml(msg.message)}</p>` : ''}
                             </div>
 
                             <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
-                                <button onclick="setReply('${msg.username}', '${escapeHtml(msg.message)}')" class="text-[9px] text-slate-500 hover:text-purple-400 transition flex items-center gap-1">
+                                <button onclick="setReply('${msg.username}', '${escapeHtml(msg.message || '[Kirim Foto]')}')" class="text-[9px] text-slate-500 hover:text-purple-400 transition flex items-center gap-1">
                                     <i class="fa-solid fa-reply"></i> Balas
                                 </button>
                             </div>
@@ -189,17 +231,68 @@
             }
         }
 
+        // Buka Pop-up Profil User
+        function bukaUserProfile(username, avatar) {
+            if (username === currentUser) return; // Jangan buka profil sendiri
+            selectedTargetUser = username;
+            document.getElementById('modal-user-name').textContent = username;
+            document.getElementById('modal-user-avatar').src = avatar;
+
+            const modal = document.getElementById('user-profile-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => modal.classList.remove('opacity-0'), 10);
+        }
+
+        function tutupUserProfileModal() {
+            const modal = document.getElementById('user-profile-modal');
+            modal.classList.add('opacity-0');
+            setTimeout(() => modal.classList.add('hidden'), 300);
+        }
+
+        function bukaChatPribadiDariModal() {
+            // Simpan riwayat chat privat
+            let chatList = JSON.parse(localStorage.getItem('mbd_private_chats') || '[]');
+            if (!chatList.some(item => item.targetUser === selectedTargetUser)) {
+                chatList.push({ targetUser: selectedTargetUser });
+                localStorage.setItem('mbd_private_chats', JSON.stringify(chatList));
+            }
+            window.location.href = `privatechat.html?target=${encodeURIComponent(selectedTargetUser)}`;
+        }
+
+        // Upload Foto Base64
+        function previewFoto(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    base64Image = e.target.result;
+                    document.getElementById('img-preview-tag').src = base64Image;
+                    document.getElementById('image-preview-container').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function batalFoto() {
+            base64Image = "";
+            document.getElementById('image-preview-container').classList.add('hidden');
+        }
+
         async function kirimPesan(e) {
             e.preventDefault();
             const input = document.getElementById('chat-input');
             const message = input.value.trim();
-            if (!message) return;
+            if (!message && !base64Image) return;
 
             input.value = "";
+            const imgToSend = base64Image;
+            batalFoto();
+
             const payload = {
                 username: currentUser,
                 avatar: currentAvatar,
                 message: message,
+                image: imgToSend,
                 replyTo: currentReply
             };
 
