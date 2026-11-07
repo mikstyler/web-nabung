@@ -12,6 +12,7 @@
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .red-glow { box-shadow: 0 0 20px rgba(239, 68, 68, 0.35); }
+        .avatar-fire-glow { box-shadow: 0 0 15px rgba(239, 68, 68, 0.8), 0 0 30px rgba(220, 38, 38, 0.5); }
         @keyframes modalScale {
             0% { transform: scale(0.85); opacity: 0; }
             100% { transform: scale(1); opacity: 1; }
@@ -21,74 +22,30 @@
 </head>
 <body id="page-body" class="bg-[#090305] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative transition-colors duration-300">
 
-    <!-- TOAST NOTIFIKASI -->
-    <div id="toast-chat" class="fixed top-4 left-4 right-4 z-50 hidden opacity-0 transition-opacity duration-300 pointer-events-none flex justify-center">
-        <div class="bg-[#14060a]/90 border border-red-500/40 text-red-300 px-4 py-2.5 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl pointer-events-auto red-glow">
-            <i class="fa-solid fa-bell text-red-400 text-xs"></i>
-            <span class="text-xs font-semibold">Pesan baru masuk di Chat Global</span>
-        </div>
-    </div>
-
-    <!-- HEADER -->
-    <header id="page-header" class="flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0 transition-colors duration-300">
-        <button onclick="window.location.href='index.html'" id="back-btn" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all">
+    <header id="page-header" class="flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0">
+        <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all">
             <i class="fa-solid fa-chevron-left text-xs"></i>
         </button>
         <div class="text-center">
             <h1 class="text-sm font-bold tracking-wide text-rose-100">Global Chat</h1>
             <p class="text-[9px] text-red-400 font-medium">● Realtime Sync Active</p>
         </div>
-        <button onclick="bukaRuleModal()" id="rule-btn" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all">
+        <button onclick="bukaRuleModal()" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all">
             <i class="fa-solid fa-hammer text-xs text-red-400"></i>
         </button>
     </header>
 
-    <!-- BANNER RULE -->
-    <div id="rule-banner" class="bg-gradient-to-r from-red-950/40 to-slate-900/60 border-b border-red-900/30 px-4 py-2 flex items-center justify-between flex-shrink-0">
-        <div class="flex items-center space-x-2 text-[10px] text-red-300 font-semibold">
-            <i class="fa-solid fa-bullhorn text-red-400"></i>
-            <span>BACA RULE — Dilarang Spam / Toxic berlebihan</span>
-        </div>
-    </div>
-
-    <!-- CHAT CONTAINER -->
     <main id="chat-container" class="flex-grow p-4 overflow-y-auto space-y-4 no-scrollbar">
-        <div id="loading-state" class="text-center py-10 text-slate-500 text-xs flex flex-col items-center space-y-2">
-            <i class="fa-solid fa-spinner fa-spin text-lg text-red-500"></i>
-            <span>Memuat obrolan global...</span>
-        </div>
+        <div class="text-center py-10 text-slate-500 text-xs">Memuat obrolan global...</div>
     </main>
 
-    <!-- PREVIEW REPLY -->
-    <div id="reply-preview" class="hidden bg-[#100407] border-t border-rose-950/60 px-4 py-2 flex items-center justify-between flex-shrink-0">
-        <div class="space-y-0.5 border-l-2 border-red-500 pl-2">
-            <p id="reply-user" class="text-[10px] font-bold text-red-400">Membalas User</p>
-            <p id="reply-msg" class="text-[10px] text-slate-400 truncate max-w-xs">Isi pesan...</p>
-        </div>
-        <button onclick="batalReply()" class="text-slate-500 hover:text-red-400 p-1">
-            <i class="fa-solid fa-xmark text-xs"></i>
-        </button>
-    </div>
-
-    <!-- PREVIEW IMAGE UPLOAD -->
-    <div id="image-preview-container" class="hidden bg-[#100407] border-t border-rose-950/60 p-3 flex items-center justify-between flex-shrink-0">
-        <div class="flex items-center space-x-3">
-            <img id="img-preview-tag" src="" class="w-12 h-12 rounded-xl object-cover border border-red-500">
-            <span class="text-xs text-rose-200">Foto siap dikirim</span>
-        </div>
-        <button onclick="batalFoto()" class="text-slate-400 hover:text-red-400 px-2 py-1 text-xs">Batalkan</button>
-    </div>
-
-    <!-- FORM INPUT -->
-    <footer id="page-footer" class="p-3 bg-[#100407] border-t border-rose-950/60 flex-shrink-0 z-20 transition-colors duration-300">
+    <footer id="page-footer" class="p-3 bg-[#100407] border-t border-rose-950/60 flex-shrink-0 z-20">
         <form onsubmit="kirimPesan(event)" class="flex items-center space-x-2">
-            <label id="upload-label" class="w-10 h-10 rounded-2xl bg-[#090305] border border-rose-900/40 flex items-center justify-center text-rose-300 hover:text-white cursor-pointer flex-shrink-0 active:scale-95 transition-all">
+            <label class="w-10 h-10 rounded-2xl bg-[#090305] border border-rose-900/40 flex items-center justify-center text-rose-300 hover:text-white cursor-pointer flex-shrink-0 active:scale-95">
                 <i class="fa-solid fa-image text-xs"></i>
                 <input type="file" accept="image/*" onchange="previewFoto(event)" class="hidden">
             </label>
-
             <input type="text" id="chat-input" placeholder="Tulis pesan ke Global Chat..." class="flex-grow bg-[#090305] border border-rose-900/40 rounded-2xl px-4 py-3 text-xs focus:outline-none focus:border-red-500 text-white transition">
-            
             <button type="submit" class="w-11 h-11 rounded-2xl bg-gradient-to-tr from-red-600 to-rose-600 flex items-center justify-center text-white active:scale-90 transition-all shadow-lg red-glow flex-shrink-0">
                 <i class="fa-solid fa-paper-plane text-xs"></i>
             </button>
@@ -97,179 +54,89 @@
 
     <!-- MODAL PROFIL USER -->
     <div id="user-profile-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div id="profile-modal-box" class="bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal">
-            <div class="w-20 h-20 rounded-full bg-black border-2 border-red-600 mx-auto overflow-hidden shadow-xl">
-                <img id="modal-user-avatar" src="" class="w-full h-full object-cover">
+        <div class="bg-[#14060a] border border-red-600/50 rounded-3xl w-full max-w-xs overflow-hidden shadow-2xl red-glow animate-modal">
+            <div class="relative h-28 w-full bg-black">
+                <img id="modal-user-banner" src="media/background1.gif" class="w-full h-full object-cover opacity-60">
+                <div class="absolute inset-0 bg-gradient-to-t from-[#14060a] via-transparent to-transparent"></div>
             </div>
-            <div class="space-y-1">
-                <h3 id="modal-user-name" class="text-sm font-extrabold text-white">Username</h3>
-                <p class="text-[10px] text-red-400 font-semibold">MBD DHO Member</p>
-            </div>
-            <div class="flex items-center gap-2 pt-2">
-                <button onclick="tutupUserProfileModal()" class="flex-1 py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-300 active:scale-95 text-xs font-bold transition-all">
-                    Tutup
-                </button>
-                <button onclick="bukaChatPribadiDariModal()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white active:scale-95 text-xs font-bold shadow-lg red-glow transition-all">
-                    Chat Pribadi
-                </button>
+            <div class="px-6 pb-6 pt-0 text-center space-y-4 -mt-10 relative z-10">
+                <div class="w-20 h-20 rounded-full bg-black border-2 border-red-500 mx-auto overflow-hidden shadow-xl avatar-fire-glow">
+                    <img id="modal-user-avatar" src="" class="w-full h-full object-cover">
+                </div>
+                <div class="space-y-1">
+                    <h3 id="modal-user-name" class="text-sm font-extrabold text-white">Username</h3>
+                    <p class="text-[10px] text-red-400 font-semibold">MBD DHO Member</p>
+                </div>
+                <div class="flex items-center gap-2 pt-2">
+                    <button onclick="tutupUserProfileModal()" class="flex-1 py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-300 active:scale-95 text-xs font-bold transition-all">Tutup</button>
+                    <button onclick="bukaChatPribadiDariModal()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white active:scale-95 text-xs font-bold shadow-lg red-glow transition-all">Chat Pribadi</button>
+                </div>
             </div>
         </div>
     </div>
 
-    <!-- MODAL RULE -->
-    <div id="rule-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
-        <div id="rule-modal-box" class="bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal">
-            <div class="w-12 h-12 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 flex items-center justify-center text-lg mx-auto">
-                <i class="fa-solid fa-shield-halved"></i>
-            </div>
-            <div class="space-y-1">
-                <h3 class="text-sm font-extrabold text-white">Aturan Chat Global</h3>
-                <p class="text-[11px] text-rose-200/80 leading-relaxed">Hormati sesama pengguna MBD. Dilarang menyebarkan iklan terlarang atau toxic berlebihan.</p>
-            </div>
-            <button onclick="tutupRuleModal()" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-bold text-xs shadow-lg red-glow active:scale-95 transition-all">
-                Oke, Paham
-            </button>
-        </div>
-    </div>
-
-    <!-- SCRIPT -->
     <script>
         let currentUser = "";
         let currentAvatar = "";
-        let currentReply = null;
-        let base64Image = "";
+        let currentBanner = "";
         let selectedTargetUser = "";
-        let lastMessageCount = 0;
-        let isFirstLoad = true;
 
         document.addEventListener("DOMContentLoaded", () => {
             currentUser = localStorage.getItem('mbd_logged_user');
-            if (!currentUser) {
-                window.location.href = 'login.html';
-                return;
-            }
+            if (!currentUser) { window.location.href = 'login.html'; return; }
 
             currentAvatar = localStorage.getItem('mbd_user_avatar_' + currentUser) || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';
-
-            const savedTheme = localStorage.getItem('mbd_theme') || 'red';
-            applyTheme(savedTheme);
+            currentBanner = localStorage.getItem('mbd_user_banner_' + currentUser) || 'media/background1.gif';
 
             loadMessages();
             setInterval(loadMessages, 3000);
         });
 
-        function applyTheme(mode) {
-            const body = document.getElementById('page-body');
-            const header = document.getElementById('page-header');
-            const footer = document.getElementById('page-footer');
-            const backBtn = document.getElementById('back-btn');
-            const ruleBtn = document.getElementById('rule-btn');
-            const profileModalBox = document.getElementById('profile-modal-box');
-            const ruleModalBox = document.getElementById('rule-modal-box');
-
-            if (mode === 'day') {
-                body.className = "bg-slate-100 text-slate-900 font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative transition-colors duration-300";
-                header.className = "flex justify-between items-center px-4 py-3 bg-white border-b border-slate-200 z-10 flex-shrink-0 transition-colors duration-300";
-                footer.className = "p-3 bg-white border-t border-slate-200 flex-shrink-0 z-20 transition-colors duration-300";
-                backBtn.className = "w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 active:scale-90 transition-all";
-                ruleBtn.className = "w-9 h-9 rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-700 active:scale-90 transition-all";
-                profileModalBox.className = "bg-white border border-slate-200 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal text-slate-900";
-                ruleModalBox.className = "bg-white border border-slate-200 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl animate-modal text-slate-900";
-            } else {
-                body.className = "bg-[#090305] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative transition-colors duration-300";
-                header.className = "flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0 transition-colors duration-300";
-                footer.className = "p-3 bg-[#100407] border-t border-rose-950/60 flex-shrink-0 z-20 transition-colors duration-300";
-                backBtn.className = "w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all";
-                ruleBtn.className = "w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all";
-                profileModalBox.className = "bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal";
-                ruleModalBox.className = "bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal";
-            }
-        }
-
         async function loadMessages() {
             try {
                 const res = await fetch('/api/chat');
                 const data = await res.json();
-
-                if (data.success) {
-                    if (!isFirstLoad && data.messages.length > lastMessageCount) {
-                        tampilkanNotifToast();
-                    }
-                    lastMessageCount = data.messages.length;
-                    isFirstLoad = false;
-                    renderChatList(data.messages);
-                }
-            } catch (err) {
-                console.error("Gagal sinkronisasi");
-            }
+                if (data.success) renderChatList(data.messages);
+            } catch (err) {}
         }
 
         function renderChatList(messages) {
             const container = document.getElementById('chat-container');
-            const savedTheme = localStorage.getItem('mbd_theme') || 'red';
-
-            if (messages.length === 0) {
-                container.innerHTML = `<div class="text-center py-10 text-slate-500 text-xs">Belum ada obrolan.</div>`;
-                return;
-            }
+            if (messages.length === 0) { container.innerHTML = `<div class="text-center py-10 text-slate-500 text-xs">Belum ada obrolan.</div>`; return; }
 
             let html = "";
             messages.forEach(msg => {
                 const isMe = msg.username === currentUser;
                 const timeStr = new Date(msg.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-
-                const bubbleClass = isMe 
-                    ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-tr-none shadow-lg red-glow' 
-                    : (savedTheme === 'day' ? 'bg-white border border-slate-200 text-slate-900 rounded-tl-none shadow-sm' : 'bg-[#14060a] border border-rose-900/40 text-slate-200 rounded-tl-none shadow-md');
+                const userBanner = msg.banner || 'media/background1.gif';
+                const bubbleClass = isMe ? 'bg-gradient-to-r from-red-600 to-rose-600 text-white rounded-tr-none shadow-lg red-glow' : 'bg-[#14060a] border border-rose-900/40 text-slate-200 rounded-tl-none shadow-md';
 
                 html += `
                     <div class="flex items-start space-x-2.5 ${isMe ? 'flex-row-reverse space-x-reverse' : ''}">
-                        <img src="${msg.avatar}" onclick="bukaUserProfile('${msg.username}', '${msg.avatar}')" class="w-8 h-8 rounded-full border border-red-500/50 object-cover flex-shrink-0 mt-1 cursor-pointer hover:scale-105 transition-transform">
-                        
+                        <img src="${msg.avatar}" onclick="bukaUserProfile('${msg.username}', '${msg.avatar}', '${userBanner}')" class="w-8 h-8 rounded-full border border-red-500/50 object-cover flex-shrink-0 mt-1 cursor-pointer hover:scale-105 transition-transform">
                         <div class="max-w-[78%] space-y-1">
                             <div class="flex items-center space-x-2 ${isMe ? 'justify-end' : ''}">
-                                <span onclick="bukaUserProfile('${msg.username}', '${msg.avatar}')" class="text-[10px] font-extrabold ${isMe ? 'text-red-400' : 'text-slate-300'} cursor-pointer hover:underline">${msg.username}</span>
-                                <span class="px-1.5 py-0.2 rounded bg-red-950/60 border border-red-500/30 text-[8px] font-bold text-red-300">${msg.role || 'FREE'}</span>
+                                <span onclick="bukaUserProfile('${msg.username}', '${msg.avatar}', '${userBanner}')" class="text-[10px] font-extrabold ${isMe ? 'text-red-400' : 'text-slate-300'} cursor-pointer hover:underline">${msg.username}</span>
+                                <span class="px-1.5 py-0.2 rounded bg-red-950/65 border border-red-500/30 text-[8px] font-bold text-red-300">FREE</span>
                                 <span class="text-[8px] text-slate-500">${timeStr}</span>
                             </div>
-
                             <div class="p-3 rounded-2xl text-xs space-y-1.5 ${bubbleClass}">
-                                ${msg.replyTo ? `
-                                    <div class="p-2 rounded-xl bg-black/30 border-l-2 border-red-400 text-[10px] space-y-0.5 opacity-90">
-                                        <p class="font-bold text-red-300">@${msg.replyTo.username}</p>
-                                        <p class="truncate text-slate-300">${msg.replyTo.message}</p>
-                                    </div>
-                                ` : ''}
-
-                                ${msg.image ? `<img src="${msg.image}" class="rounded-xl max-h-48 w-full object-cover cursor-pointer mb-1" onclick="window.open('${msg.image}')">` : ''}
-                                
+                                ${msg.image ? `<img src="${msg.image}" class="rounded-xl max-h-48 w-full object-cover cursor-pointer mb-1">` : ''}
                                 ${msg.message ? `<p class="leading-relaxed break-words">${escapeHtml(msg.message)}</p>` : ''}
-                            </div>
-
-                            <div class="flex ${isMe ? 'justify-end' : 'justify-start'}">
-                                <button onclick="setReply('${msg.username}', '${escapeHtml(msg.message || '[Kirim Foto]')}')" class="text-[9px] text-slate-500 hover:text-red-400 transition flex items-center gap-1">
-                                    <i class="fa-solid fa-reply"></i> Balas
-                                </button>
                             </div>
                         </div>
                     </div>
                 `;
             });
-
-            const shouldScroll = container.scrollTop + container.clientHeight >= container.scrollHeight - 100;
             container.innerHTML = html;
-            
-            if (shouldScroll || isFirstLoad) {
-                container.scrollTop = container.scrollHeight;
-            }
         }
 
-        function bukaUserProfile(username, avatar) {
+        function bukaUserProfile(username, avatar, banner) {
             if (username === currentUser) return;
             selectedTargetUser = username;
             document.getElementById('modal-user-name').textContent = username;
             document.getElementById('modal-user-avatar').src = avatar;
-
+            document.getElementById('modal-user-banner').src = banner;
             const modal = document.getElementById('user-profile-modal');
             modal.classList.remove('hidden');
             setTimeout(() => modal.classList.remove('opacity-0'), 10);
@@ -290,96 +157,22 @@
             window.location.href = `privatechat.html?target=${encodeURIComponent(selectedTargetUser)}`;
         }
 
-        function previewFoto(event) {
-            const file = event.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    base64Image = e.target.result;
-                    document.getElementById('img-preview-tag').src = base64Image;
-                    document.getElementById('image-preview-container').classList.remove('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function batalFoto() {
-            base64Image = "";
-            document.getElementById('image-preview-container').classList.add('hidden');
-        }
-
         async function kirimPesan(e) {
             e.preventDefault();
             const input = document.getElementById('chat-input');
             const message = input.value.trim();
-            if (!message && !base64Image) return;
-
+            if (!message) return;
             input.value = "";
-            const imgToSend = base64Image;
-            batalFoto();
-
-            const payload = {
-                username: currentUser,
-                avatar: currentAvatar,
-                message: message,
-                image: imgToSend,
-                replyTo: currentReply
-            };
-
-            batalReply();
-
             try {
                 await fetch('/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({ username: currentUser, avatar: currentAvatar, banner: currentBanner, message })
                 });
                 loadMessages();
-            } catch (err) {
-                console.error("Gagal terkirim");
-            }
+            } catch (err) {}
         }
-
-        function setReply(username, msg) {
-            currentReply = { username, message: msg };
-            document.getElementById('reply-user').textContent = `Membalas @${username}`;
-            document.getElementById('reply-msg').textContent = msg;
-            document.getElementById('reply-preview').classList.remove('hidden');
-        }
-
-        function batalReply() {
-            currentReply = null;
-            document.getElementById('reply-preview').classList.add('hidden');
-        }
-
-        function tampilkanNotifToast() {
-            const isMuted = localStorage.getItem('mbd_mute_chat') === 'true';
-            if (isMuted) return;
-
-            const toast = document.getElementById('toast-chat');
-            toast.classList.remove('hidden');
-            setTimeout(() => toast.classList.remove('opacity-0'), 10);
-            setTimeout(() => {
-                toast.classList.add('opacity-0');
-                setTimeout(() => toast.classList.add('hidden'), 300);
-            }, 2500);
-        }
-
-        function bukaRuleModal() {
-            const modal = document.getElementById('rule-modal');
-            modal.classList.remove('hidden');
-            setTimeout(() => modal.classList.remove('opacity-0'), 10);
-        }
-
-        function tutupRuleModal() {
-            const modal = document.getElementById('rule-modal');
-            modal.classList.add('opacity-0');
-            setTimeout(() => modal.classList.add('hidden'), 300);
-        }
-
-        function escapeHtml(text) {
-            return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
-        }
+        function escapeHtml(text) { return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
     </script>
 </body>
 </html>
