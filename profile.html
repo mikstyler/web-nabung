@@ -17,7 +17,6 @@
 </head>
 <body id="profile-body" class="bg-[#090305] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative transition-colors duration-300">
 
-    <!-- TOAST NOTIFIKASI -->
     <div id="toast-notif" class="fixed top-4 left-4 right-4 z-50 hidden opacity-0 transition-opacity duration-300 pointer-events-none flex justify-center">
         <div class="bg-[#14060a]/90 border border-red-500/50 text-red-300 px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl pointer-events-auto red-glow">
             <i class="fa-solid fa-circle-check text-red-400 text-sm"></i>
@@ -25,7 +24,6 @@
         </div>
     </div>
 
-    <!-- HEADER -->
     <header class="flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0">
         <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all">
             <i class="fa-solid fa-chevron-left text-xs"></i>
@@ -34,10 +32,7 @@
         <div class="w-9"></div>
     </header>
 
-    <!-- CONTENT -->
     <main class="flex-grow p-4 overflow-y-auto no-scrollbar space-y-5 pb-10">
-        
-        <!-- PREVIEW AVATAR DENGAN GLOW API -->
         <div class="text-center space-y-3">
             <div class="w-24 h-24 rounded-full bg-black border-2 border-red-500 mx-auto overflow-hidden shadow-2xl avatar-fire-glow relative">
                 <img id="main-avatar-preview" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="w-full h-full object-cover">
@@ -48,7 +43,6 @@
             </div>
         </div>
 
-        <!-- PILIHAN AVATAR -->
         <div class="space-y-2">
             <label class="text-xs font-bold text-rose-300/80">Pilih Foto Avatar</label>
             <div class="flex space-x-3 overflow-x-auto py-2 no-scrollbar px-1">
@@ -60,42 +54,40 @@
             </div>
         </div>
 
-        <!-- PILIHAN BACKGROUND BANNER 1 SAMPAI 7 -->
         <div class="space-y-2">
-            <label class="text-xs font-bold text-rose-300/80">Pilih Background Banner Profil (background1.gif - 7.gif)</label>
+            <label class="text-xs font-bold text-rose-300/80">Pilih Background Banner Profil (Folder Media)</label>
             <div class="grid grid-cols-4 gap-2.5">
-                <div onclick="pilihBanner('background1.gif')" id="banner-opt-background1.gif" class="h-16 rounded-xl border-2 border-red-500 overflow-hidden cursor-pointer relative active:scale-95 transition">
-                    <img src="background1.gif" class="w-full h-full object-cover">
+                <div onclick="pilihBanner('media/background1.gif')" id="banner-opt-media/background1.gif" class="h-16 rounded-xl border-2 border-red-500 overflow-hidden cursor-pointer relative active:scale-95 transition">
+                    <img src="media/background1.gif" class="w-full h-full object-cover">
                     <span class="absolute bottom-1 right-1 px-1 bg-black/70 text-[8px] font-bold text-white rounded">Bg 1</span>
                 </div>
-                <div onclick="pilihBanner('background2.gif')" id="banner-opt-background2.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
-                    <img src="background2.gif" class="w-full h-full object-cover">
+                <div onclick="pilihBanner('media/background2.gif')" id="banner-opt-media/background2.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
+                    <img src="media/background2.gif" class="w-full h-full object-cover">
                     <span class="absolute bottom-1 right-1 px-1 bg-black/70 text-[8px] font-bold text-white rounded">Bg 2</span>
                 </div>
-                <div onclick="pilihBanner('background3.gif')" id="banner-opt-background3.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
-                    <img src="background3.gif" class="w-full h-full object-cover">
+                <div onclick="pilihBanner('media/background3.gif')" id="banner-opt-media/background3.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
+                    <img src="media/background3.gif" class="w-full h-full object-cover">
                     <span class="absolute bottom-1 right-1 px-1 bg-black/70 text-[8px] font-bold text-white rounded">Bg 3</span>
                 </div>
-                <div onclick="pilihBanner('background4.gif')" id="banner-opt-background4.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
-                    <img src="background4.gif" class="w-full h-full object-cover">
+                <div onclick="pilihBanner('media/background4.gif')" id="banner-opt-media/background4.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
+                    <img src="media/background4.gif" class="w-full h-full object-cover">
                     <span class="absolute bottom-1 right-1 px-1 bg-black/70 text-[8px] font-bold text-white rounded">Bg 4</span>
                 </div>
-                <div onclick="pilihBanner('background5.gif')" id="banner-opt-background5.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
-                    <img src="background5.gif" class="w-full h-full object-cover">
+                <div onclick="pilihBanner('media/background5.gif')" id="banner-opt-media/background5.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
+                    <img src="media/background5.gif" class="w-full h-full object-cover">
                     <span class="absolute bottom-1 right-1 px-1 bg-black/70 text-[8px] font-bold text-white rounded">Bg 5</span>
                 </div>
-                <div onclick="pilihBanner('background6.gif')" id="banner-opt-background6.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
-                    <img src="background6.gif" class="w-full h-full object-cover">
+                <div onclick="pilihBanner('media/background6.gif')" id="banner-opt-media/background6.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
+                    <img src="media/background6.gif" class="w-full h-full object-cover">
                     <span class="absolute bottom-1 right-1 px-1 bg-black/70 text-[8px] font-bold text-white rounded">Bg 6</span>
                 </div>
-                <div onclick="pilihBanner('background7.gif')" id="banner-opt-background7.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
-                    <img src="background7.gif" class="w-full h-full object-cover">
+                <div onclick="pilihBanner('media/background7.gif')" id="banner-opt-media/background7.gif" class="h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition">
+                    <img src="media/background7.gif" class="w-full h-full object-cover">
                     <span class="absolute bottom-1 right-1 px-1 bg-black/70 text-[8px] font-bold text-white rounded">Bg 7</span>
                 </div>
             </div>
         </div>
 
-        <!-- PENGATURAN TEMA -->
         <div class="space-y-3 bg-[#14060a] border border-rose-900/40 p-4 rounded-3xl">
             <h3 class="text-xs font-bold text-white tracking-wide">Pilihan Tema Aplikasi</h3>
             <div class="grid grid-cols-2 gap-3 pt-1">
@@ -108,16 +100,14 @@
             </div>
         </div>
 
-        <!-- TOMBOL SIMPAN -->
         <button onclick="simpanProfil()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-90 active:scale-95 text-white font-extrabold text-xs shadow-xl red-glow transition-all">
             Simpan Perubahan Profil
         </button>
     </main>
 
-    <!-- SCRIPT -->
     <script>
         let selectedAvatarUrl = "";
-        let selectedBannerUrl = "background1.gif";
+        let selectedBannerUrl = "media/background1.gif";
         let currentLoggedUser = "";
 
         document.addEventListener("DOMContentLoaded", () => {
@@ -125,32 +115,25 @@
             if (!currentLoggedUser) { window.location.href = 'login.html'; return; }
 
             document.getElementById('prof-user-display').textContent = `@${currentLoggedUser}`;
-            
             selectedAvatarUrl = localStorage.getItem('mbd_user_avatar_' + currentLoggedUser) || 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150';
             document.getElementById('main-avatar-preview').src = selectedAvatarUrl;
 
-            selectedBannerUrl = localStorage.getItem('mbd_user_banner_' + currentLoggedUser) || 'background1.gif';
+            selectedBannerUrl = localStorage.getItem('mbd_user_banner_' + currentLoggedUser) || 'media/background1.gif';
             highlightBanner(selectedBannerUrl);
 
             const savedTheme = localStorage.getItem('mbd_theme') || 'red';
             highlightThemeButton(savedTheme);
         });
 
-        function pilihAvatar(url) {
-            selectedAvatarUrl = url;
-            document.getElementById('main-avatar-preview').src = url;
-        }
-
-        function pilihBanner(bannerName) {
-            selectedBannerUrl = bannerName;
-            highlightBanner(bannerName);
-        }
+        function pilihAvatar(url) { selectedAvatarUrl = url; document.getElementById('main-avatar-preview').src = url; }
+        function pilihBanner(bannerName) { selectedBannerUrl = bannerName; highlightBanner(bannerName); }
 
         function highlightBanner(bannerName) {
             for (let i = 1; i <= 7; i++) {
-                const el = document.getElementById(`banner-opt-background${i}.gif`);
+                const pathName = `media/background${i}.gif`;
+                const el = document.getElementById(`banner-opt-${pathName}`);
                 if (el) {
-                    if (`background${i}.gif` === bannerName) {
+                    if (pathName === bannerName) {
                         el.className = "h-16 rounded-xl border-2 border-red-500 overflow-hidden cursor-pointer relative active:scale-95 transition red-glow";
                     } else {
                         el.className = "h-16 rounded-xl border-2 border-transparent overflow-hidden cursor-pointer relative active:scale-95 transition opacity-60";
@@ -159,12 +142,8 @@
             }
         }
 
-        function gantiTema(mode) {
-            localStorage.setItem('mbd_theme', mode);
-            highlightThemeButton(mode);
-            tampilkanToast("Tema berhasil diubah!");
-        }
-
+        function gantiTema(mode) { localStorage.setItem('mbd_theme', mode); highlightThemeButton(mode); tampilkanToast("Tema berhasil diubah!"); }
+        
         function highlightThemeButton(mode) {
             const btnRed = document.getElementById('btn-theme-red');
             const btnDay = document.getElementById('btn-theme-day');
@@ -188,10 +167,7 @@
             const toast = document.getElementById('toast-notif');
             toast.classList.remove('hidden');
             setTimeout(() => toast.classList.remove('opacity-0'), 10);
-            setTimeout(() => {
-                toast.classList.add('opacity-0');
-                setTimeout(() => toast.classList.add('hidden'), 300);
-            }, 2500);
+            setTimeout(() => { toast.classList.add('opacity-0'); setTimeout(() => toast.classList.add('hidden'), 300); }, 2500);
         }
     </script>
 </body>
