@@ -8,21 +8,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        body { 
-            font-family: 'Plus Jakarta Sans', sans-serif; 
-            user-select: none; 
-            -webkit-tap-highlight-color: transparent; 
-            transition: opacity 0.4s ease, transform 0.4s ease;
-        }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.4s ease, transform 0.4s ease; }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-        
         .red-glow { box-shadow: 0 0 25px rgba(239, 68, 68, 0.4); }
         .red-glow-btn:active { box-shadow: 0 0 20px rgba(239, 68, 68, 0.7); }
-        .avatar-fire-glow { 
-            box-shadow: 0 0 15px rgba(239, 68, 68, 0.9), 0 0 30px rgba(220, 38, 38, 0.6); 
-            animation: pulseFire 2s infinite alternate; 
-        }
+        .avatar-fire-glow { box-shadow: 0 0 15px rgba(239, 68, 68, 0.9), 0 0 30px rgba(220, 38, 38, 0.6); animation: pulseFire 2s infinite alternate; }
         @keyframes pulseFire {
             0% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.6), 0 0 20px rgba(220, 38, 38, 0.3); }
             100% { box-shadow: 0 0 22px rgba(239, 68, 68, 1), 0 0 45px rgba(239, 68, 68, 0.8); }
@@ -56,9 +47,9 @@
     <!-- MAIN CONTENT -->
     <main class="flex-grow p-4 overflow-y-auto no-scrollbar space-y-4 pb-24">
         
-        <!-- BANNER UTAMA -->
+        <!-- BANNER UTAMA (MEDIA FOLDER) -->
         <div class="relative rounded-3xl overflow-hidden border border-rose-600/40 red-glow bg-[#14060a] h-48 group">
-            <img src="banner.gif" alt="Anime Red Banner" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700">
+            <img src="media/banner.gif" alt="Anime Red Banner" class="w-full h-full object-cover opacity-90 group-hover:scale-105 transition-transform duration-700">
             <div class="absolute inset-0 bg-gradient-to-t from-[#090305] via-[#090305]/30 to-transparent"></div>
             <div class="absolute bottom-3 left-4 right-4 z-10 flex justify-between items-end">
                 <div>
@@ -74,7 +65,7 @@
         <!-- CARD PROFIL USER -->
         <div onclick="window.location.href='profile.html'" id="user-card" class="relative rounded-3xl overflow-hidden border border-rose-900/50 bg-[#14060a] shadow-xl p-4 space-y-3 active:scale-[0.98] transition-all duration-150 cursor-pointer">
             <div class="absolute inset-0 z-0 overflow-hidden opacity-30">
-                <img id="card-bg-banner" src="background1.gif" alt="Profile Banner" class="w-full h-full object-cover">
+                <img id="card-bg-banner" src="media/background1.gif" alt="Profile Banner" class="w-full h-full object-cover">
             </div>
             <div class="absolute inset-0 bg-gradient-to-t from-[#090305] via-[#090305]/80 to-transparent z-0"></div>
 
@@ -122,12 +113,10 @@
         </div>
     </main>
 
-    <!-- SIDEBAR MENU (TEMBUS PANDANG, KOTAK USERNAME EFEX API & EFEK KLIK SMOOTH GLOW) -->
+    <!-- SIDEBAR MENU -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-md z-40 hidden transition-opacity opacity-0" onclick="toggleSidebar()"></div>
     <div id="sidebar-menu" class="fixed top-0 left-0 bottom-0 w-64 max-w-[70vw] bg-[#120408]/75 backdrop-blur-2xl border-r border-rose-600/30 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between p-4 shadow-2xl red-glow">
-        
         <div class="space-y-4">
-            <!-- KOTAK USERNAME GLASSMORPHISM & EFEK API -->
             <div onclick="window.location.href='profile.html'" class="p-3.5 rounded-2xl bg-[#1c080e]/80 border border-rose-500/40 flex items-center space-x-3 active:scale-95 transition-all duration-200 cursor-pointer red-glow">
                 <div class="w-11 h-11 rounded-full bg-black border-2 border-red-500 flex items-center justify-center overflow-hidden avatar-fire-glow flex-shrink-0">
                     <img id="sidebar-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="w-full h-full object-cover">
@@ -140,52 +129,42 @@
                 </div>
             </div>
 
-            <!-- TABEL / MENU KATEGORI -->
             <div class="space-y-3.5 pt-1">
-                <!-- KATEGORI UTAMA -->
                 <div class="space-y-1.5">
                     <div class="px-2 flex items-center space-x-1.5 text-[10px] font-extrabold text-rose-400/80 uppercase tracking-wider">
-                        <i class="fa-solid fa-layer-group text-[9px]"></i>
-                        <span>Utama</span>
+                        <i class="fa-solid fa-layer-group text-[9px]"></i><span>Utama</span>
                     </div>
                     <div class="bg-[#18060b]/60 border border-rose-900/30 rounded-2xl p-1 space-y-1">
                         <a href="index.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl bg-gradient-to-r from-red-600/30 to-rose-600/20 border border-red-500/40 text-red-300 text-xs font-bold active:scale-95 transition-all duration-200 red-glow">
-                            <i class="fa-solid fa-house w-4 text-center"></i>
-                            <span>Home</span>
+                            <i class="fa-solid fa-house w-4 text-center"></i><span>Home</span>
                         </a>
                     </div>
                 </div>
 
-                <!-- KATEGORI CHAT -->
                 <div class="space-y-1.5">
                     <div class="px-2 flex items-center space-x-1.5 text-[10px] font-extrabold text-rose-400/80 uppercase tracking-wider">
-                        <i class="fa-solid fa-comments text-[9px]"></i>
-                        <span>Chat</span>
+                        <i class="fa-solid fa-comments text-[9px]"></i><span>Chat</span>
                     </div>
                     <div class="bg-[#18060b]/60 border border-rose-900/30 rounded-2xl p-1 space-y-1">
                         <a href="#" onclick="bukaChatGlobal()" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl bg-[#14060a]/80 hover:bg-rose-950/40 border border-rose-900/40 text-rose-200 active:scale-95 transition-all duration-200 text-xs font-semibold red-glow-btn">
-                            <i class="fa-solid fa-globe w-4 text-center text-red-400"></i>
-                            <span>Chat Global</span>
+                            <i class="fa-solid fa-globe w-4 text-center text-red-400"></i><span>Chat Global</span>
                         </a>
                         <a href="chatlist.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl bg-[#14060a]/80 hover:bg-rose-950/40 border border-rose-900/40 text-rose-200 active:scale-95 transition-all duration-200 text-xs font-semibold red-glow-btn">
-                            <i class="fa-solid fa-message w-4 text-center text-rose-400"></i>
-                            <span>Chat Private</span>
+                            <i class="fa-solid fa-message w-4 text-center text-rose-400"></i><span>Chat Private</span>
                         </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- TOMBOL LOGOUT -->
         <div class="pt-3 border-t border-rose-900/30">
             <button onclick="bukaModalLogout()" class="w-full flex items-center justify-center space-x-2 py-2.5 rounded-xl bg-red-500/10 hover:bg-red-500/20 border border-red-500/30 text-red-400 text-xs font-bold active:scale-95 transition-all duration-200 red-glow-btn">
-                <i class="fa-solid fa-power-off text-[10px]"></i>
-                <span>Logout</span>
+                <i class="fa-solid fa-power-off text-[10px]"></i><span>Logout</span>
             </button>
         </div>
     </div>
 
-    <!-- CUSTOM POP-UP FITUR / INFORMASI -->
+    <!-- CUSTOM MODAL -->
     <div id="custom-modal" class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/80 backdrop-blur-md hidden opacity-0 transition-opacity duration-300">
         <div id="custom-modal-box" class="bg-[#14060a] border border-red-600/50 rounded-3xl p-6 w-full max-w-xs text-center space-y-4 shadow-2xl red-glow animate-modal">
             <div id="modal-icon-container" class="w-14 h-14 rounded-full bg-red-500/20 border border-red-500/40 text-red-400 flex items-center justify-center text-xl mx-auto shadow-lg shadow-red-900/40">
@@ -212,17 +191,13 @@
                 <p class="text-[11px] text-rose-200/80">Apakah kamu yakin ingin keluar dari akun ini?</p>
             </div>
             <div class="flex items-center gap-2 pt-2">
-                <button onclick="tutupModalLogout()" class="flex-1 py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-300 active:scale-95 transition-all duration-200 text-xs font-bold">
-                    Batal
-                </button>
-                <button onclick="eksekusiLogout()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white active:scale-95 transition-all duration-200 text-xs font-bold shadow-lg red-glow">
-                    Ya, Keluar
-                </button>
+                <button onclick="tutupModalLogout()" class="flex-1 py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-300 active:scale-95 transition-all duration-200 text-xs font-bold">Batal</button>
+                <button onclick="eksekusiLogout()" class="flex-1 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white active:scale-95 transition-all duration-200 text-xs font-bold shadow-lg red-glow">Ya, Keluar</button>
             </div>
         </div>
     </div>
 
-    <!-- BOTTOM NAV (DENGAN IKON TOOLS TERBARU 🛠️) -->
+    <!-- BOTTOM NAV -->
     <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-[#100407]/95 backdrop-blur-lg border-t border-rose-950/60 px-4 py-2.5 flex justify-around items-center z-20">
         <a href="index.html" class="flex flex-col items-center text-red-500 space-y-1 active:scale-90 transition-transform"><i class="fa-solid fa-house text-xs"></i><span class="text-[9px] font-bold">Home</span></a>
         <a href="chatlist.html" class="flex flex-col items-center text-rose-400/60 hover:text-rose-200 space-y-1 active:scale-90 transition-transform"><i class="fa-solid fa-comments text-xs"></i><span class="text-[9px]">Chat</span></a>
@@ -252,7 +227,7 @@
                 document.getElementById('sidebar-user-avatar').src = savedAvatar;
             }
 
-            const savedBanner = localStorage.getItem('mbd_user_banner_' + loggedUser) || 'background1.gif';
+            const savedBanner = localStorage.getItem('mbd_user_banner_' + loggedUser) || 'media/background1.gif';
             document.getElementById('card-bg-banner').src = savedBanner;
 
             const savedTheme = localStorage.getItem('mbd_theme') || 'red';
@@ -346,9 +321,7 @@
         }
 
         function bukaChatGlobal() { window.location.href = 'chat.html'; }
-        function bukaUlarTangga() { 
-            showCustomModal("Permainan Group", "Fitur Permainan Ular Tangga akan segera hadir!", "info"); 
-        }
+        function bukaUlarTangga() { showCustomModal("Permainan Group", "Fitur Permainan Ular Tangga akan segera hadir!", "info"); }
 
         function updateDateTime() {
             const now = new Date();
