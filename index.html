@@ -35,12 +35,21 @@
 </head>
 <body id="main-body" class="bg-[#090305] text-white font-sans flex flex-col h-screen justify-between overflow-hidden relative">
 
-    <!-- TOP HEADER -->
+    <!-- TOP HEADER (DENGAN WIDGET SALDO DOMPET) -->
     <header id="main-header" class="flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0">
         <button onclick="toggleSidebar()" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 hover:text-white active:scale-90 transition-all shadow-md red-glow-btn">
             <i class="fa-solid fa-bars text-sm"></i>
         </button>
-        <h1 id="header-title" class="text-sm font-bold tracking-wide text-rose-100">Home</h1>
+        
+        <!-- KONTEN TENGAH: HOME & WIDGET SALDO -->
+        <div class="flex items-center space-x-2">
+            <h1 id="header-title" class="text-xs font-bold tracking-wide text-rose-100">Home</h1>
+            <div onclick="window.location.href='deposit.html'" class="px-2.5 py-1 rounded-xl bg-[#14060a] border border-rose-500/40 flex items-center space-x-1.5 cursor-pointer active:scale-95 transition-all red-glow shadow-md">
+                <i class="fa-solid fa-wallet text-[10px] text-red-400"></i>
+                <span class="text-[10px] font-extrabold text-white font-mono" id="header-saldo">Rp 0</span>
+            </div>
+        </div>
+
         <div class="flex items-center space-x-2">
             <button onclick="window.location.href='profile.html'" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all red-glow-btn">
                 <i class="fa-solid fa-user text-xs"></i>
@@ -121,7 +130,7 @@
         </div>
     </main>
 
-    <!-- SIDEBAR MENU (TEMBUS PANDANG & KATEGORI LENGKAP) -->
+    <!-- SIDEBAR MENU (TEMBUS PANDANG & KATEGORI UTAMA TERMASUK DEPOSIT) -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-md z-40 hidden transition-opacity opacity-0" onclick="toggleSidebar()"></div>
     <div id="sidebar-menu" class="fixed top-0 left-0 bottom-0 w-64 max-w-[70vw] bg-[#120408]/75 backdrop-blur-2xl border-r border-rose-600/30 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between p-4 shadow-2xl red-glow">
         <div class="space-y-4">
@@ -148,6 +157,9 @@
                     <div class="bg-[#18060b]/60 border border-rose-900/30 rounded-2xl p-1 space-y-1">
                         <a href="index.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl bg-gradient-to-r from-red-600/30 to-rose-600/20 border border-red-500/40 text-red-300 text-xs font-bold active:scale-95 transition-all duration-200 red-glow">
                             <i class="fa-solid fa-house w-4 text-center"></i><span>Home</span>
+                        </a>
+                        <a href="deposit.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl bg-[#14060a]/80 hover:bg-rose-950/40 border border-rose-900/40 text-rose-200 active:scale-95 transition-all duration-200 text-xs font-semibold red-glow-btn">
+                            <i class="fa-solid fa-wallet w-4 text-center text-red-400"></i><span>Deposit Saldo</span>
                         </a>
                         <a href="rules.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl bg-[#14060a]/80 hover:bg-rose-950/40 border border-rose-900/40 text-rose-200 active:scale-95 transition-all duration-200 text-xs font-semibold red-glow-btn">
                             <i class="fa-solid fa-book-open w-4 text-center text-red-400"></i><span>Rules & Panduan</span>
@@ -235,6 +247,10 @@
 
             document.getElementById('profile-username').textContent = loggedUser;
             document.getElementById('sidebar-username').textContent = loggedUser;
+
+            // Muat Saldo Dompet User
+            const userSaldo = parseInt(localStorage.getItem('mbd_saldo_' + loggedUser) || '0');
+            document.getElementById('header-saldo').textContent = 'Rp ' + userSaldo.toLocaleString('id-ID');
 
             const savedAvatar = localStorage.getItem('mbd_user_avatar_' + loggedUser);
             if (savedAvatar) {
