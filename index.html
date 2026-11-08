@@ -8,12 +8,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-        body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; transition: opacity 0.4s ease, transform 0.4s ease; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            user-select: none; 
+            -webkit-tap-highlight-color: transparent; 
+            transition: opacity 0.4s ease, transform 0.4s ease;
+        }
         .no-scrollbar::-webkit-scrollbar { display: none; }
         .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
         .red-glow { box-shadow: 0 0 25px rgba(239, 68, 68, 0.4); }
         .red-glow-btn:active { box-shadow: 0 0 20px rgba(239, 68, 68, 0.7); }
-        .avatar-fire-glow { box-shadow: 0 0 15px rgba(239, 68, 68, 0.9), 0 0 30px rgba(220, 38, 38, 0.6); animation: pulseFire 2s infinite alternate; }
+        .avatar-fire-glow { 
+            box-shadow: 0 0 15px rgba(239, 68, 68, 0.9), 0 0 30px rgba(220, 38, 38, 0.6); 
+            animation: pulseFire 2s infinite alternate; 
+        }
         @keyframes pulseFire {
             0% { box-shadow: 0 0 10px rgba(239, 68, 68, 0.6), 0 0 20px rgba(220, 38, 38, 0.3); }
             100% { box-shadow: 0 0 22px rgba(239, 68, 68, 1), 0 0 45px rgba(239, 68, 68, 0.8); }
@@ -113,10 +121,11 @@
         </div>
     </main>
 
-    <!-- SIDEBAR MENU -->
+    <!-- SIDEBAR MENU (TEMBUS PANDANG & KATEGORI LENGKAP) -->
     <div id="sidebar-overlay" class="fixed inset-0 bg-black/70 backdrop-blur-md z-40 hidden transition-opacity opacity-0" onclick="toggleSidebar()"></div>
     <div id="sidebar-menu" class="fixed top-0 left-0 bottom-0 w-64 max-w-[70vw] bg-[#120408]/75 backdrop-blur-2xl border-r border-rose-600/30 z-50 transform -translate-x-full transition-transform duration-300 flex flex-col justify-between p-4 shadow-2xl red-glow">
         <div class="space-y-4">
+            <!-- KOTAK USERNAME & EFEK API -->
             <div onclick="window.location.href='profile.html'" class="p-3.5 rounded-2xl bg-[#1c080e]/80 border border-rose-500/40 flex items-center space-x-3 active:scale-95 transition-all duration-200 cursor-pointer red-glow">
                 <div class="w-11 h-11 rounded-full bg-black border-2 border-red-500 flex items-center justify-center overflow-hidden avatar-fire-glow flex-shrink-0">
                     <img id="sidebar-user-avatar" src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150" class="w-full h-full object-cover">
@@ -129,7 +138,9 @@
                 </div>
             </div>
 
+            <!-- TABEL / KATEGORI MENU -->
             <div class="space-y-3.5 pt-1">
+                <!-- KATEGORI UTAMA -->
                 <div class="space-y-1.5">
                     <div class="px-2 flex items-center space-x-1.5 text-[10px] font-extrabold text-rose-400/80 uppercase tracking-wider">
                         <i class="fa-solid fa-layer-group text-[9px]"></i><span>Utama</span>
@@ -138,9 +149,13 @@
                         <a href="index.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl bg-gradient-to-r from-red-600/30 to-rose-600/20 border border-red-500/40 text-red-300 text-xs font-bold active:scale-95 transition-all duration-200 red-glow">
                             <i class="fa-solid fa-house w-4 text-center"></i><span>Home</span>
                         </a>
+                        <a href="rules.html" class="flex items-center space-x-2.5 px-3 py-2 rounded-xl bg-[#14060a]/80 hover:bg-rose-950/40 border border-rose-900/40 text-rose-200 active:scale-95 transition-all duration-200 text-xs font-semibold red-glow-btn">
+                            <i class="fa-solid fa-book-open w-4 text-center text-red-400"></i><span>Rules & Panduan</span>
+                        </a>
                     </div>
                 </div>
 
+                <!-- KATEGORI CHAT -->
                 <div class="space-y-1.5">
                     <div class="px-2 flex items-center space-x-1.5 text-[10px] font-extrabold text-rose-400/80 uppercase tracking-wider">
                         <i class="fa-solid fa-comments text-[9px]"></i><span>Chat</span>
@@ -197,7 +212,7 @@
         </div>
     </div>
 
-    <!-- BOTTOM NAV -->
+    <!-- BOTTOM NAV (DENGAN IKON TOOLS 🛠️) -->
     <nav id="bottom-nav" class="fixed bottom-0 left-0 right-0 bg-[#100407]/95 backdrop-blur-lg border-t border-rose-950/60 px-4 py-2.5 flex justify-around items-center z-20">
         <a href="index.html" class="flex flex-col items-center text-red-500 space-y-1 active:scale-90 transition-transform"><i class="fa-solid fa-house text-xs"></i><span class="text-[9px] font-bold">Home</span></a>
         <a href="chatlist.html" class="flex flex-col items-center text-rose-400/60 hover:text-rose-200 space-y-1 active:scale-90 transition-transform"><i class="fa-solid fa-comments text-xs"></i><span class="text-[9px]">Chat</span></a>
