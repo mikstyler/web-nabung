@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MBD DHO - Rules & Panduan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; opacity: 0; animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .red-glow { box-shadow: 0 0 25px rgba(239, 68, 68, 0.4); }
+        
+        /* Animasi Dunia & Sosial Media Berputar */
+        @keyframes rotateGlobe {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .globe-orbit {
+            animation: rotateGlobe 18s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-[#090305] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative">
+
+    <!-- HEADER -->
+    <header class="flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0">
+        <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all red-glow">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <div class="text-center">
+            <h1 class="text-sm font-bold tracking-wide text-rose-100">Panduan & Rules MBD</h1>
+            <p class="text-[9px] text-red-400 font-medium">● Informasi & Ketentuan Sistem</p>
+        </div>
+        <div class="w-9"></div>
+    </header>
+
+    <!-- CONTENT RULES (SLIDE PANJANG BERJEJER) -->
+    <main class="flex-grow p-4 overflow-y-auto space-y-3 no-scrollbar pb-6">
+        
+        <!-- RULES 1: CHAT GLOBAL -->
+        <div class="rounded-2xl bg-[#14060a]/90 border border-rose-900/40 overflow-hidden shadow-lg transition-all">
+            <button onclick="toggleSlide('slide-1', 'icon-1')" class="w-full p-4 flex items-center justify-between text-left active:bg-rose-950/30 transition">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 text-xs">
+                        <i class="fa-solid fa-globe"></i>
+                    </div>
+                    <span class="text-xs font-extrabold text-rose-100">Cara menggunakan Chat Global</span>
+                </div>
+                <i id="icon-1" class="fa-solid fa-chevron-down text-xs text-rose-400 transition-transform duration-300"></i>
+            </button>
+            <div id="slide-1" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-[#0c0306] border-t border-rose-950/0">
+                <div class="p-4 text-[11px] text-rose-200/80 leading-relaxed space-y-2.5">
+                    <p><strong>Chat Global</strong> adalah pusat obrolan utama di dalam aplikasi MBD DHO yang dirancang khusus bagi seluruh member untuk saling berinteraksi, memperluas pergaulan, mencari teman baru, kerabat, hingga pasangan.</p>
+                    <p>• <strong>Interaksi Sosial:</strong> Anda dapat mengirim pesan teks secara real-time, berbagi foto melalui galeri, serta membalas pesan pengguna lain secara spesifik (fitur Reply).</p>
+                    <p>• <strong>Lihat Profil & Chat Pribadi:</strong> Ketuk foto profil atau nama pengguna siapa pun di dalam obrolan global untuk membuka pop-up profil mereka (lengkap dengan banner background pilihan mereka), lalu ketuk <em>"Chat Pribadi"</em> untuk langsung memulai obrolan empat mata.</p>
+                    <p>• <strong>Aturan Etika:</strong> Dilarang keras melakukan spam pesan berlebihan, menyebarkan tautan berbahaya, atau menggunakan kata-kata kasar (toxic) yang dapat mengganggu kenyamanan sesama anggota.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RULES 2: CHAT PRIVATE -->
+        <div class="rounded-2xl bg-[#14060a]/90 border border-rose-900/40 overflow-hidden shadow-lg transition-all">
+            <button onclick="toggleSlide('slide-2', 'icon-2')" class="w-full p-4 flex items-center justify-between text-left active:bg-rose-950/30 transition">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 text-xs">
+                        <i class="fa-solid fa-comments"></i>
+                    </div>
+                    <span class="text-xs font-extrabold text-rose-100">Cara menggunakan Chat Private</span>
+                </div>
+                <i id="icon-2" class="fa-solid fa-chevron-down text-xs text-rose-400 transition-transform duration-300"></i>
+            </button>
+            <div id="slide-2" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-[#0c0306]">
+                <div class="p-4 text-[11px] text-rose-200/80 leading-relaxed space-y-2.5">
+                    <p><strong>Chat Private</strong> (Pesan Langsung / DM) adalah fitur komunikasi rahasia dan aman antar dua pengguna tanpa terlihat oleh member lain di Global Chat.</p>
+                    <p>• <strong>Cara Mengakses:</strong> Anda bisa masuk melalui menu navigasi bawah atau sidebar, lalu memilih menu *Chat Private* (`chatlist.html`) untuk melihat daftar percakapan aktif Anda.</p>
+                    <p>• <strong>Memulai Percakapan Baru:</strong> Cukup cari atau klik profil user di Global Chat, pilih tombol *Chat Pribadi*, maka ruang obrolan privat dengan user tersebut akan otomatis tersimpan dan terbuka.</p>
+                    <p>• <strong>Penyimpanan Lokal:</strong> Riwayat percakapan privat disimpan secara aman di perangkat Anda menggunakan sistem penyimpanan lokal browser (*localStorage*).</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- RULES 3: MENGATUR PROFILE -->
+        <div class="rounded-2xl bg-[#14060a]/90 border border-rose-900/40 overflow-hidden shadow-lg transition-all">
+            <button onclick="toggleSlide('slide-3', 'icon-3')" class="w-full p-4 flex items-center justify-between text-left active:bg-rose-950/30 transition">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400 text-xs">
+                        <i class="fa-solid fa-user-gear"></i>
+                    </div>
+                    <span class="text-xs font-extrabold text-rose-100">Cara Mengatur Profile</span>
+                </div>
+                <i id="icon-3" class="fa-solid fa-chevron-down text-xs text-rose-400 transition-transform duration-300"></i>
+            </button>
+            <div id="slide-3" class="max-h-0 overflow-hidden transition-all duration-300 ease-in-out bg-[#0c0306]">
+                <div class="p-4 text-[11px] text-rose-200/80 leading-relaxed space-y-2.5">
+                    <p>Halaman <strong>Pengaturan Profil</strong> memungkinkan Anda untuk mempersonalisasi tampilan akun agar terlihat unik dan menarik di hadapan pengguna lain.</p>
+                    <p>• <strong>Ganti Foto Avatar:</strong> Pilih berbagai pilihan foto avatar keren yang telah disediakan untuk mempercantik tampilan bulatan profil Anda dengan efek nyala api.</p>
+                    <p>• <strong>Pilih Background Banner (1 s.d. 7):</strong> Anda dapat memilih salah satu dari 7 animasi banner background (`background1.gif` s.d. `background7.gif`). Banner ini akan tampil di kartu profil utama Anda dan muncul saat profil Anda diklik oleh orang lain di Global Chat.</p>
+                    <p>• <strong>Ganti Tema Global:</strong> Ubah suasana aplikasi secara instan dengan memilih mode *Red Night* (futuristik gelap merah) atau *Light Day* (terang bersih).</p>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- FOOTER: ANIMASI DUNIA BERPUTAR, SOSMED & REALISTIS STATS -->
+    <footer class="bg-[#100407]/95 border-t border-rose-950/60 p-3 flex-shrink-0 z-20 space-y-2.5 backdrop-blur-md">
+        
+        <!-- ANIMASI DUNIA & SOSMED BERPUTAR -->
+        <div class="relative h-12 flex items-center justify-center overflow-hidden">
+            <!-- Lingkaran Orbit -->
+            <div class="absolute w-32 h-32 rounded-full border border-rose-500/20 globe-orbit flex items-center justify-center pointer-events-none">
+                <span class="absolute -top-2 text-rose-400 text-xs"><i class="fa-brands fa-whatsapp"></i></span>
+                <span class="absolute -bottom-2 text-rose-400 text-xs"><i class="fa-brands fa-facebook"></i></span>
+                <span class="absolute -left-2 text-rose-400 text-xs"><i class="fa-brands fa-telegram"></i></span>
+                <span class="absolute -right-2 text-rose-400 text-xs"><i class="fa-brands fa-instagram"></i></span>
+            </div>
+            <!-- Ikon Dunia di Tengah -->
+            <div class="relative z-10 w-8 h-8 rounded-full bg-red-600/20 border border-red-500/50 flex items-center justify-center text-red-400 text-sm shadow-lg red-glow globe-orbit">
+                <i class="fa-solid fa-earth-americas"></i>
+            </div>
+        </div>
+
+        <!-- REALISTIS STATS: USERS ONLINE & TERAKHIR UPDATE -->
+        <div class="flex justify-between items-center px-3 py-2 rounded-xl bg-[#090305] border border-rose-900/40 text-[10px]">
+            <div class="flex items-center space-x-2 text-rose-300">
+                <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
+                <span class="font-bold">Users Online: <span class="text-white font-mono">23</span></span>
+            </div>
+            <div class="text-rose-400/80 font-medium">
+                Terakhir Update: <span id="current-update-date" class="text-rose-200 font-mono">08 Nov 2026</span>
+            </div>
+        </div>
+    </footer>
+
+    <!-- SCRIPT -->
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const loggedUser = localStorage.getItem('mbd_logged_user');
+            if (!loggedUser) { window.location.href = 'login.html'; return; }
+
+            // Set Tanggal Update Otomatis hari ini
+            const now = new Date();
+            const options = { day: 'numeric', month: 'short', year: 'numeric' };
+            document.getElementById('current-update-date').textContent = now.toLocaleDateString('id-ID', options);
+        });
+
+        // Fungsi Slide Dropdown Panjang Smooth
+        function toggleSlide(slideId, iconId) {
+            const slide = document.getElementById(slideId);
+            const icon = document.getElementById(iconId);
+
+            if (slide.style.maxHeight && slide.style.maxHeight !== "0px") {
+                slide.style.maxHeight = "0px";
+                icon.style.transform = "rotate(0deg)";
+            } else {
+                // Tutup slide lain dulu jika ingin satu yang terbuka (opsional, biarkan terbuka independen juga bagus)
+                slide.style.maxHeight = slide.scrollHeight + "px";
+                icon.style.transform = "rotate(180deg)";
+            }
+        }
+    </script>
+</body>
+</html>
