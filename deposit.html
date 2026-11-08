@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MBD DHO - Deposit Saldo</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body { font-family: 'Plus Jakarta Sans', sans-serif; user-select: none; -webkit-tap-highlight-color: transparent; opacity: 0; animation: fadeIn 0.4s ease forwards; }
+        @keyframes fadeIn { to { opacity: 1; } }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        .red-glow { box-shadow: 0 0 25px rgba(239, 68, 68, 0.4); }
+        @keyframes modalScale {
+            0% { transform: scale(0.85); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        .animate-modal { animation: modalScale 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards; }
+    </style>
+</head>
+<body class="bg-[#090305] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative">
+
+    <!-- TOAST NOTIFIKASI SELAMAT DATANG (WELCOME DEPOSIT) -->
+    <div id="toast-welcome" class="fixed top-4 left-4 right-4 z-50 flex justify-center transition-all duration-500 transform -translate-y-10 opacity-0 pointer-events-none">
+        <div class="bg-[#14060a]/95 border border-red-500/60 text-red-300 px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl red-glow pointer-events-auto">
+            <i class="fa-solid fa-wallet text-red-400 text-base animate-bounce"></i>
+            <div>
+                <h4 class="text-xs font-bold text-white">Selamat Datang di Ruang Deposit</h4>
+                <p class="text-[10px] text-rose-200/80">Silakan pilih nominal & lakukan pembayaran instan.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- HEADER -->
+    <header class="flex justify-between items-center px-4 py-3 bg-[#090305] border-b border-rose-950/40 z-10 flex-shrink-0">
+        <button onclick="window.location.href='index.html'" class="w-9 h-9 rounded-xl bg-[#14060a] border border-rose-900/40 flex items-center justify-center text-rose-300 active:scale-90 transition-all red-glow">
+            <i class="fa-solid fa-chevron-left text-xs"></i>
+        </button>
+        <div class="text-center">
+            <h1 class="text-sm font-bold tracking-wide text-rose-100">Deposit Saldo</h1>
+            <p class="text-[9px] text-red-400 font-medium">● QRIS All Payment Auto-System</p>
+        </div>
+        <div class="w-9"></div>
+    </header>
+
+    <!-- CONTENT UTAMA -->
+    <main class="flex-grow p-4 overflow-y-auto space-y-4 no-scrollbar">
+        
+        <!-- INFO SALDO SAAT INI -->
+        <div class="p-4 rounded-3xl bg-gradient-to-r from-red-950/50 to-[#14060a] border border-red-600/40 flex items-center justify-between red-glow">
+            <div class="space-y-0.5">
+                <span class="text-[10px] font-bold text-rose-300/80 uppercase tracking-wider">Dompet Saldo Anda</span>
+                <h2 id="user-current-saldo" class="text-lg font-extrabold text-white font-mono">Rp 0</h2>
+            </div>
+            <div class="w-10 h-10 rounded-2xl bg-red-600/20 border border-red-500/40 flex items-center justify-center text-red-400">
+                <i class="fa-solid fa-wallet text-sm"></i>
+            </div>
+        </div>
+
+        <!-- FORM INPUT NOMINAL -->
+        <div class="p-4 rounded-3xl bg-[#14060a] border border-rose-900/50 space-y-4 shadow-xl">
+            <div class="space-y-1.5">
+                <label class="text-xs font-bold text-rose-300">Masukkan Nominal Deposit (Rp)</label>
+                <input type="number" id="input-nominal" placeholder="Contoh: 10000" class="w-full bg-[#090305] border border-rose-900/50 rounded-2xl px-4 py-3 text-xs text-white focus:outline-none focus:border-red-500 font-mono transition">
+            </div>
+
+            <!-- PILIHAN NOMINAL CEPAT -->
+            <div class="space-y-1.5">
+                <span class="text-[10px] font-bold text-rose-400/70 uppercase">Pilihan Nominal Cepat</span>
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="pilihNominal(2000)" class="py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-200 hover:border-red-500 text-xs font-mono font-bold active:scale-95 transition">Rp 2.000</button>
+                    <button onclick="pilihNominal(5000)" class="py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-200 hover:border-red-500 text-xs font-mono font-bold active:scale-95 transition">Rp 5.000</button>
+                    <button onclick="pilihNominal(10000)" class="py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-200 hover:border-red-500 text-xs font-mono font-bold active:scale-95 transition">Rp 10.000</button>
+                    <button onclick="pilihNominal(15000)" class="py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-200 hover:border-red-500 text-xs font-mono font-bold active:scale-95 transition">Rp 15.000</button>
+                    <button onclick="pilihNominal(25000)" class="py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-200 hover:border-red-500 text-xs font-mono font-bold active:scale-95 transition">Rp 25.000</button>
+                    <button onclick="pilihNominal(50000)" class="py-2.5 rounded-xl bg-[#090305] border border-rose-900/40 text-rose-200 hover:border-red-500 text-xs font-mono font-bold active:scale-95 transition">Rp 50.000</button>
+                </div>
+            </div>
+
+            <!-- TOMBOL DEPOSIT SEKARANG -->
+            <button onclick="buatDeposit()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-90 active:scale-95 text-white font-extrabold text-xs shadow-lg red-glow transition-all">
+                Deposit Sekarang (QRIS)
+            </button>
+        </div>
+
+        <!-- AREA QRIS & STATUS PEMBAYARAN (MUNCUL OTOMATIS) -->
+        <div id="qris-card" class="hidden p-5 rounded-3xl bg-[#14060a] border border-red-600/60 text-center space-y-4 shadow-2xl red-glow animate-modal">
+            <div class="space-y-1">
+                <h3 class="text-xs font-extrabold text-white">Scan QRIS untuk Pembayaran</h3>
+                <p class="text-[10px] text-rose-300">Total Tagihan: <span id="qris-nominal-text" class="font-bold font-mono text-white">Rp 0</span></p>
+            </div>
+
+            <!-- GAMBAR QRIS (BISA PAKAI LINK API QRIS ATAU GAMBAR DUMMY) -->
+            <div class="w-48 h-48 bg-white p-3 rounded-2xl mx-auto border-2 border-red-500 shadow-xl flex items-center justify-center">
+                <img id="qris-image" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=MBD_DHO_DEPOSIT" alt="QRIS Code" class="w-full h-full object-contain">
+            </div>
+
+            <div class="space-y-2">
+                <p id="status-teks" class="text-[11px] text-amber-400 font-semibold animate-pulse">Menunggu Pembayaran...</p>
+                <button onclick="cekPembayaran()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs active:scale-95 transition shadow-lg">
+                    Cek Pembayaran Otomatis
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- SCRIPT -->
+    <script>
+        let currentUser = "";
+        let nominalDeposit = 0;
+
+        document.addEventListener("DOMContentLoaded", () => {
+            currentUser = localStorage.getItem('mbd_logged_user');
+            if (!currentUser) { window.location.href = 'login.html'; return; }
+
+            muatSaldo();
+
+            // Tampilkan Pop-up Toast Welcome di Atas secara Smooth
+            const toast = document.getElementById('toast-welcome');
+            setTimeout(() => {
+                toast.classList.remove('-translate-y-10', 'opacity-0');
+            }, 300);
+            setTimeout(() => {
+                toast.classList.add('-translate-y-10', 'opacity-0');
+            }, 3500);
+        });
+
+        function muatSaldo() {
+            const saldo = parseInt(localStorage.getItem('mbd_saldo_' + currentUser) || '0');
+            document.getElementById('user-current-saldo').textContent = 'Rp ' + saldo.toLocaleString('id-ID');
+        }
+
+        function pilihNominal(nilai) {
+            document.getElementById('input-nominal').value = nilai;
+        }
+
+        function buatDeposit() {
+            const input = document.getElementById('input-nominal');
+            nominalDeposit = parseInt(input.value);
+
+            if (!nominalDeposit || nominalDeposit < 2000) {
+                alert("Minimal deposit adalah Rp 2.000!");
+                return;
+            }
+
+            document.getElementById('qris-nominal-text').textContent = 'Rp ' + nominalDeposit.toLocaleString('id-ID');
+            
+            // Generate QRIS dinamis sesuai nominal
+            document.getElementById('qris-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=MBD_DEPOSIT_${currentUser}_${nominalDeposit}`;
+            
+            document.getElementById('qris-card').classList.remove('hidden');
+            document.getElementById('qris-card').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cekPembayaran() {
+            const statusTeks = document.getElementById('status-teks');
+            statusTeks.textContent = "Memverifikasi pembayaran...";
+            statusTeks.className = "text-[11px] text-blue-400 font-semibold animate-pulse";
+
+            setTimeout(() => {
+                // Simulasi pembayaran berhasil sukses otomatis
+                let saldoLama = parseInt(localStorage.getItem('mbd_saldo_' + currentUser) || '0');
+                let saldoBaru = saldoLama + nominalDeposit;
+                localStorage.setItem('mbd_saldo_' + currentUser, saldoBaru);
+
+                muatSaldo();
+
+                statusTeks.textContent = "✅ Pembayaran Berhasil! Saldo telah ditambahkan.";
+                statusTeks.className = "text-[11px] text-emerald-400 font-bold";
+
+                // Sembunyikan QRIS setelah sukses
+                setTimeout(() => {
+                    document.getElementById('qris-card').classList.add('hidden');
+                    document.getElementById('input-nominal').value = "";
+                }, 3000);
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
