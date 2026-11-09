@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "MBD DHO Vercel App",
   "dependencies": {
-    "mongoose": "^6.8.0"
+    "mongoose": "^6.8.0",
+    "qrcode": "^1.5.3"
   }
 }
