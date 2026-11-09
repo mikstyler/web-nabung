@@ -22,13 +22,13 @@
 </head>
 <body class="bg-[#090305] text-white font-sans flex flex-col h-[100dvh] justify-between overflow-hidden relative">
 
-    <!-- TOAST NOTIFIKASI SELAMAT DATANG (WELCOME DEPOSIT) -->
+    <!-- TOAST NOTIFIKASI SELAMAT DATANG -->
     <div id="toast-welcome" class="fixed top-4 left-4 right-4 z-50 flex justify-center transition-all duration-500 transform -translate-y-10 opacity-0 pointer-events-none">
         <div class="bg-[#14060a]/95 border border-red-500/60 text-red-300 px-5 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 backdrop-blur-xl red-glow pointer-events-auto">
             <i class="fa-solid fa-wallet text-red-400 text-base animate-bounce"></i>
             <div>
                 <h4 class="text-xs font-bold text-white">Selamat Datang di Ruang Deposit</h4>
-                <p class="text-[10px] text-rose-200/80">Silakan pilih nominal & lakukan pembayaran instan.</p>
+                <p class="text-[10px] text-rose-200/80">Sistem QRIS Otomatis dengan Kode Unik.</p>
             </div>
         </div>
     </div>
@@ -40,7 +40,7 @@
         </button>
         <div class="text-center">
             <h1 class="text-sm font-bold tracking-wide text-rose-100">Deposit Saldo</h1>
-            <p class="text-[9px] text-red-400 font-medium">● QRIS All Payment Auto-System</p>
+            <p class="text-[9px] text-red-400 font-medium">● QRIS Auto Unique Code System</p>
         </div>
         <div class="w-9"></div>
     </header>
@@ -79,28 +79,32 @@
                 </div>
             </div>
 
-            <!-- TOMBOL DEPOSIT SEKARANG -->
+            <!-- TOMBOL BUAT TAGIHAN -->
             <button onclick="buatDeposit()" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-90 active:scale-95 text-white font-extrabold text-xs shadow-lg red-glow transition-all">
-                Deposit Sekarang (QRIS)
+                Buat Tagihan QRIS
             </button>
         </div>
 
-        <!-- AREA QRIS & STATUS PEMBAYARAN (MUNCUL OTOMATIS) -->
+        <!-- AREA QRIS & TOTAL TRANSFER DENGAN KODE UNIK -->
         <div id="qris-card" class="hidden p-5 rounded-3xl bg-[#14060a] border border-red-600/60 text-center space-y-4 shadow-2xl red-glow animate-modal">
             <div class="space-y-1">
-                <h3 class="text-xs font-extrabold text-white">Scan QRIS untuk Pembayaran</h3>
-                <p class="text-[10px] text-rose-300">Total Tagihan: <span id="qris-nominal-text" class="font-bold font-mono text-white">Rp 0</span></p>
+                <h3 class="text-xs font-extrabold text-white">Scan QRIS SEMBAKO ERNY, Air</h3>
+                <p class="text-[10px] text-rose-300">Harap transfer tepat hingga 3 digit terakhir:</p>
+                <!-- TOTAL TRANSFER DENGAN KODE UNIK (MENYALA/BOLD) -->
+                <div class="py-2 bg-[#090305] rounded-xl border border-rose-900/50 my-2">
+                    <span id="qris-nominal-text" class="text-base font-black font-mono text-emerald-400">Rp 0</span>
+                </div>
             </div>
 
-            <!-- GAMBAR QRIS (BISA PAKAI LINK API QRIS ATAU GAMBAR DUMMY) -->
-            <div class="w-48 h-48 bg-white p-3 rounded-2xl mx-auto border-2 border-red-500 shadow-xl flex items-center justify-center">
-                <img id="qris-image" src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=MBD_DHO_DEPOSIT" alt="QRIS Code" class="w-full h-full object-contain">
+            <!-- GAMBAR QRIS STATIS DARI FOLDER MEDIA -->
+            <div class="w-48 h-48 bg-white p-2 rounded-2xl mx-auto border-2 border-red-500 shadow-xl flex items-center justify-center">
+                <img src="/media/qris.jpg" alt="QRIS SEMBAKO ERNY" class="w-full h-full object-contain rounded-lg">
             </div>
 
             <div class="space-y-2">
-                <p id="status-teks" class="text-[11px] text-amber-400 font-semibold animate-pulse">Menunggu Pembayaran...</p>
+                <p id="status-teks" class="text-[11px] text-amber-400 font-semibold animate-pulse">Menunggu Mutasi / Notifikasi DANA...</p>
                 <button onclick="cekPembayaran()" class="w-full py-3 rounded-xl bg-gradient-to-r from-emerald-600 to-teal-600 text-white font-bold text-xs active:scale-95 transition shadow-lg">
-                    Cek Pembayaran Otomatis
+                    Cek Status Pembayaran
                 </button>
             </div>
         </div>
@@ -110,7 +114,7 @@
     <!-- SCRIPT -->
     <script>
         let currentUser = "";
-        let nominalDeposit = 0;
+        let finalNominal = 0;
 
         document.addEventListener("DOMContentLoaded", () => {
             currentUser = localStorage.getItem('mbd_logged_user');
@@ -118,14 +122,9 @@
 
             muatSaldo();
 
-            // Tampilkan Pop-up Toast Welcome di Atas secara Smooth
             const toast = document.getElementById('toast-welcome');
-            setTimeout(() => {
-                toast.classList.remove('-translate-y-10', 'opacity-0');
-            }, 300);
-            setTimeout(() => {
-                toast.classList.add('-translate-y-10', 'opacity-0');
-            }, 3500);
+            setTimeout(() => { toast.classList.remove('-translate-y-10', 'opacity-0'); }, 300);
+            setTimeout(() => { toast.classList.add('-translate-y-10', 'opacity-0'); }, 3500);
         });
 
         function muatSaldo() {
@@ -139,39 +138,45 @@
 
         function buatDeposit() {
             const input = document.getElementById('input-nominal');
-            nominalDeposit = parseInt(input.value);
+            let baseNominal = parseInt(input.value);
 
-            if (!nominalDeposit || nominalDeposit < 2000) {
+            if (!baseNominal || baseNominal < 2000) {
                 alert("Minimal deposit adalah Rp 2.000!");
                 return;
             }
 
-            document.getElementById('qris-nominal-text').textContent = 'Rp ' + nominalDeposit.toLocaleString('id-ID');
+            // Generate kode unik acak 3 digit terakhir (antara 101 s/d 999)
+            const kodeUnik = Math.floor(Math.random() * 899) + 101;
             
-            // Generate QRIS dinamis sesuai nominal
-            document.getElementById('qris-image').src = `https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=MBD_DEPOSIT_${currentUser}_${nominalDeposit}`;
+            // Jika mau murni tambahan angka kecil, bisa pakai angka random 1 s/d 99:
+            // const kodeUnik = Math.floor(Math.random() * 90) + 10; 
             
+            finalNominal = baseNominal + (kodeUnik % 500); // Agar penambahannya wajar
+
+            // Tampilkan total tagihan persis dengan kode uniknya
+            document.getElementById('qris-nominal-text').textContent = 'Rp ' + finalNominal.toLocaleString('id-ID');
+            
+            // Munculkan card QRIS
             document.getElementById('qris-card').classList.remove('hidden');
             document.getElementById('qris-card').scrollIntoView({ behavior: 'smooth' });
         }
 
         function cekPembayaran() {
             const statusTeks = document.getElementById('status-teks');
-            statusTeks.textContent = "Memverifikasi pembayaran...";
+            statusTeks.textContent = "Memverifikasi mutasi webhook...";
             statusTeks.className = "text-[11px] text-blue-400 font-semibold animate-pulse";
 
             setTimeout(() => {
-                // Simulasi pembayaran berhasil sukses otomatis
+                // Simulasi sukses penambahan saldo berdasarkan nominal unik
                 let saldoLama = parseInt(localStorage.getItem('mbd_saldo_' + currentUser) || '0');
-                let saldoBaru = saldoLama + nominalDeposit;
+                let saldoBaru = saldoLama + finalNominal;
                 localStorage.setItem('mbd_saldo_' + currentUser, saldoBaru);
 
                 muatSaldo();
 
-                statusTeks.textContent = "✅ Pembayaran Berhasil! Saldo telah ditambahkan.";
+                statusTeks.textContent = "✅ Pembayaran Berhasil! Saldo otomatis masuk.";
                 statusTeks.className = "text-[11px] text-emerald-400 font-bold";
 
-                // Sembunyikan QRIS setelah sukses
                 setTimeout(() => {
                     document.getElementById('qris-card').classList.add('hidden');
                     document.getElementById('input-nominal').value = "";
