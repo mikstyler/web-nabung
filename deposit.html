@@ -29,7 +29,7 @@
         </button>
         <div class="text-center">
             <h1 class="text-sm font-bold tracking-wide text-rose-100">Deposit Saldo</h1>
-            <p class="text-[9px] text-red-400 font-medium">● Real-time Auto Webhook System</p>
+            <p class="text-[9px] text-red-400 font-medium">● QRIS Dynamic Auto-Nominal</p>
         </div>
         <div class="w-9"></div>
     </header>
@@ -68,28 +68,45 @@
                 </div>
             </div>
 
-            <button onclick="buatDepositOtomatis()" id="btn-buat" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-90 active:scale-95 text-white font-extrabold text-xs shadow-lg red-glow transition-all">
-                Generate QRIS Otomatis
+            <button onclick="buatTagihanQRIS()" id="btn-buat" class="w-full py-3.5 rounded-2xl bg-gradient-to-r from-red-600 to-rose-600 hover:opacity-90 active:scale-95 text-white font-extrabold text-xs shadow-lg red-glow transition-all">
+                Buat QRIS Otomatis
             </button>
         </div>
 
-        <!-- AREA QRIS & LIVE LISTENER -->
+        <!-- AREA INVOICE & QRIS DINAMIS -->
         <div id="qris-card" class="hidden p-5 rounded-3xl bg-[#14060a] border border-red-600/60 text-center space-y-4 shadow-2xl red-glow animate-modal">
             <div class="space-y-1">
-                <h3 class="text-xs font-extrabold text-white">Scan QRIS SEMBAKO ERNY</h3>
-                <p class="text-[10px] text-rose-300">Nominal Tagihan: <span id="qris-nominal-text" class="font-bold font-mono text-emerald-400">Rp 0</span></p>
+                <h3 class="text-xs font-extrabold text-white">QRIS SEMBAKO ERNY, Air</h3>
+                <p class="text-[10px] text-rose-300">Scan untuk bayar (Nominal otomatis terkunci)</p>
             </div>
 
-            <!-- GAMBAR QRIS / QR CODE GENERATOR LANGSUNG DI BROWSER -->
-            <div class="w-48 h-48 bg-white p-2 rounded-2xl mx-auto border-2 border-red-500 shadow-xl flex items-center justify-center">
-                <img id="qris-image-dynamic" src="" alt="QRIS Otomatis" class="w-full h-full object-contain rounded-lg">
-            </div>
-
-            <div class="space-y-2">
-                <p id="status-teks" class="text-[11px] text-amber-400 font-semibold animate-pulse">Menunggu Pembayaran Masuk (Real-time)...</p>
-                <div class="text-[10px] text-rose-400/80 bg-[#090305] py-2 px-3 rounded-xl border border-rose-950">
-                    <i class="fa-solid fa-circle-info mr-1"></i> Saldo akan bertambah otomatis begitu notifikasi DANA masuk.
+            <!-- DETAIL INVOICE -->
+            <div class="bg-[#090305] p-3 rounded-2xl border border-rose-900/50 text-left space-y-2 text-[11px]">
+                <div class="flex justify-between">
+                    <span class="text-rose-400">Total Tagihan:</span>
+                    <span id="inv-nominal" class="font-bold font-mono text-emerald-400">Rp 0</span>
                 </div>
+                <div class="flex justify-between">
+                    <span class="text-rose-400">Waktu Dibuat:</span>
+                    <span id="inv-tanggal" class="font-medium text-white">--</span>
+                </div>
+                <div class="flex justify-between border-t border-rose-950 pt-2">
+                    <span class="text-amber-400 font-bold">Masa Berlaku:</span>
+                    <span id="inv-timer" class="font-extrabold font-mono text-amber-400">10:00</span>
+                </div>
+            </div>
+
+            <!-- GAMBAR QRIS DINAMIS HASIL API -->
+            <div class="w-48 h-48 bg-white p-2 rounded-2xl mx-auto border-2 border-red-500 shadow-xl flex items-center justify-center">
+                <img id="qris-image-dynamic" src="" alt="QRIS Dinamis" class="w-full h-full object-contain rounded-lg">
+            </div>
+
+            <!-- STATUS -->
+            <div class="space-y-2">
+                <p id="status-teks" class="text-[11px] text-amber-400 font-semibold animate-pulse">Menunggu Pembayaran Real-time...</p>
+                <button onclick="batalkanTagihan()" class="w-full py-2.5 rounded-xl bg-rose-950/60 border border-red-500/40 text-red-300 font-bold text-xs active:scale-95 transition">
+                    Batalkan Tagihan
+                </button>
             </div>
         </div>
 
@@ -98,14 +115,15 @@
     <!-- SCRIPT -->
     <script>
         let currentUser = "";
+        let finalNominal = 0;
+        let timerInterval = null;
+        let webhookChecker = null;
+        let baselineSaldo = 0;
 
         document.addEventListener("DOMContentLoaded", () => {
             currentUser = localStorage.getItem('mbd_logged_user');
             if (!currentUser) { window.location.href = 'login.html'; return; }
-            muatSaldo();
-
-            // Jalankan auto-checker setiap 3 detik untuk memantau apakah webhook backend sudah nambahin saldo
-            setInterval(muatSaldoRealtime, 3000);
+            baselineSaldo = muatSaldo();
         });
 
         function muatSaldo() {
@@ -114,28 +132,11 @@
             return saldo;
         }
 
-        let saldoSebelumnya = muatSaldo();
-
-        function muatSaldoRealtime() {
-            const saldoBaru = muatSaldo();
-            // Jika saldo tiba-tiba bertambah (artinya webhook dari MacroDroid sukses mengeksekusi penambahan)
-            if (saldoBaru > saldoSebelumnya) {
-                saldoSebelumnya = saldoBaru;
-                document.getElementById('status-teks').textContent = "✅ Pembayaran Berhasil! Saldo telah masuk.";
-                document.getElementById('status-teks').className = "text-[11px] text-emerald-400 font-bold";
-                
-                setTimeout(() => {
-                    document.getElementById('qris-card').classList.add('hidden');
-                    document.getElementById('input-nominal').value = "";
-                }, 3500);
-            }
-        }
-
         function pilihNominal(nilai) {
             document.getElementById('input-nominal').value = nilai;
         }
 
-        function buatDepositOtomatis() {
+        async function buatTagihanQRIS() {
             const input = document.getElementById('input-nominal');
             const nominal = parseInt(input.value);
 
@@ -144,18 +145,104 @@
                 return;
             }
 
-            // Format data string tagihan khusus untuk user & nominal ini
-            // Agar bisa dibaca unik oleh sistem kamu
-            const payloadData = `MBD_DEPOSIT_${currentUser}_${nominal}_ID1025439915212`;
+            finalNominal = nominal;
+            const btn = document.getElementById('btn-buat');
+            btn.textContent = "Memproses QRIS...";
+            btn.disabled = true;
 
-            // Generate QR code secara instan via API publik menggunakan payload data tersebut
-            const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(payloadData)}`;
+            try {
+                // Panggil API backend Vercel untuk generate QRIS ber-nominal
+                const response = await fetch('/api/generate-qris', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nominal: nominal })
+                });
 
-            document.getElementById('qris-nominal-text').textContent = 'Rp ' + nominal.toLocaleString('id-ID');
-            document.getElementById('qris-image-dynamic').src = qrApiUrl;
-            
-            document.getElementById('qris-card').classList.remove('hidden');
-            document.getElementById('qris-card').scrollIntoView({ behavior: 'smooth' });
+                const data = await response.json();
+                if (data.success) {
+                    // Set Tanggal Pembuatan
+                    const sekarang = new Date();
+                    const waktuStr = sekarang.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', year: 'numeric' }) + ' ' + sekarang.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+
+                    document.getElementById('inv-nominal').textContent = 'Rp ' + nominal.toLocaleString('id-ID');
+                    document.getElementById('inv-tanggal').textContent = waktuStr;
+                    document.getElementById('qris-image-dynamic').src = data.qrCodeUrl;
+
+                    // Tampilkan card QRIS
+                    document.getElementById('qris-card').classList.remove('hidden');
+                    document.getElementById('qris-card').scrollIntoView({ behavior: 'smooth' });
+
+                    // Mulai Countdown 10 Menit (600 detik)
+                    mulaiCountdown(600);
+
+                    // Pantau webhook masuk
+                    baselineSaldo = muatSaldo();
+                    if (webhookChecker) clearInterval(webhookChecker);
+                    webhookChecker = setInterval(pantauWebhookMasuk, 3000);
+                } else {
+                    alert("Gagal membuat QRIS: " + data.error);
+                }
+            } catch (err) {
+                alert("Terjadi kesalahan koneksi ke server API.");
+            } finally {
+                btn.textContent = "Buat QRIS Otomatis";
+                btn.disabled = false;
+            }
+        }
+
+        function mulaiCountdown(durasiDetik) {
+            if (timerInterval) clearInterval(timerInterval);
+            let sisaWaktu = durasiDetik;
+
+            timerInterval = setInterval(() => {
+                let menit = Math.floor(sisaWaktu / 60);
+                let detik = sisaWaktu % 60;
+
+                document.getElementById('inv-timer').textContent = 
+                    String(menit).padStart(2, '0') + ':' + String(detik).padStart(2, '0');
+
+                if (sisaWaktu <= 0) {
+                    clearInterval(timerInterval);
+                    expiredTagihan();
+                }
+                sisaWaktu--;
+            }, 1000);
+        }
+
+        function pantauWebhookMasuk() {
+            const saldoSekarang = muatSaldo();
+            if (saldoSekarang > baselineSaldo) {
+                clearInterval(timerInterval);
+                clearInterval(webhookChecker);
+
+                document.getElementById('status-teks').textContent = "✅ Pembayaran Sukses! Saldo telah masuk otomatis.";
+                document.getElementById('status-teks').className = "text-[11px] text-emerald-400 font-bold";
+                
+                setTimeout(() => {
+                    document.getElementById('qris-card').classList.add('hidden');
+                    document.getElementById('input-nominal').value = "";
+                }, 4000);
+            }
+        }
+
+        function expiredTagihan() {
+            if (webhookChecker) clearInterval(webhookChecker);
+
+            document.getElementById('status-teks').textContent = "❌ Waktu Habis! QRIS telah kedaluwarsa.";
+            document.getElementById('status-teks').className = "text-[11px] text-rose-500 font-bold";
+
+            setTimeout(() => {
+                document.getElementById('qris-card').classList.add('hidden');
+                document.getElementById('input-nominal').value = "";
+            }, 3000);
+        }
+
+        function batalkanTagihan() {
+            if (timerInterval) clearInterval(timerInterval);
+            if (webhookChecker) clearInterval(webhookChecker);
+
+            document.getElementById('qris-card').classList.add('hidden');
+            document.getElementById('input-nominal').value = "";
         }
     </script>
 </body>
